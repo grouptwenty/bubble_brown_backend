@@ -1,0 +1,28 @@
+.events{
+    .btn-eventsadd{
+        float: right;
+    }
+    th,td{
+        padding: 10px 0px;
+        img{
+            padding: 0% 10%;
+        }
+    }
+        .events-input{
+            border-style: groove;
+            border: 1px solid #e4e7ea;
+            border-radius: 0.25rem;
+        }
+        .events-editor{
+            height: calc(12em + 0.75rem + 2px);
+        }
+    
+    .card {
+        border : none;
+    }
+    .card-header{
+        color: #89ad3f;
+        background-color: #2f353a;
+        border-bottom: 1px solid #ffffff00;
+    }
+}
