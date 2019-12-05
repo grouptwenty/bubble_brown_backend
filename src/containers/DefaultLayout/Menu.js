@@ -34,11 +34,11 @@ export default class MenuComponent {
                 url: '/bill/',
                 icon: 'icon-list',
             },
-            // {
-            //     name: 'ผู้ดูแลระบบ  ',
-            //     url: '/admin/',
-            //     icon: 'icon-home',
-            // },
+            {
+                name: 'โปรโมชัน  ',
+                url: '/promotion/',
+                icon: 'icon-list',
+            },
 
             // {
             //     name: 'สมาชิก',
