@@ -6,7 +6,7 @@ export default {
 
 
 
-	
+
 	// URL: 'http://192.168.0.119:3004',
 	// // IO: 'http://localhost:3002',
 	// URL_UPLOAD_IMG: 'http://192.168.0.119:3005/upload-image/',
@@ -18,6 +18,12 @@ export default {
 	// URL_UPLOAD_IMG: 'http://10.1.11.52:3005/upload-image/',
 	// URL_DELETE_IMG: 'http://10.1.11.52:3005/delete-image/',
 	// URL_IMG: 'http://10.1.11.52:3006/',
+
+	// URL: 'http://192.168.2.54:3004',
+	// // IO: 'http://localhost:3002',
+	// URL_UPLOAD_IMG: 'http://192.168.2.54:3005/upload-image/',
+	// URL_DELETE_IMG: 'http://192.168.2.54:3005/delete-image/',
+	// URL_IMG: 'http://192.168.2.54:3006/',
 
 	URL: 'http://192.168.1.112:3004',
 	// IO: 'http://localhost:3002',
