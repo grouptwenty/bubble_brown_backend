@@ -168,11 +168,11 @@ class MenuView extends Component {
             var cart_list = []
             for (let i = 0; i < this.state.cart.length; i++) {
                 cart_list.push(
-                    <Row>
-                        <Col lg="4"><div>{this.state.cart[i].name}</div></Col>
-                        <Col lg="4"><div>{this.state.cart[i].price}</div></Col>
+                    <Row >
+                        <Col lg="4" style={{ paddingTop: '5px' }}><div>{this.state.cart[i].name}</div></Col>
+                        <Col lg="4" style={{ paddingTop: '5px', textAlign: 'center' }}><div>{this.state.cart[i].price}</div></Col>
 
-                        <Col lg="4"><Button onClick={this.deleteItemButton.bind(this, this.state.cart[i])}> - </Button>{this.state.cart[i].count}<Button onClick={this.addItemButton.bind(this, this.state.cart[i])}> + </Button></Col>
+                        <Col lg="4" style={{ paddingTop: '5px', textAlign: 'center' }}><Button onClick={this.deleteItemButton.bind(this, this.state.cart[i])}> - </Button>{this.state.cart[i].count}<Button onClick={this.addItemButton.bind(this, this.state.cart[i])}> + </Button></Col>
                     </Row>
                 )
             }
@@ -210,31 +210,7 @@ class MenuView extends Component {
         }
     }
 
-    // var shoppingCart = (function () {
-    // // =============================
-    // // Private methods and propeties
-    // // =============================
-    // cart = [];
 
-    // // Constructor
-    // function Item(name, price, count) {
-    //     this.name = name;
-    //     this.price = price;
-    //     this.count = count;
-    // }
-
-    // // Save cart
-    // function saveCart() {
-    //     sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
-    // }
-
-    // // Load cart
-    // function loadCart() {
-    //     cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
-    // }
-    // if (sessionStorage.getItem("shoppingCart") != null) {
-    //     loadCart();
-    // }
 
     async insertOrder() {
 
@@ -248,16 +224,13 @@ class MenuView extends Component {
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
         const data = new FormData();
-        // data.append('table_id', '01')
-        // data.append('customer_code', 'CM001')
-        // data.append('order_date', toDay)
-        // data.append('order_code', order_code)
-        // console.log(data);
         order.push({
             'table_id': '01',
             'customer_code': 'CM001',
             'order_date': toDay,
-            'order_code': order_code
+            'order_code': order_code,
+            'order_total_price': this.sumtotal()
+
 
         })
         console.log(order);
@@ -278,16 +251,17 @@ class MenuView extends Component {
                 order_list_price_sum: this.sumtotal()
             }
             const arr = await order_list_model.insertOrderList(order_list)
+            // if (order_list != undefined) {
+            //     swal({
+            //         title: "Good job!",
+            //         text: "Add user Ok",
+            //         icon: "success",
+            //         button: "Close",
+            //     });
+            //     this.props.history.push('/menu/')
+            // }
         }
-        // if (res.data) {
-        //     swal({
-        //         title: "Good job!",
-        //         text: "Add user Ok",
-        //         icon: "success",
-        //         button: "Close",
-        //     });
-        //     this.props.history.push('/order/')
-        // }
+
     }
     rendertotal() {
         if (this.state.cart != undefined) {
@@ -300,7 +274,12 @@ class MenuView extends Component {
             }
             order_total.push(
                 <Row>
-                    {sum}
+                    <Col lg="8" style={{ paddingTop: '30px' }}>
+                        <label>ราคารวม</label>
+                    </Col>
+                    <Col lg="4" style={{ textAlign: 'center', paddingTop: '30px' }}>
+                        <label>{sum}</label>
+                    </Col>
                 </Row>
             )
             console.log("3333333333", sum);
@@ -345,14 +324,14 @@ class MenuView extends Component {
                     </Col>
                     <Col lg="6" style={{ borderStyle: 'solid', borderWidth: 1 }}>
 
-                        <Row>
-                            <div > รายการอาหาร</div>
+                        <Row >
+                            <div style={{ paddingTop: '10px', paddingLeft: '10px', paddingBottom: '30px' }}> รายการอาหาร</div>
 
                         </Row>
 
                         {this.rendercart()}
                         {this.rendertotal()}
-                        {this.state.cart != undefined && this.state.cart != "" ? <Row><Button onClick={this.insertOrder.bind(this)}><label>สั่งอาหาร</label></Button></Row> : ''}
+                        {this.state.cart != undefined && this.state.cart != "" ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.insertOrder.bind(this)}><label>สั่งอาหาร</label></Button></div></Row> : ''}
 
 
                     </Col>

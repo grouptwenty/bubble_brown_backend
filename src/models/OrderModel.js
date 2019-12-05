@@ -68,27 +68,27 @@ export default class OrderModel {
             });
     }
 
-    // async updateUserBy(data) {
-    //     return fetch(GOBALS.URL + '/user/updateUserBy', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(data)
-    //     }).then((response) => response.json())
-    //         .then((responseJson) => {
+    async getOrderBy(data) {
+        return fetch(GOBALS.URL + '/order/getOrderBy', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
 
-    //             return responseJson;
-    //         }).catch((error) => {
-    //             return {
-    //                 data: [],
-    //                 error: error,
-    //                 query_result: false,
-    //                 server_result:false
-    //             };
-    //         });
-    // }
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result:false
+                };
+            });
+    }
 
     // async deleteByCode(data) {
     //     return fetch(GOBALS.URL + '/user/deleteByCode', {

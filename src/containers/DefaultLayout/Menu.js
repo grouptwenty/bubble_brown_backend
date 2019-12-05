@@ -29,6 +29,11 @@ export default class MenuComponent {
                 url: '/menu/',
                 icon: 'icon-list',
             },
+            {
+                name: 'บิล',
+                url: '/bill/',
+                icon: 'icon-list',
+            },
             // {
             //     name: 'ผู้ดูแลระบบ  ',
             //     url: '/admin/',
