@@ -92,10 +92,17 @@ class HomeView extends Component {
 
         event.preventDefault();
         const form = event.target;
-        var arr = { addby: "1" };
-        arr['promotion_header'] = form.elements['promotion_header'].value;
-        arr['promotion_detail'] = form.elements['promotion_detail'].value;
-        arr['promotion_type_code'] = form.elements['promotion_type_code'].value;
+        var arr = []
+
+        arr.push({
+            'addby': '1',
+            'promotion_header': form.elements['promotion_header'].value,
+            'promotion_detail': form.elements['promotion_detail'].value,
+            'promotion_type_code': form.elements['promotion_type_code'].value
+        })
+        // arr['promotion_header'] = form.elements['promotion_header'].value;
+        // arr['promotion_detail'] = form.elements['promotion_detail'].value;
+        // arr['promotion_type_code'] = form.elements['promotion_type_code'].value;
         // arr['promotion_image'] = form.elements['promotion_image'].value;
         var res = await promotion_model.insertPromotion(arr);
         if (res.query_result) {
