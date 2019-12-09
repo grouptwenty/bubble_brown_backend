@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import { Col, Row, CardHeader, Card, CardImg, CardText, CardBody, CardTitle, Button, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { connect } from 'react-redux';
+import { Col, Row, CardHeader, Card, Nav, NavItem, CardText, CardBody, CardTitle, Button, Label, TabContent, TabPane, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NavLink, Link } from 'react-router-dom';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import ClickNHold from 'react-click-n-hold';
-import swal from 'sweetalert';
 
 import OrderModel from '../../models/OrderModel'
 import OrderListModel from '../../models/OrderListModel'
+import ZoneModel from '../../models/ZoneModel'
+import TableModel from '../../models/TableModel'
 
 const order_model = new OrderModel
 const orderlist__model = new OrderListModel
-
+const zone_model = new ZoneModel
+const table_model = new TableModel
 class BillView extends Component {
     constructor(props) {
         super(props);
@@ -18,29 +21,48 @@ class BillView extends Component {
             data: [],
             bill_order: [],
             order_list: [],
+            zone_menu: [],
+            table_list: [],
+            useState: 0,
             refresh: false
 
         };
         this.renderBill = this.renderBill.bind(this);
         this.onBillDetail = this.onBillDetail.bind(this);
         this.renderOrderList = this.renderOrderList.bind(this);
-        this.toggle = this.toggle.bind(this);
+        this.toggle_Bill = this.toggle_Bill.bind(this);
+        this.renderZoneMenu = this.renderZoneMenu.bind(this);
+        this.renderTableByZone = this.renderTableByZone.bind(this);
+        this.renderModalBill = this.renderModalBill.bind(this);
     }
 
 
     async componentDidMount() {
 
         var bill_order = await order_model.getOrderBy()
-        // console.log("bill_order", bill_order);
+        var zone_menu = await zone_model.getZoneBy()
+        var table_list = await table_model.getTableByCode(1)
 
         this.setState({
             bill_order: bill_order.data,
+            zone_menu: zone_menu.data,
+            table_list: table_list.data,
         })
+
 
 
     }
 
-    toggle() {
+    async getTableByCode(code) {
+        var table_list = await table_model.getTableByCode(code)
+        console.log("menulistbycode", table_list);
+        this.setState({
+            table_list: table_list.data
+        })
+    }
+
+
+    toggle_Bill() {
         this.setState(prevState => ({
             modal: !prevState.modal
         }));
@@ -48,14 +70,13 @@ class BillView extends Component {
 
     async onBillDetail(order_code) {
         var order_list = await orderlist__model.getOrderListBy(order_code)
+
         this.setState({
             order_list: order_list.data,
-            order_code_list: order_code
+            order_code_list: order_code.data
         })
 
-        // console.log("order_list", order_list);
-        // console.log("order_code55555", order_code);
-        this.toggle()
+        this.toggle_Bill()
 
     }
 
@@ -131,57 +152,154 @@ class BillView extends Component {
         }
         return Bill_order_list;
     }
+
+    renderZoneMenu() {
+        var zone = []
+        for (let i = 0; i < this.state.zone_menu.length; i++) {
+            zone.push(
+                <Tab onClick={this.getTableByCode.bind(this, this.state.zone_menu[i].zone_id)}>
+                    <label>{this.state.zone_menu[i].zone_name}</label>
+                </Tab>
+
+            )
+        }
+        return zone;
+    }
+
+    start(e) {
+        console.log('START');
+    }
+    end(e, enough) {
+        console.log('END');
+        console.log(enough ? alert('show') : 'Click released too soon');
+    }
+    clickNHold(e) {
+        console.log('CLICK AND HOLD');
+    }
+    renderTableByZone() {
+        console.log("this.state.table_list", this.state.table_list);
+
+        var table = []
+        if (this.state.table_list != undefined) {
+            for (let i = 0; i < this.state.table_list.length; i++) {
+                table.push(
+                    <Col lg="2">
+                        <ClickNHold
+                            time={0.5}
+                            onStart={this.start}
+                            onClickNHold={this.clickNHold}
+                            onEnd={this.end} >
+                            <Button color="secondary" size="lg" active>{this.state.table_list[i].table_name}</Button>
+
+                        </ClickNHold>
+                    </Col>
+                    // <div style={{ overflowY: 'scroll' }}>
+                    //     <label>{this.state.table_list[i].table_name}</label>
+                    // </div>
+
+
+                )
+            }
+            console.log("table", table);
+
+            return table;
+        }
+    }
+
+
+    renderModalBill() {
+        const closeBtn = <button className="close" onClick={this.toggle_Bill}>&times;</button>;
+        var modal_bill = []
+
+        modal_bill.push(
+            <Modal isOpen={this.state.modal} toggle={this.toggle_Bill} className={this.props.className} >
+                <ModalHeader toggle={this.toggle} close={closeBtn}>Order : {this.state.order_code_list}</ModalHeader>
+                <ModalBody >
+
+                    <Row>
+                        <Col lg="4">
+                            <Label  > รายการ </Label>
+                        </Col>
+                        <Col lg="4" style={{ textAlign: 'center' }}>
+                            <Label > จำนวน</Label>
+
+                        </Col>
+                        <Col lg="4" style={{ textAlign: 'center' }}>
+                            <Label > ราคา </Label>
+
+                        </Col>
+
+                    </Row>
+                    <br />
+                    {this.renderOrderList()}
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.toggle_Bill} style={{ width: 100, height: 40 }}>OK</Button>
+                </ModalFooter>
+            </Modal>
+        )
+        return modal_bill;
+    }
+
     render() {
 
-        const closeBtn = <button className="close" onClick={this.toggle}>&times;</button>;
+
 
 
         return (
-            <div>
-                <Row style={{ padding: '3%' }}>
-                    <Col sm="3">
-                        <Card outline color="secondary">
-                            <CardHeader style={{ textAlign: 'center', }}>เพิ่มบิล</CardHeader>
-                            <CardBody>
-                                <CardText style={{ textAlign: 'center' }}>
-                                    <NavLink exact to={`/menu/`} style={{ width: '100%' }}>
-                                        <i class="fa fa-plus-square-o" aria-hidden="true" style={{ color: '#515A5A', fontSize: '50px' }}></i>
-                                    </NavLink>
-                                </CardText>
-                            </CardBody>
-                        </Card>
 
-                    </Col>
+            <div style={{ padding: '10px' }}>
+                <Card>
 
-                    {this.renderBill()}
+                    <CardBody style={{ padding: '5px' }}>
 
-                </Row>
-                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} >
-                    <ModalHeader toggle={this.toggle} close={closeBtn}>Order : {this.state.order_code_list}</ModalHeader>
-                    <ModalBody >
-                       
-                        <Row>
-                            <Col lg="4">
-                                <Label  > รายการ </Label>
-                            </Col>
-                            <Col lg="4" style={{ textAlign: 'center' }}>
-                                <Label > จำนวน</Label>
+                        <Tabs >
+                            <TabList>
+                                <Tab style={{ fontSize: '20px' }}> บิล</Tab>
+                                <Tab style={{ fontSize: '20px' }}>โต๊ะอาหาร</Tab>
+                            </TabList>
+                            <TabPanel >
+                                <Row style={{ padding: '1%', overflowY: 'scroll' }}>
+                                    <Col sm="3" >
+                                        <Card outline color="secondary">
+                                            <CardHeader style={{ textAlign: 'center', }}>เพิ่มบิล</CardHeader>
+                                            <CardBody>
+                                                <CardText style={{ textAlign: 'center' }}>
+                                                    <NavLink exact to={`/menu/`} style={{ width: '100%' }}>
+                                                        <i class="fa fa-plus-square-o" aria-hidden="true" style={{ color: '#515A5A', fontSize: '50px' }}></i>
+                                                    </NavLink>
+                                                </CardText>
+                                            </CardBody>
+                                        </Card>
 
-                            </Col>
-                            <Col lg="4" style={{ textAlign: 'center' }}>
-                                <Label > ราคา </Label>
+                                    </Col>
 
-                            </Col>
+                                    {this.renderBill()}
 
+
+                                </Row>
+                            </TabPanel>
+                            <TabPanel>
+                                <Tabs>
+                                    <TabList>
+
+                                        {this.renderZoneMenu()}
+
+                                    </TabList>
+
+
+
+                                </Tabs>
+                            </TabPanel>
+                        </Tabs>
+                        <Row style={{ textAlign: 'center' }}>
+                            {this.renderTableByZone()}
                         </Row>
-                        <br />
-                        {this.renderOrderList()}
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this.toggle} style={{ width: 100, height: 40 }}>OK</Button>
-                    </ModalFooter>
-                </Modal>
-            </div>
+                    </CardBody>
+                </Card>
+                {this.renderModalBill()}
+                
+            </div >
         )
     }
 }
