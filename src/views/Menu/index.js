@@ -19,8 +19,8 @@ class User extends Component {
         <React.Suspense fallback={loading()}>
           <Switch>
             <Route exact path="/menu" render={props => <MenuView {...props} />} />
-            {/* <Route exact path="/user/insert" render={props => <UserInsert {...props} />} />
-            <Route exact path="/user/update/:code" render={props => <UserEdit {...props} />} /> */}
+            {/* {/* <Route exact path="/user/insert" render={props => <UserInsert {...props} />} /> */}
+            <Route exact path="/menu/:code" render={props => <MenuView  {...props} />} /> 
           </Switch>
         </React.Suspense>
       </HashRouter>

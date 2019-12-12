@@ -38,7 +38,9 @@ class MenuView extends Component {
 
 
     async componentDidMount() {
-
+        cart = []
+        const code = this.props.match.params.code
+        console.log(code);
 
         var menutype_list = await menutype_model.getMenuTypeBy()
         this.setState({
@@ -50,10 +52,25 @@ class MenuView extends Component {
             menulist: menulist.data
         })
 
-        var menu_list = await menu_model.getMenuByCode('MNT01')
-        this.setState({
-            menu_list: menu_list.data
-        })
+        if (code != undefined) {
+
+            var order_old = await order_model.getOrderByCode(code)
+            var orderlist_old = await order_list_model.getOrderListByOrderCode(code)
+            console.log("order_old", order_old);
+            console.log("orderlist_old", orderlist_old);
+
+            this.setState({
+                order_old: order_old.data,
+                orderlist_old: orderlist_old.data
+            })
+            for (var i in orderlist_old.data) {
+
+
+                this.addItemTocart(orderlist_old.data[i].order_list_name, orderlist_old.data[i].order_list_price_qty, orderlist_old.data[i].menu_code, orderlist_old.data[i].order_list_qty)
+            }
+
+        }
+
     }
 
     async getMenuByCode(code) {
@@ -229,16 +246,15 @@ class MenuView extends Component {
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
         const data = new FormData();
-        order.push({
-            'table_id': '01',
+        var order = {
+            'table_code': '01',
             'customer_code': 'CM001',
             'order_date': toDay,
             'order_code': order_code,
             'order_total_price': this.sumtotal()
+        }
 
 
-        })
-        console.log(order);
 
         const res = await order_model.insertOrder(order)
         for (var key in this.state.cart) {
@@ -268,6 +284,54 @@ class MenuView extends Component {
         }
 
     }
+
+    async updateOrder() {
+
+        var order = []
+
+        const date_now = new Date();
+        var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
+        const data = new FormData();
+        var order = {
+            'table_code': '01',
+            'customer_code': 'CM001',
+            'order_date': toDay,
+            'order_code': this.props.match.params.code,
+            'order_total_price': this.sumtotal()
+        }
+
+
+
+        const res = await order_model.updateOrderByCode(order)
+        const arr = await order_list_model.deleteOrderListByCode(this.state.order_old)
+
+        for (var key in this.state.cart) {
+            // this.state.cart[key].code
+            // this.state.cart[key].count
+            // this.state.cart[key].name
+            // this.state.cart[key].price
+            var order_list = {
+                order_code: this.state.order_old.order_code,
+                menu_code: this.state.cart[key].code,
+                order_list_qty: this.state.cart[key].count,
+                order_list_name: this.state.cart[key].name,
+                order_list_price_qty: this.state.cart[key].price,
+                order_list_price_sum_qty: this.state.cart[key].count * this.state.cart[key].price,
+                order_list_price_sum: this.sumtotal()
+            }
+            const arr = await order_list_model.insertOrderList(order_list)
+            if (order_list != undefined) {
+                swal({
+                    title: "สั่งอาหารเรียบร้อย",
+                    text: "โปรดรออาหารสักครู่...",
+                    icon: "success",
+                    button: "Close",
+                });
+            }
+        }
+
+    }
+
     rendertotal() {
         if (this.state.cart != undefined) {
             var order_total = []
@@ -337,7 +401,7 @@ class MenuView extends Component {
 
 
 
-                            <Col lg="6" style={{ borderStyle: 'solid', borderWidth: 1,overflowY:'scroll' }}>
+                            <Col lg="6" style={{ borderStyle: 'solid', borderWidth: 1, overflowY: 'scroll' }}>
 
                                 <Row >
                                     <div style={{ paddingTop: '10px', paddingLeft: '10px', paddingBottom: '30px' }}> รายการอาหาร</div>
@@ -347,7 +411,8 @@ class MenuView extends Component {
                                 {this.rendercart()}
 
                                 {this.rendertotal()}
-                                {this.state.cart != undefined && this.state.cart != "" ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.insertOrder.bind(this)}><label>สั่งอาหาร</label></Button></div></Row> : ''}
+                                {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code == undefined ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.insertOrder.bind(this)}><label>สั่งอาหาร</label></Button></div></Row> : ''}
+                                {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.updateOrder.bind(this)}><label>แก้ไขการสั่งอาหาร</label></Button></div></Row> : ''}
 
 
                             </Col>

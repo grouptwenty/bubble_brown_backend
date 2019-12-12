@@ -40,11 +40,11 @@ export default class MenuComponent {
                 icon: 'icon-list',
             },
 
-            // {
-            //     name: 'สมาชิก',
-            //     url: '/user/',
-            //     icon: 'icon-people',
-            // },
+            {
+                name: 'โต๊ะอาหาร / โซน',
+                url: '/table/',
+                icon: 'icon-list',
+            },
 
             // {
             //     name: 'ผู้ประกอบการ',
