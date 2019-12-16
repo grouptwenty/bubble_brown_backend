@@ -418,7 +418,7 @@ class BillView extends Component {
                                             <QRCode
                                                 id={this.state.table_edit.table_code}
                                                 // value={this.state.table_edit.table_code}
-                                                value={'http://localhost:3000/#/bill/' + this.state.table_edit.table_code}
+                                                value={ this.state.table_edit.table_code}
                                                 size={290}
                                                 level={"H"}
                                                 includeMargin={true}

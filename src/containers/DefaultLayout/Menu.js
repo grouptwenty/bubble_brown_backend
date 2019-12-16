@@ -46,6 +46,30 @@ export default class MenuComponent {
                 icon: 'icon-list',
             },
 
+            {
+                name: 'จัดการข้อมูลสินค้า',
+                url: '/product-manage/',
+                icon: 'icon-pencil',
+                children: [
+                    {
+                        name: 'สินค้า',
+                        // url: '/product-manage/product',
+                    },
+                    {
+                        name: 'จัดการสูตร',
+                        url: '/product-manage/recipe',
+                    },
+                    {
+                        name: 'สต๊อกเข้า',
+                        // url: '/product-manage/stock-in',
+                    },
+                    {
+                        name: 'สต๊อกออก',
+                        // url: '/product-manage/stock-out',
+                    },
+                ],
+            },
+
             // {
             //     name: 'ผู้ประกอบการ',
             //     url: '/entrepreneur/',
@@ -58,28 +82,7 @@ export default class MenuComponent {
             //     icon: 'icon-basket',
             // },
             // {
-            //     name: 'จัดการข้อมูลเครื่องซักผ้า',
-            //     url: '/machine-manage/',
-            //     icon: 'icon-pencil',
-            //     children: [
-            //         {
-            //             name: 'แบรนด์เครื่องซักผ้า',
-            //             url: '/machine-manage/machine-brand',
-            //         },
-            //         {
-            //             name: 'รุ่นเครื่องซักผ้า',
-            //             url: '/machine-manage/machine-generation',
-            //         },
-            //         {
-            //             name: 'ประเภทเครื่อง',
-            //             url: '/machine-manage/machine-type',
-            //         },
-            //         {
-            //             name: 'โปรเเกรมการซัก',
-            //             url: '/machine-manage/machine-program',
-            //         },
-            //     ],
-            // },
+
             // {
             //     name: 'รายการเครื่องซักผ้าแจ้งเสีย',
             //     url: '/repair/',
@@ -134,7 +137,7 @@ export default class MenuComponent {
             //     url: '/agreement',
             //     icon: 'icon-list',
             // },
-           
+
 
         ]
 
