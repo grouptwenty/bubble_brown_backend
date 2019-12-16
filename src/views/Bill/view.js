@@ -5,6 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import ClickNHold from 'react-click-n-hold';
 import swal from 'sweetalert';
+
 import OrderModel from '../../models/OrderModel'
 import OrderListModel from '../../models/OrderListModel'
 import ZoneModel from '../../models/ZoneModel'
@@ -14,7 +15,7 @@ const order_model = new OrderModel
 const orderlist_model = new OrderListModel
 const zone_model = new ZoneModel
 const table_model = new TableModel
-
+var QRCode = require('qrcode.react');
 
 class BillView extends Component {
     constructor(props) {
@@ -42,6 +43,8 @@ class BillView extends Component {
         this.renderModelEdit = this.renderModelEdit.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onDelete = this.onDelete.bind(this);
+        this.start = this.start.bind(this);
+        // this.download = this.download.bind(this);
 
     }
 
@@ -109,7 +112,9 @@ class BillView extends Component {
     }
 
 
-
+    start(order_code) {
+        this.props.history.push('/menu/' + order_code)
+    }
 
 
 
@@ -118,45 +123,48 @@ class BillView extends Component {
         var bill = []
         for (let i = 0; i < this.state.bill_order.length; i++) {
             bill.push(
-                <Col sm="3">
-                    <NavLink  to={`/menu/` + this.state.bill_order[i].order_code } style={{ width: '100%' }}>
-                        <Card body outline color="success">
-                            <Row style={{ borderBottomStyle: 'ridge' }}>
-                                <Col sm="6">
-                                    <CardTitle style={{ textAlign: 'center', fontSize: '23px' }}>โต๊ะ {this.state.bill_order[i].table_id}</CardTitle>
-                                </Col>
-                                <Col sm="6">
-                                    <CardTitle style={{ textAlign: 'center', fontSize: '23px' }}>
-                                        <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '20px' }}></i> 2</CardTitle>
-                                </Col>
-                            </Row>
 
-                            <CardText>
-                                <Row style={{ paddingTop: "15px ", borderBottomStyle: 'ridge' }}>
-                                    <Col sm="6">
-                                        <CardTitle style={{ textAlign: 'center', fontSize: '18px', }}>ยอด</CardTitle>
-                                    </Col>
-                                    <Col sm="6">
-                                        <CardTitle style={{ textAlign: 'center', fontSize: '18px' }}>
-                                            <label>{this.state.bill_order[i].order_total_price}</label> <i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }}></i>
-                                        </CardTitle>
-                                    </Col>
-                                </Row>
-                            </CardText>
-                            <Row >
-                                <Col lg="6" >
-                                    <div style={{ textAlign: 'end' }}>
-                                        <Button color="secondary">ชำระเงิน</Button>
-                                    </div>
+                <Col sm="3">
+
+                    {/* <NavLink exact to={`/menu/` + this.state.bill_order[i].order_code } style={{ width: '100%' }}> */}
+                    <Card body outline color="success">
+                        <Row style={{ borderBottomStyle: 'ridge' }}>
+                            <Col sm="6">
+                                <CardTitle style={{ textAlign: 'center', fontSize: '23px' }}>โต๊ะ {this.state.bill_order[i].table_id}</CardTitle>
+                            </Col>
+                            <Col sm="6">
+                                <CardTitle style={{ textAlign: 'center', fontSize: '23px' }}>
+                                    <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '20px' }}></i> 2</CardTitle>
+                            </Col>
+                        </Row>
+
+                        <CardText>
+                            <Row style={{ paddingTop: "15px ", borderBottomStyle: 'ridge' }}>
+                                <Col sm="6">
+                                    <CardTitle style={{ textAlign: 'center', fontSize: '18px', }}>ยอด</CardTitle>
                                 </Col>
-                                <Col lg="6">
-                                    <div style={{ textAlign: 'start' }}>
-                                        <Button onClick={this.onBillDetail.bind(this, this.state.bill_order[i].order_code)} color="secondary" >ดูบิล</Button>
-                                    </div>
+                                <Col sm="6">
+                                    <CardTitle style={{ textAlign: 'center', fontSize: '18px' }}>
+                                        <label>{this.state.bill_order[i].order_total_price}</label> <i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }}></i>
+                                    </CardTitle>
                                 </Col>
                             </Row>
-                        </Card>
-                    </NavLink>
+                        </CardText>
+                        <Row >
+                            <Col lg="6" >
+                                <div style={{ textAlign: 'end' }}>
+                                    <Button color="secondary">ชำระเงิน</Button>
+                                </div>
+                            </Col>
+                            <Col lg="6">
+                                <div style={{ textAlign: 'start' }}>
+                                    <Button onClick={this.onBillDetail.bind(this, this.state.bill_order[i].order_code)} color="secondary" >ดูบิล</Button>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Card>
+                    {/* </NavLink> */}
+
                 </Col>
 
             )
@@ -295,7 +303,8 @@ class BillView extends Component {
                         {this.renderOrderList()}
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="primary" onClick={this.toggle_Bill} style={{ width: 100, height: 40 }}>OK</Button>
+                        <Button color="secondary" onClick={this.toggle_Bill} style={{ width: 100, height: 40 }}>กลับ</Button>
+                        <Button color="primary" onClick={this.start.bind(this, this.state.order_code_list)} style={{ width: 100, height: 40 }}>แก้ไขบิล</Button>
                     </ModalFooter>
                 </Modal>
             )
@@ -405,7 +414,17 @@ class BillView extends Component {
                             <Col lg="6">
                                 <Row>
                                     <Col lg="12">
-                                        <div>รูปปปป</div>
+                                        <div>
+                                            <QRCode
+                                                id={this.state.table_edit.table_code}
+                                                // value={this.state.table_edit.table_code}
+                                                value={'http://localhost:3000/#/bill/' + this.state.table_edit.table_code}
+                                                size={290}
+                                                level={"H"}
+                                                includeMargin={true}
+                                            />
+                                            <Button onClick={this.download.bind(this,this.state.table_edit.table_code)}> Download QR </Button>
+                                        </div>
                                     </Col>
                                 </Row>
                             </Col>
@@ -438,10 +457,23 @@ class BillView extends Component {
 
     }
 
-
+     download(code) {
+            const canvas = document.getElementById(code);
+            const pngUrl = canvas
+                .toDataURL("image/png")
+                .replace("image/png", "image/octet-stream");
+            let downloadLink = document.createElement("a");
+            downloadLink.href = pngUrl;
+            downloadLink.download = code + "QR.png";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+     
+    }
 
 
     render() {
+
         return (
 
             <div style={{ padding: '10px' }}>
@@ -477,9 +509,7 @@ class BillView extends Component {
                             <TabPanel>
                                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })} forceRenderTabPanel>
                                     <TabList>
-
                                         {this.renderZoneMenu()}
-
                                     </TabList>
                                     {this.state.x}
                                     {/* {this.renderTableByZone()} */}

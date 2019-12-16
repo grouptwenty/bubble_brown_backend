@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Row, Container, Card, CardImg, CardText, CardBody, CardTitle, Button } from 'reactstrap';
+import { Col, Row, Container, Card, CardImg, CardText, FormGroup, Input, CardBody, CardTitle, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 // import ClickNHold from 'react-click-n-hold';
@@ -11,11 +11,13 @@ import MenuModel from '../../models/MenuModel'
 import MenuTypeModel from '../../models/MenuTypeModel'
 import OrderModel from '../../models/OrderModel'
 import OrderListModel from '../../models/OrderListModel'
+import TableModel from '../../models/TableModel'
 
 const menu_model = new MenuModel
 const menutype_model = new MenuTypeModel
 const order_model = new OrderModel
 const order_list_model = new OrderListModel
+const table_model = new TableModel
 var cart = [];
 class MenuView extends Component {
     constructor(props) {
@@ -246,8 +248,10 @@ class MenuView extends Component {
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
         const data = new FormData();
+        var order_service = document.getElementById('order_service').value
         var order = {
             'table_code': '01',
+            'order_service': order_service,
             'customer_code': 'CM001',
             'order_date': toDay,
             'order_code': order_code,
@@ -292,8 +296,11 @@ class MenuView extends Component {
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
         const data = new FormData();
+
+        var order_service = document.getElementById('order_service').value
         var order = {
             'table_code': '01',
+            'order_service': order_service,
             'customer_code': 'CM001',
             'order_date': toDay,
             'order_code': this.props.match.params.code,
@@ -385,8 +392,6 @@ class MenuView extends Component {
                         <Row style={{ minWidth: '100%', height: '100%', minHeight: '80vh' }}>
 
                             <Col lg="6">
-                                {/* <Tabs> */}
-
                                 <Row style={{ paddingTop: '2%' }}>
                                     {this.renderMenuType()}
                                 </Row>
@@ -402,7 +407,18 @@ class MenuView extends Component {
 
 
                             <Col lg="6" style={{ borderStyle: 'solid', borderWidth: 1, overflowY: 'scroll' }}>
+                                <Row style={{ padding: '2%' }}>
+                                    <Col lg="3">
+                                        <FormGroup>
+                                            <Input type="select" id="order_service" name="order_service" class="form-control" >
+                                                <option value="ทานที่ร้าน">ทานที่ร้าน</option>
+                                                <option value="สั่งกลับบ้าน">สั่งกลับบ้าน</option>
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
 
+
+                                </Row>
                                 <Row >
                                     <div style={{ paddingTop: '10px', paddingLeft: '10px', paddingBottom: '30px' }}> รายการอาหาร</div>
 
