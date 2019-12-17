@@ -17,6 +17,7 @@ class CustomerView extends Component {
             refresh: false
         };
         this.onDelete = this.onDelete.bind(this);
+        this.renderCustomer = this.renderCustomer.bind(this);
     }
 
 
@@ -27,7 +28,7 @@ class CustomerView extends Component {
         this.setState({
             customer_list: customer_list.data
         })
-
+        
     }
 
     async onDelete(code) {
@@ -44,12 +45,11 @@ class CustomerView extends Component {
                         .then((req) => {
                             if (req.data == true) {
                                 this.componentDidMount();
-
                                 swal("success Deleted! ", {
                                     icon: "success",
 
                                 });
-                                this.componentDidMount()
+                                // this.componentDidMount()
                             } else {
                                 swal("success Deleted! ", {
                                     icon: "error",
@@ -64,28 +64,27 @@ class CustomerView extends Component {
             });
 
     }
-
-    render() {
-        let customer_list = this.state.customer_list
+ 
+    renderCustomer(){
         let tbody_customer = []
 
-        for (let i = 0; i < customer_list.length; i++) {
+        for (let i = 0; i < this.state.customer_list.length; i++) {
 
             tbody_customer.push(
                 <tr>
                     <td><h6 className="textcenter3">{i + 1}</h6></td>
-                    <td><h6 className="textcenter3">{customer_list[i].customer_code}</h6></td>
-                    <td><h6 className="textcenter3">{customer_list[i].customer_name}</h6></td>
-                    <td><h6 className="textcenter3">{customer_list[i].customer_id}</h6></td>
-                    <td><h6 className="textcenter3">{customer_list[i].customer_email}</h6></td>
-                    <td><h6 className="textcenter3">{customer_list[i].customer_phone}</h6></td>
+                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_code}</h6></td>
+                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_name}</h6></td>
+                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_id}</h6></td>
+                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_email}</h6></td>
+                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_phone}</h6></td>
 
                     {<td width={100}>
                         <h6 className="textcenter3">
-                            <NavLink exact to={`/customer/update/` + customer_list[i].customer_code} style={{ width: '100%' }}>
+                            <NavLink exact to={`/customer/update/` + this.state.customer_list[i].customer_code} style={{ width: '100%' }}>
                                 <i class="fa fa-pencil-square-o" aria-hidden="true" style={{ color: 'blue', marginRight: 30 }}></i>
                             </NavLink>
-                            <Link to={`#`} onClick={this.onDelete.bind(null, customer_list[i].customer_code)}>
+                            <Link to={`#`} onClick={this.onDelete.bind(null, this.state.customer_list[i].customer_code)}>
                                 <i class="fa fa-times" aria-hidden="true" style={{ color: 'red' }}></i>
                             </Link>
                         </h6>
@@ -94,6 +93,12 @@ class CustomerView extends Component {
             )
 
         }
+        return tbody_customer;
+    }
+
+    render() {
+    
+       
 
         return (
             <div className="animated fadeIn">
@@ -103,7 +108,7 @@ class CustomerView extends Component {
                             <CardHeader>
                                 จัดการข้อมูลลูกค้า
                                 <NavLink exact to={`/customer/insert`} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i>เพิ่ม</button>
+                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i>   เพิ่ม</button>
                                 </NavLink>
                             </CardHeader>
                             <CardBody>
@@ -120,7 +125,7 @@ class CustomerView extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {tbody_customer}
+                                        {this.renderCustomer()}
                                     </tbody>
                                 </Table>
                             </CardBody>
