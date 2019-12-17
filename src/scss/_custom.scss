@@ -305,9 +305,7 @@ h4{
   -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-th {
-  background-color: #dbdde2;
-}
+
 .formgroup {
   border-top-style: outset !important;
   padding-top: 18px !important;
@@ -459,11 +457,11 @@ th {
   padding: 3px;
 }
 
-th {
-  background-color: #0c7eaf;
-  color: #fff;
-  text-align: center;
-}
+// th {
+//   background-color: #b99c6b;
+//   color: #fff;
+//   text-align: center;
+// }
 
 .modal-content {
   position: relative;

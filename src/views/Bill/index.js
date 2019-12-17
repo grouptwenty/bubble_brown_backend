@@ -5,7 +5,7 @@ const loading = () => <div className="animated fadeIn pt-3 text-center">Loading.
 // Pages
 const BillView = React.lazy(() => import('./view'));
 // const UserInsert = React.lazy(() => import('./insert'));
-// const UserEdit = React.lazy(() => import('./update'));
+// const BillEdit = React.lazy(() => import('./update'));
 
 class User extends Component {
   async componentDidMount() {
@@ -19,8 +19,8 @@ class User extends Component {
         <React.Suspense fallback={loading()}>
           <Switch>
             <Route exact path="/bill" render={props => <BillView {...props} />} />
-            {/* <Route exact path="/user/insert" render={props => <UserInsert {...props} />} />
-            <Route exact path="/user/update/:code" render={props => <UserEdit {...props} />} /> */}
+            {/* <Route exact path="/user/insert" render={props => <UserInsert {...props} />} /> */}
+            {/* <Route exact path="/bill/update/:code" render={props => <BillEdit {...props} />} /> */}
           </Switch>
         </React.Suspense>
       </HashRouter>

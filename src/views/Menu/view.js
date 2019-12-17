@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
-import { Col, Row, Container, Card, CardImg, CardText, CardBody, CardTitle, Button } from 'reactstrap';
+import { Col, Row, Container, Card, CardImg, CardText, FormGroup, Input, CardBody, CardTitle, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
-import ClickNHold from 'react-click-n-hold';
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
+// import ClickNHold from 'react-click-n-hold';
 import swal from 'sweetalert';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 import MenuModel from '../../models/MenuModel'
 import MenuTypeModel from '../../models/MenuTypeModel'
 import OrderModel from '../../models/OrderModel'
 import OrderListModel from '../../models/OrderListModel'
+import TableModel from '../../models/TableModel'
 
 const menu_model = new MenuModel
 const menutype_model = new MenuTypeModel
 const order_model = new OrderModel
 const order_list_model = new OrderListModel
+const table_model = new TableModel
 var cart = [];
 class MenuView extends Component {
     constructor(props) {
@@ -38,7 +40,9 @@ class MenuView extends Component {
 
 
     async componentDidMount() {
-
+        cart = []
+        const code = this.props.match.params.code
+        console.log(code);
 
         var menutype_list = await menutype_model.getMenuTypeBy()
         this.setState({
@@ -50,10 +54,25 @@ class MenuView extends Component {
             menulist: menulist.data
         })
 
-        var menu_list = await menu_model.getMenuByCode('MNT01')
-        this.setState({
-            menu_list: menu_list.data
-        })
+        if (code != undefined) {
+
+            var order_old = await order_model.getOrderByCode(code)
+            var orderlist_old = await order_list_model.getOrderListByOrderCode(code)
+            console.log("order_old", order_old);
+            console.log("orderlist_old", orderlist_old);
+
+            this.setState({
+                order_old: order_old.data,
+                orderlist_old: orderlist_old.data
+            })
+            for (var i in orderlist_old.data) {
+
+
+                this.addItemTocart(orderlist_old.data[i].order_list_name, orderlist_old.data[i].order_list_price_qty, orderlist_old.data[i].menu_code, orderlist_old.data[i].order_list_qty)
+            }
+
+        }
+
     }
 
     async getMenuByCode(code) {
@@ -91,13 +110,16 @@ class MenuView extends Component {
             var type_list = []
             for (let i = 0; i < this.state.menutype_list.length; i++) {
                 type_list.push(
-                    <Col style={{ borderWidth: 1, borderStyle: 'solid', height: 50, textAlign: 'center' }}>
-                        <div>
-                            <label style={{ margin: '15px' }} onClick={this.getMenuByCode.bind(this, this.state.menutype_list[i].menu_type_code)}>
+                    <div>
+                        {/* <TabList>
+                            <Tab onClick={this.getMenuByCode.bind(this, this.state.menutype_list[i].menu_type_code)}> {this.state.menutype_list[i].menu_type_name}</Tab>
+                        </TabList> */}
+                        <Col onClick={this.getMenuByCode.bind(this, this.state.menutype_list[i].menu_type_code)} style={{ borderRightStyle: 'ridge', pading: '0px' }}>
+                            <label style={{ margin: '15px' }} >
                                 {this.state.menutype_list[i].menu_type_name}
                             </label>
-                        </div>
-                    </Col>
+                        </Col>
+                    </div>
 
                 )
             }
@@ -168,12 +190,14 @@ class MenuView extends Component {
             var cart_list = []
             for (let i = 0; i < this.state.cart.length; i++) {
                 cart_list.push(
-                    <Row >
-                        <Col lg="4" style={{ paddingTop: '5px' }}><div>{this.state.cart[i].name}</div></Col>
-                        <Col lg="4" style={{ paddingTop: '5px', textAlign: 'center' }}><div>{this.state.cart[i].price}</div></Col>
-
-                        <Col lg="4" style={{ paddingTop: '5px', textAlign: 'center' }}><Button onClick={this.deleteItemButton.bind(this, this.state.cart[i])}> - </Button>{this.state.cart[i].count}<Button onClick={this.addItemButton.bind(this, this.state.cart[i])}> + </Button></Col>
-                    </Row>
+                    <div>
+                        <Row >
+                            <Col lg="4" style={{ paddingTop: '5px' }}><div>{this.state.cart[i].name}</div></Col>
+                            <Col lg="4" style={{ paddingTop: '5px', textAlign: 'center' }}><div>{this.state.cart[i].price}</div></Col>
+                            <Col lg="4" style={{ paddingTop: '5px', textAlign: 'center' }}><Button onClick={this.deleteItemButton.bind(this, this.state.cart[i])}> - </Button>{this.state.cart[i].count}<Button onClick={this.addItemButton.bind(this, this.state.cart[i])}> + </Button></Col>
+                        </Row>
+                        <hr />
+                    </div>
                 )
             }
             return cart_list;
@@ -224,16 +248,17 @@ class MenuView extends Component {
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
         const data = new FormData();
-        order.push({
-            'table_id': '01',
+        var order_service = document.getElementById('order_service').value
+        var order = {
+            'table_code': '01',
+            'order_service': order_service,
             'customer_code': 'CM001',
             'order_date': toDay,
             'order_code': order_code,
             'order_total_price': this.sumtotal()
+        }
 
 
-        })
-        console.log(order);
 
         const res = await order_model.insertOrder(order)
         for (var key in this.state.cart) {
@@ -251,18 +276,69 @@ class MenuView extends Component {
                 order_list_price_sum: this.sumtotal()
             }
             const arr = await order_list_model.insertOrderList(order_list)
-            // if (order_list != undefined) {
-            //     swal({
-            //         title: "Good job!",
-            //         text: "Add user Ok",
-            //         icon: "success",
-            //         button: "Close",
-            //     });
-            //     this.props.history.push('/menu/')
-            // }
+            if (order_list != undefined) {
+                swal({
+                    title: "สั่งอาหารเรียบร้อย",
+                    text: "โปรดรออาหารสักครู่...",
+                    icon: "success",
+                    button: "Close",
+                });
+                this.props.history.push('/menu/')
+            }
         }
 
     }
+
+    async updateOrder() {
+
+        var order = []
+
+        const date_now = new Date();
+        var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
+        const data = new FormData();
+
+        var order_service = document.getElementById('order_service').value
+        var order = {
+            'table_code': '01',
+            'order_service': order_service,
+            'customer_code': 'CM001',
+            'order_date': toDay,
+            'order_code': this.props.match.params.code,
+            'order_total_price': this.sumtotal()
+        }
+
+
+
+        const res = await order_model.updateOrderByCode(order)
+        const arr = await order_list_model.deleteOrderListByCode(this.state.order_old)
+
+        for (var key in this.state.cart) {
+            // this.state.cart[key].code
+            // this.state.cart[key].count
+            // this.state.cart[key].name
+            // this.state.cart[key].price
+            var order_list = {
+                order_code: this.state.order_old.order_code,
+                menu_code: this.state.cart[key].code,
+                order_list_qty: this.state.cart[key].count,
+                order_list_name: this.state.cart[key].name,
+                order_list_price_qty: this.state.cart[key].price,
+                order_list_price_sum_qty: this.state.cart[key].count * this.state.cart[key].price,
+                order_list_price_sum: this.sumtotal()
+            }
+            const arr = await order_list_model.insertOrderList(order_list)
+            if (order_list != undefined) {
+                swal({
+                    title: "สั่งอาหารเรียบร้อย",
+                    text: "โปรดรออาหารสักครู่...",
+                    icon: "success",
+                    button: "Close",
+                });
+            }
+        }
+
+    }
+
     rendertotal() {
         if (this.state.cart != undefined) {
             var order_total = []
@@ -310,33 +386,55 @@ class MenuView extends Component {
 
         return (
 
-            <div>
+            <div style={{ padding: '10px' }}>
+                <Card>
+                    <CardBody style={{ padding: '5px' }}>
+                        <Row style={{ minWidth: '100%', height: '100%', minHeight: '80vh' }}>
 
-                <Row style={{ minWidth: '100%', height: '100%', minHeight: '80vh' }}>
-                    <Col lg="6" style={{ borderStyle: 'solid', borderWidth: 1 }}>
+                            <Col lg="6">
+                                <Row style={{ paddingTop: '2%' }}>
+                                    {this.renderMenuType()}
+                                </Row>
+                                <hr />
+                                {/* <TabPanel > */}
+                                <Row style={{ paddingTop: '5%', overflowY: 'scroll', }}>
+                                    {this.renderMenuby()}
+                                </Row>
+                                {/* </TabPanel>
+                                </Tabs> */}
+                            </Col>
 
-                        <Row style={{ minWidth: '100%' }}>
-                            {this.renderMenuType()}
+
+
+                            <Col lg="6" style={{ borderStyle: 'solid', borderWidth: 1, overflowY: 'scroll' }}>
+                                <Row style={{ padding: '2%' }}>
+                                    <Col lg="3">
+                                        <FormGroup>
+                                            <Input type="select" id="order_service" name="order_service" class="form-control" >
+                                                <option value="ทานที่ร้าน">ทานที่ร้าน</option>
+                                                <option value="สั่งกลับบ้าน">สั่งกลับบ้าน</option>
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+
+
+                                </Row>
+                                <Row >
+                                    <div style={{ paddingTop: '10px', paddingLeft: '10px', paddingBottom: '30px' }}> รายการอาหาร</div>
+
+                                </Row>
+
+                                {this.rendercart()}
+
+                                {this.rendertotal()}
+                                {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code == undefined ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.insertOrder.bind(this)}><label>สั่งอาหาร</label></Button></div></Row> : ''}
+                                {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.updateOrder.bind(this)}><label>แก้ไขการสั่งอาหาร</label></Button></div></Row> : ''}
+
+
+                            </Col>
                         </Row>
-                        <Row style={{ overflowY: 'scroll', paddingTop: '20px' }}>
-                            {this.renderMenuby()}
-                        </Row>
-                    </Col>
-                    <Col lg="6" style={{ borderStyle: 'solid', borderWidth: 1 }}>
-
-                        <Row >
-                            <div style={{ paddingTop: '10px', paddingLeft: '10px', paddingBottom: '30px' }}> รายการอาหาร</div>
-
-                        </Row>
-
-                        {this.rendercart()}
-                        {this.rendertotal()}
-                        {this.state.cart != undefined && this.state.cart != "" ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.insertOrder.bind(this)}><label>สั่งอาหาร</label></Button></div></Row> : ''}
-
-
-                    </Col>
-                </Row>
-
+                    </CardBody>
+                </Card>
             </div>
 
         )

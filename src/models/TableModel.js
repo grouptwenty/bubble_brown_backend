@@ -1,31 +1,11 @@
 import GOBALS from '../GOBALS';
-export default class OrderModel {
+export default class TableModel {
 
     constructor() {
     }
-    // async getMenuTypeBy(data) {
-    //     return fetch(GOBALS.URL + '/menutype/getMenuTypeBy', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(data)
-    //     }).then((response) => response.json())
-    //         .then((responseJson) => {
 
-    //             return responseJson;
-    //         }).catch((error) => {
-    //             return {
-    //                 data: [],
-    //                 error: error,
-    //                 query_result: false,
-    //                 server_result:false
-    //             };
-    //         });
-    // }
-    async getOrderMaxCode(data) {
-        return fetch(GOBALS.URL + '/order/getOrderMaxCode', {
+    async getTableBy(data) {
+        return fetch(GOBALS.URL + '/table/getTableBy', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -46,8 +26,30 @@ export default class OrderModel {
             });
     }
 
-    async insertOrder(data) {
-        return fetch(GOBALS.URL + '/order/insertOrder', {
+    async getTableByZoneCode(data) {
+        return fetch(GOBALS.URL + '/table/getTableByZoneCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({zone_id: data})
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result:false
+                };
+            });
+    }
+
+    async getTableMaxCode(data) {
+        return fetch(GOBALS.URL + '/table/getTableMaxCode', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -68,8 +70,31 @@ export default class OrderModel {
             });
     }
 
-    async getOrderBy(data) {
-        return fetch(GOBALS.URL + '/order/getOrderBy', {
+    
+    async getTableByCode(data) {
+        return fetch(GOBALS.URL + '/table/getTableByCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ table_code: data })
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+
+    async insertTable(data) {
+        return fetch(GOBALS.URL + '/table/insertTable', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -85,35 +110,13 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
 
-    async getOrderByCode(data) {
-        return fetch(GOBALS.URL + '/order/getOrderByCode', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({order_code:data})
-        }).then((response) => response.json())
-            .then((responseJson) => {
-
-                return responseJson;
-            }).catch((error) => {
-                return {
-                    data: [],
-                    error: error,
-                    query_result: false,
-                    server_result:false
-                };
-            });
-    }
-
-    async updateOrderByCode(data) {
-        return fetch(GOBALS.URL + '/order/updateOrderByCode', {
+    async updateTebleBy(data) {
+        return fetch(GOBALS.URL + '/table/updateTebleBy', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -129,10 +132,33 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
+                    server_result: false
+                };
+            });
+    }
+
+    async deleteByCode(data) {
+        return fetch(GOBALS.URL + '/table/deleteByCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({table_code:data})
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
                     server_result:false
                 };
             });
     }
+    
     
 
 }
