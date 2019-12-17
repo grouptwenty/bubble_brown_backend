@@ -47,6 +47,29 @@ export default class TableModel {
                 };
             });
     }
+
+    async getTableMaxCode(data) {
+        return fetch(GOBALS.URL + '/table/getTableMaxCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result:false
+                };
+            });
+    }
+
     
     async getTableByCode(data) {
         return fetch(GOBALS.URL + '/table/getTableByCode', {
@@ -56,6 +79,28 @@ export default class TableModel {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ table_code: data })
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+
+    async insertTable(data) {
+        return fetch(GOBALS.URL + '/table/insertTable', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 
