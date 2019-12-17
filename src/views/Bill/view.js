@@ -623,7 +623,7 @@ class BillView extends Component {
                                             <CardHeader style={{ textAlign: 'center', }}>เพิ่มบิล</CardHeader>
                                             <CardBody>
                                                 <CardText style={{ textAlign: 'center' }}>
-                                                    <NavLink exact to={`/menu/`} style={{ width: '100%' }}>
+                                                    <NavLink exact to={`/order/`} style={{ width: '100%' }}>
                                                         <i class="fa fa-plus-square-o" aria-hidden="true" style={{ color: '#515A5A', fontSize: '50px' }}></i>
                                                     </NavLink>
                                                 </CardText>

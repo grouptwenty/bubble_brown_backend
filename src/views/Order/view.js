@@ -19,7 +19,7 @@ const order_model = new OrderModel
 const order_list_model = new OrderListModel
 const table_model = new TableModel
 var cart = [];
-class MenuView extends Component {
+class OrderView extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -111,14 +111,14 @@ class MenuView extends Component {
             for (let i = 0; i < this.state.menutype_list.length; i++) {
                 type_list.push(
                     <div>
-                        {/* <TabList>
+                        <TabList>
                             <Tab onClick={this.getMenuByCode.bind(this, this.state.menutype_list[i].menu_type_code)}> {this.state.menutype_list[i].menu_type_name}</Tab>
-                        </TabList> */}
-                        <Col onClick={this.getMenuByCode.bind(this, this.state.menutype_list[i].menu_type_code)} style={{ borderRightStyle: 'ridge', pading: '0px' }}>
+                        </TabList>
+                        {/* <Col onClick={this.getMenuByCode.bind(this, this.state.menutype_list[i].menu_type_code)} style={{ borderRightStyle: 'ridge', pading: '0px' }}>
                             <label style={{ margin: '15px' }} >
                                 {this.state.menutype_list[i].menu_type_name}
                             </label>
-                        </Col>
+                        </Col> */}
                     </div>
 
                 )
@@ -339,6 +339,17 @@ class MenuView extends Component {
 
     }
 
+    async onMenuAdd() {
+        // const max_code = await table_model.getTableMaxCode()//province data
+        // // console.log("max_code", max_code);
+
+        // var table_code = 'T' + max_code.data.table_code_max
+        // this.setState({
+        //     table_code_add: table_code
+        // })
+        // this.toggle_Table_Add()
+    }
+
     rendertotal() {
         if (this.state.cart != undefined) {
             var order_total = []
@@ -399,6 +410,17 @@ class MenuView extends Component {
                                 {/* <TabPanel > */}
                                 <Row style={{ paddingTop: '5%', overflowY: 'scroll', }}>
                                     {this.renderMenuby()}
+                                    <Col lg="4">
+
+                                        <Card body outline  color="success" style={{borderWidth:"2px",borderStyle:'dashed',padding:0}}>
+                                            <CardBody style={{ textAlign: 'center',alignItems:'center' ,padding:0}}>
+                                                {/* <i class="fa fa-plus-square-o" aria-hidden="true" style={{ color: 'green', fontSize:'50px' }} /> */}
+                                                <label style={{ color: 'green', fontSize:'60px' }} > + </label>
+                                                </CardBody>
+                                        </Card>
+
+                                        {/* </ClickNHold> */}
+                                    </Col>
                                 </Row>
                                 {/* </TabPanel>
                                 </Tabs> */}
@@ -430,7 +452,6 @@ class MenuView extends Component {
                                 {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code == undefined ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.insertOrder.bind(this)}><label>สั่งอาหาร</label></Button></div></Row> : ''}
                                 {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.updateOrder.bind(this)}><label>แก้ไขการสั่งอาหาร</label></Button></div></Row> : ''}
 
-
                             </Col>
                         </Row>
                     </CardBody>
@@ -440,4 +461,4 @@ class MenuView extends Component {
         )
     }
 }
-export default (MenuView);
+export default (OrderView);

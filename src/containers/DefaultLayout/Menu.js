@@ -25,8 +25,8 @@ export default class MenuComponent {
                 class: ''
             },
             {
-                name: 'เมนู',
-                url: '/menu/',
+                name: 'สั่งอาการ',
+                url: '/order/',
                 icon: 'icon-list',
             },
             {
@@ -51,22 +51,22 @@ export default class MenuComponent {
                 url: '/product-manage/',
                 icon: 'icon-pencil',
                 children: [
-                    {
-                        name: 'สินค้า',
-                        // url: '/product-manage/product',
-                    },
+                    // {
+                    //     name: 'สินค้า',
+                    //     // url: '/product-manage/product',
+                    // },
                     {
                         name: 'จัดการสูตร',
                         url: '/product-manage/recipe',
                     },
                     {
                         name: 'สต๊อกเข้า',
-                        // url: '/product-manage/stock-in',
+                        url: '/product-manage/stock-in',
                     },
-                    {
-                        name: 'สต๊อกออก',
-                        // url: '/product-manage/stock-out',
-                    },
+                    // {
+                    //     name: 'สต๊อกออก',
+                    //     // url: '/product-manage/stock-out',
+                    // },
                 ],
             },
 
