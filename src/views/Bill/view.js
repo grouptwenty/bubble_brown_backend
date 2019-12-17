@@ -135,7 +135,7 @@ class BillView extends Component {
 
 
     start(order_code) {
-        this.props.history.push('/menu/' + order_code)
+        this.props.history.push('/order/' + order_code)
     }
 
 
