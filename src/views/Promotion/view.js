@@ -84,7 +84,7 @@ class PromotionView extends Component {
         for (var key in promotion_list.data) {
             var set_row = {
                 pCode: promotion_list.data[key].promotion_code,
-                Type: promotion_list.data[key].promotion_type_code,
+                Type: promotion_list.data[key].menu_type_name,
                 Header: promotion_list.data[key].promotion_header,
                 Detail: promotion_list.data[key].promotion_detail,
                 Picture: promotion_list.data[key].promotion_image,
@@ -124,11 +124,12 @@ class PromotionView extends Component {
                                                 data={data.rows}
                                                 striped hover pagination
                                                 search={true}
+                                                // className="table-overflow"
 
                                             >
                                                 {/* <TableHeaderColumn width={"15%"} dataField='Code' headerAlign="center" dataAlign="center" >Code</TableHeaderColumn> */}
-                                                <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center"dataSort isKey={true} dataFormat={this.showPicture.bind(this)}>Picture</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='Header' headerAlign="center" dataAlign="center" dataSort>Header</TableHeaderColumn>
+                                                {/* <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>Picture</TableHeaderColumn> */}
+                                                <TableHeaderColumn dataField='Header' headerAlign="center" dataAlign="center" dataSort isKey={true}>Header</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Detail' headerAlign="center" dataAlign="center" dataSort>Detail</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Type' headerAlign="center" dataAlign="center" dataSort>Type</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Start' headerAlign="center" dataAlign="center" dataSort>Startdate</TableHeaderColumn>

@@ -39,26 +39,30 @@ class insertView extends Component {
   
 
     async componentDidMount() {
-        const max_code = await customer_model.getCustomerMaxCode()
-    document.getElementById("customer_code").value = 'CM' + max_code.data.customer_code_max
+      
     // console.log("max_code",customer_code_max);
 }
 
     
 
     async handleSubmit(event) {
-        event.preventDefault();
+        event.preventDefault(); 
+
         const form = event.target;
         const data = new FormData(form);
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime()
         var arr = {};
+        
+        const max_code = await customer_model.getCustomerMaxCode()
+        var customer_code = 'CM' + max_code.data.customer_code_max
+
 
         for (let name of data.keys()) {
             arr[name] = form.elements[name.toString()].value;
         }
         
-
+        arr['customer_code'] = customer_code
         if (this.check(arr)) {
             var res = await customer_model.insertCustomer(arr);
             //   console.log(res)
@@ -138,16 +142,13 @@ class insertView extends Component {
                                   
                                     <Col lg="12">
                                         <br />
-                                        <Row>
-                                            <Col lg="4">
-                                                <Label className="text_head"> รหัสลูกค้า<font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="customer_code" name="customer_code" class="form-control" readOnly ></Input>
-                                                <p id="customer_code" className="text_head_sub">Example : CM001</p>
-                                            </Col>
-                                            <br />
-                                           
-                                        </Row>
-                                        <br />
+            
+                                            {/* <Col lg="4">
+                                                <Label className="text_head"> รหัสลูกค้า<font color='red'><b> * </b></font></Label> */}
+                                                {/* <Input type="hidden" id="customer_code" name="customer_code" class="form-control" readOnly ></Input> */}
+                                                {/* <p id="customer_code" className="text_head_sub">Example : CM001</p> */}
+                                            {/* </Col> */}
+                                        
                                         <Row>
                                             <Col lg="6">
                                                 <Label className="text_head"> ชื่อ-นามสกุล <font color='red'><b> * </b></font></Label>
