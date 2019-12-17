@@ -184,7 +184,7 @@ class ProductTable extends React.Component {
         var insert = false
         if (product_name.length > 0) {
             for (let i = 0; i < product_name.length; i++) {
-                if (product_name[i].value == '' || product_code[i].value == '' || product_qty[i].value == '' || sell_price[i].value == '' ||  unit[i].value == '' ) {
+                if (product_name[i].value == '' || product_code[i].value == '' || product_qty[i].value == '' || sell_price[i].value == '' || unit[i].value == '') {
                     swal({
                         text: "กรุณากรอกข้อมูลให้ครบ",
                         icon: "warning",
@@ -245,9 +245,9 @@ class ProductTable extends React.Component {
                 <Card>
 
                     <CardBody>
-                        <button type="button" onClick={this.props.onRowAdd} className="btn btn-success pull-right">Add</button>
-                        <table className="table table-bordered">
-                            <thead>
+
+                        <table className="table table-bordered"  >
+                            <thead style={{textAlign:'center'}}>
                                 <tr>
                                     <th>#</th>
                                     <th>ชื่อวัตถุดิบ</th>
@@ -261,9 +261,18 @@ class ProductTable extends React.Component {
 
                             <tbody>
                                 {recipe}
-
                             </tbody>
+                            <tbody>
+                                <tr style={{ textAlign: 'center' }}>
+                                    <td colSpan="7">
+                                     
+                                            <i class="fa fa-plus" aria-hidden="true" style={{ color: 'red', fontSize: '23px' }} />
+                                            <label onClick={this.props.onRowAdd} style={{ color: 'red', fontSize: '18px' }}> เพิ่มรายการ</label>
+                                        
+                                    </td>
 
+                                </tr>
+                            </tbody>
                         </table>
                     </CardBody>
                     <CardFooter>
@@ -398,7 +407,8 @@ class ProductRow extends React.Component {
 
 
                 <td className="del-cell">
-                    <input type="button" onClick={this.onDelEvent.bind(this)} value="X" className="del-btn" />
+                <i class="fa fa-times" aria-hidden="true" style={{ color: 'red', fontSize: '23px' }} onClick={this.onDelEvent.bind(this)} />
+                    {/* <input type="button" onClick={this.onDelEvent.bind(this)} value="X" className="del-btn" /> */}
                 </td>
             </tr>
 
