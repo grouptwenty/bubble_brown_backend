@@ -18,7 +18,7 @@ class Stock extends Component {
       <HashRouter>
         <React.Suspense fallback={loading()}>
           <Switch>
-            <Route exact path="/product-manage/stock-in/" render={props => <StockView {...props} />} />
+            <Route exact path="/product-manage/stock-in" render={props => <StockView {...props} />} />
             <Route exact path="/product-manage/stock-in/insert/" render={props => <StockInsert {...props} />} />
             <Route exact path="/product-manage/stock-in/stock-in-order/:code" render={props => <StockDetail {...props} />} />
 

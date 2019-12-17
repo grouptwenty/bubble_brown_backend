@@ -4,8 +4,9 @@ import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHe
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import swal from 'sweetalert';
-
+import StockModel from '../../../models/StockModel'
 import ProductModel from '../../../models/ProductModel'
+const stock_model = new StockModel
 
 const product_model = new ProductModel
 class RecipeView extends Component {
@@ -20,31 +21,34 @@ class RecipeView extends Component {
 
 
     async componentDidMount() {
-        var product = await product_model.getProductBy()
-        console.log(product);
+      
+        var stock = await stock_model.getSumStockBy()
+  
 
         this.setState({
-            product: product.data
+            stock: stock.data,
         })
+       
+        
 
     }
 
     renderProductList() {
-        if (this.state.product != undefined) {
-            let product_list = []
-            for (let i = 0; i < this.state.product.length; i++) {
-                product_list.push(
+        if (this.state.stock != undefined) {
+            let stock_list = []
+            for (let i = 0; i < this.state.stock.length; i++) {
+                stock_list.push(
                     <tr>
 
-                        <td ><h6 >{this.state.product[i].product_name}</h6></td>
-                        <td ><h6 className="textcenter3">{this.state.product[i].product_code}</h6></td>
-                        <td ><h6 className="textcenter3"></h6></td>
-                        <td ><h6 style={{ textAlign: 'end' }}>{Number(this.state.product[i].product_price).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</h6></td>
-                        <td ><h6 className="textcenter3">{this.state.product[i].product_cost}</h6></td>
+                        <td ><h6 >{this.state.stock[i].product_name}</h6></td>
+                        <td ><h6 className="textcenter3">{this.state.stock[i].product_code}</h6></td>
+                        <td ><h6 className="textcenter3">{this.state.stock[i].sum_stock}</h6></td>
+                        <td ><h6 style={{ textAlign: 'end' }}>{Number(this.state.stock[i].product_price).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</h6></td>
+                        <td ><h6 className="textcenter3">{this.state.stock[i].product_cost}</h6></td>
 
                         <td >
                             < h6 className="textcenter3">
-                                <NavLink exact to={`/product-manage/stock-in/stock-in-order/` + this.state.product[i].product_code} style={{ width: '100%' }}>
+                                <NavLink exact to={`/product-manage/stock-in/stock-in-order/` + this.state.stock[i].product_code} style={{ width: '100%' }}>
                                     <Button >รายการสต๊อกเข้า</Button>
                                 </NavLink>
                             </ h6>
@@ -52,7 +56,7 @@ class RecipeView extends Component {
                     </tr>
 
                 )
-            } return product_list;
+            } return stock_list;
         }
     }
 
@@ -68,7 +72,7 @@ class RecipeView extends Component {
                     <Col>
                         <Card>
                             <CardHeader style={{ textAlign: 'center' }}>
-                                จัดการสต๊อกเข้า
+                                จัดการสต๊อก - เข้า
                                 <NavLink exact to={`/product-manage/stock-in/insert/`} style={{ width: '100%' }}>
                                     <button class="btn btn-primary btn-lg float-right boottom-header" name="add_stock">
                                         <i class="fa fa-plus" ></i>
