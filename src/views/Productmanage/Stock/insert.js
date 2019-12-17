@@ -15,10 +15,10 @@ import { fonts } from 'pdfmake/build/pdfmake';
 import swal from 'sweetalert';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
-import RecipeModel from '../../../models/RecipeModel'
+import StockModel from '../../../models/StockModel'
 import ProductModel from '../../../models/ProductModel'
 
-const recipe_model = new RecipeModel
+const stock_model = new StockModel
 const product_model = new ProductModel
 
 
@@ -30,62 +30,22 @@ class insertView extends Component {
             brand: [],
             machine_type: [],
             refresh: false,
-            recipe: [],
+            stock: [],
 
         };
-        // this.toggle = this.toggle.bind(this);
-        this.state.filterText = "";
-        //     this.state.recipes = [
-        //         {
-        //             id: 1,
-        //             category: 'Sporting Goods',
-        //             price: '49.99',
-        //             qty: 12,
-        //             name: 'football'
-        //         }, {
-        //             id: 2,
-        //             category: 'Sporting Goods',
-        //             price: '9.99',
-        //             qty: 15,
-        //             name: 'baseball'
-        //         }, {
-        //             id: 3,
-        //             category: 'Sporting Goods',
-        //             price: '29.99',
-        //             qty: 14,
-        //             name: 'basketball'
-        //         }, {
-        //             id: 4,
-        //             category: 'Electronics',
-        //             price: '99.99',
-        //             qty: 34,
-        //             name: 'iPod Touch'
-        //         }, {
-        //             id: 5,
-        //             category: 'Electronics',
-        //             price: '399.99',
-        //             qty: 12,
-        //             name: 'iPhone 5'
-        //         }, {
-        //             id: 6,
-        //             category: 'Electronics',
-        //             price: '199.99',
-        //             qty: 23,
-        //             name: 'nexus 7'
-        //         }
-        //     ];
+
     }
 
 
 
     async componentDidMount() {
-        const code = this.props.match.params.code
-        var recipe = await recipe_model.getRecipeByCode(code)
-        // console.log(code);
+      
+        var stock = await stock_model.getStockBy()
+        console.log(stock);
 
 
         this.setState({
-            recipe: recipe.data,
+            stock: stock.data,
 
         })
         // console.log("this.state.code",this.state.code);
@@ -94,23 +54,23 @@ class insertView extends Component {
 
 
 
-    handleRowDel(recipe) {
-        var index = this.state.recipe.indexOf(recipe);
-        this.state.recipe.splice(index, 1);
-        this.setState(this.state.recipe);
+    handleRowDel(stock) {
+        var index = this.state.stock.indexOf(stock);
+        this.state.stock.splice(index, 1);
+        this.setState(this.state.stock);
     };
 
     handleAddEvent(evt) {
         var id = (+ new Date() + Math.floor(Math.random() * 999999)).toString(36);
-        var recipe = {
+        var stock = {
             id: id,
             name: "",
             price: "",
             category: "",
             qty: 0
         }
-        this.state.recipe.push(recipe);
-        this.setState(this.state.recipe);
+        this.state.stock.push(stock);
+        this.setState(this.state.stock);
 
     }
 
@@ -120,19 +80,19 @@ class insertView extends Component {
             name: evt.target.name,
             value: evt.target.value
         };
-        var recipes = this.state.recipe.slice();
-        var newProducts = recipes.map(function (recipe) {
+        var stocks = this.state.stock.slice();
+        var newProducts = stocks.map(function (stock) {
 
-            for (var key in recipe) {
-                if (key == item.name && recipe.id == item.id) {
-                    recipe[key] = item.value;
+            for (var key in stock) {
+                if (key == item.name && stock.id == item.id) {
+                    stock[key] = item.value;
 
                 }
             }
-            return recipe;
+            return stock;
         });
-        this.setState({ recipes: newProducts });
-        //  console.log(this.state.recipes);
+        this.setState({ stocks: newProducts });
+        //  console.log(this.state.stocks);
     };
 
 
@@ -142,7 +102,7 @@ class insertView extends Component {
         return (
             <div>
 
-                <ProductTable onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} recipes={this.state.recipe} filterText={this.state.filterText} />
+                <ProductTable onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} stocks={this.state.stock} filterText={this.state.filterText} />
             </div>
         );
 
@@ -168,72 +128,68 @@ class SearchBar extends React.Component {
 
 class ProductTable extends React.Component {
 
-    async  insertRecipe(code) {
+    async  insertStock(code) {
 
 
-        // var product_name = document.getElementsByName('product_name')
-        // var product_code = document.getElementsByName('product_code')
-        // var product_qty = document.getElementsByName('product_qty')
-        // var sell_price = document.getElementsByName('sell_price')
-        // var unit = document.getElementsByName('unit')
-        // // console.log("product_code", product_code[0].value);
-        // var insert = false
-        // if (product_name.length > 0) {
-        //     for (let i = 0; i < product_name.length; i++) {
-        //         if (product_name[i].value == '' || product_code[i].value == '' || product_qty[i].value == '' || sell_price[i].value == '' || unit[i].value == '') {
-        //             swal({
-        //                 text: "กรุณากรอกข้อมูลให้ครบ",
-        //                 icon: "warning",
-        //                 button: "Close",
-        //             });
-        //             insert = false
-        //             break;
-        //         }
-        //         insert = true
-        //     }
-        // } if (product_name.length <= 0) {
-        //     swal({
-        //         text: "กรุณากรอกข้อมูลให้ครบ",
-        //         icon: "warning",
-        //         button: "Close",
-        //     });
-        // }
-        // if (insert) {
-        //     var menu_code = this.props.menuCode
-        //     // console.log(menu_code);
-        //     const arr = await recipe_model.deleteRecipeByCode(menu_code)
-        //     for (let i = 0; i < product_name.length; i++) {
+        var product_code = document.getElementsByName('product_code')
+        var stock_qty = document.getElementsByName('stock_qty')
+        var stock_cost = document.getElementsByName('stock_cost')
+  
 
-        //         var recipe_list = {
-        //             menu_code: menu_code,
-        //             product_name: product_name[i].value,
-        //             product_code: product_code[i].value,
-        //             product_qty: product_qty[i].value,
-        //             sell_price: sell_price[i].value,
-        //             unit: unit[i].value,
-        //         }
+        //     // console.log("product_code", product_code[0].value);
+            var insert = false
+            if (product_code.length > 0) {
+                for (let i = 0; i < product_code.length; i++) {
+                    if (product_code[i].value == '' || stock_qty[i].value == '' || stock_cost[i].value == '' ) {
+                        swal({
+                            text: "กรุณากรอกข้อมูลให้ครบ",
+                            icon: "warning",
+                            button: "Close",
+                        });
+                        insert = false
+                        break;
+                    }
+                    insert = true
+                }
+            } if (product_code.length <= 0) {
+                swal({
+                    text: "กรุณากรอกข้อมูลให้ครบ",
+                    icon: "warning",
+                    button: "Close",
+                });
+            }
+            if (insert) {
+
+                for (let i = 0; i < product_code.length; i++) {
+
+                    var stock_list = {
+                        stock_cost: stock_cost[i].value,
+                        stock_qty: stock_qty[i].value,
+                        product_code: product_code[i].value,
+            
+                    }
 
 
 
-        //         const src = await recipe_model.insertRecipe(recipe_list)
-        //         if (recipe_list != undefined) {
-        //             swal({
-        //                 title: "จัดการสูตรเรียบร้อย",
-        //                 icon: "success",
-        //                 button: "Close",
-        //             });
-        //         }
-        //     }
-        // }
+                    const src = await stock_model.insertStock(stock_list)
+                    if (stock_list != undefined) {
+                        swal({
+                            title: "จัดการสูตรเรียบร้อย",
+                            icon: "success",
+                            button: "Close",
+                        });
+                    }
+                }
+            }
     }
 
     render() {
         var onProductTableUpdate = this.props.onProductTableUpdate;
         var rowDel = this.props.onRowDel;
         var filterText = this.props.filterText;
-        var recipe = this.props.recipes.map(function (recipe) {
+        var stock = this.props.stocks.map(function (stock) {
 
-            return (<ProductRow onProductTableUpdate={onProductTableUpdate} recipe={recipe} onDelEvent={rowDel.bind(this)} key={recipe.id} />)
+            return (<ProductRow onProductTableUpdate={onProductTableUpdate} stock={stock} onDelEvent={rowDel.bind(this)} key={stock.id} />)
         });
         return (
 
@@ -243,28 +199,28 @@ class ProductTable extends React.Component {
                     <CardBody>
 
                         <table className="table table-bordered"  >
-                            <thead style={{textAlign:'center'}}>
+                            <thead style={{ textAlign: 'center' }}>
                                 <tr>
                                     <th>#</th>
                                     <th>ชื่อวัตถุดิบ</th>
                                     <th>รหัสวัตถุดิบ</th>
+                                    <th>ราคา</th>
                                     <th>จำนวน</th>
-                                    <th>ราคาขาย</th>
-                                    <th>หน่วย</th>
+                                    <th>ต้นทุน</th>
                                     <th></th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {recipe}
+                                {stock}
                             </tbody>
                             <tbody>
                                 <tr style={{ textAlign: 'center' }}>
                                     <td colSpan="7">
-                                     
-                                            <i class="fa fa-plus" aria-hidden="true" style={{ color: 'red', fontSize: '23px' }} />
-                                            <label onClick={this.props.onRowAdd} style={{ color: 'red', fontSize: '18px' }}> เพิ่มรายการ</label>
-                                        
+
+                                        <i class="fa fa-plus" aria-hidden="true" style={{ color: 'red', fontSize: '23px' }} />
+                                        <label onClick={this.props.onRowAdd} style={{ color: 'red', fontSize: '18px' }}> เพิ่มรายการ</label>
+
                                     </td>
 
                                 </tr>
@@ -273,7 +229,7 @@ class ProductTable extends React.Component {
                     </CardBody>
                     <CardFooter>
                         <Button type="button"
-                            onClick={this.insertRecipe.bind(this)}
+                            onClick={this.insertStock.bind(this)}
                             color="success">บันทึก</Button>
                     </CardFooter>
                 </Card>
@@ -296,7 +252,7 @@ class ProductRow extends React.Component {
         };
     }
     onDelEvent() {
-        this.props.onDelEvent(this.props.recipe);
+        this.props.onDelEvent(this.props.stock);
 
     }
     product_select(data) {
@@ -314,16 +270,16 @@ class ProductRow extends React.Component {
             <tr className="eachRow">
                 {/* <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
                     "type": "menu_code",
-                    value: this.props.recipe.menu_code,
-                    id: this.props.recipe.menu_code
+                    value: this.props.stock.menu_code,
+                    id: this.props.stock.menu_code
                 }} /> */}
 
                 <ModelProduct test={this.product_select.bind(this)} />
                 {this.state.data == '' ?
                     <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
                         type: "product_name",
-                        value: this.props.recipe.product_name,
-                        id: this.props.recipe.product_name,
+                        value: this.props.stock.product_name,
+                        id: this.props.stock.product_name,
                         readonly: true
                     }} />
 
@@ -338,8 +294,8 @@ class ProductRow extends React.Component {
                 {this.state.data == '' ?
                     <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
                         type: "product_code",
-                        value: this.props.recipe.product_code,
-                        id: this.props.recipe.product_code,
+                        value: this.props.stock.product_code,
+                        id: this.props.stock.product_code,
                         readonly: true
                     }} />
 
@@ -352,58 +308,60 @@ class ProductRow extends React.Component {
                     }} />}
 
                 {this.state.data == '' ?
+                    <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
+                        type: "product_price",
+                        value: this.props.stock.product_price,
+                        id: this.props.stock.product_price,
+                        readonly: true
+                    }} />
+
+
+                    : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
+                        type: "product_price",
+                        value: this.state.data.product_price,
+                        id: this.state.data.product_price,
+                        readonly: true
+                    }} />}
+
+                {this.state.data == '' ?
 
                     <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "product_qty",
-                        value: this.props.recipe.product_qty,
-                        id: this.props.recipe.product_qty,
+                        type: "stock_qty",
+                        value: this.props.stock.stock_qty,
+                        id: this.props.stock.stock_qty,
                         readonly: false
                     }} />
 
 
                     : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "product_qty",
-                        value: this.state.data.product_qty,
-                        id: this.state.data.product_qty,
+                        type: "stock_qty",
+                        value: this.state.data.stock_qty,
+                        id: this.state.data.stock_qty,
                         readonly: false
                     }} />}
 
                 {this.state.data == '' ?
 
                     <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "sell_price",
-                        value: this.props.recipe.sell_price,
-                        id: this.props.recipe.sell_price,
+                        type: "stock_cost",
+                        value: this.props.stock.stock_cost,
+                        id: this.props.stock.stock_cost,
                         readonly: false
                     }} />
 
 
                     : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "sell_price",
-                        value: this.state.data.sell_price,
-                        id: this.state.data.sell_price,
+                        type: "stock_cost",
+                        value: this.state.data.stock_cost,
+                        id: this.state.data.stock_cost,
                         readonly: false
                     }} />}
 
-                {this.state.data == '' ?
 
-                    <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "unit",
-                        value: this.props.recipe.unit,
-                        id: this.props.recipe.unit,
-                        readonly: false
-                    }} />
-
-                    : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "unit",
-                        value: this.state.data.unit,
-                        id: this.state.data.unit,
-                        readonly: false
-                    }} />}
 
 
                 <td className="del-cell">
-                <i class="fa fa-times" aria-hidden="true" style={{ color: 'red', fontSize: '23px' }} onClick={this.onDelEvent.bind(this)} />
+                    <i class="fa fa-times" aria-hidden="true" style={{ color: 'red', fontSize: '23px' }} onClick={this.onDelEvent.bind(this)} />
                     {/* <input type="button" onClick={this.onDelEvent.bind(this)} value="X" className="del-btn" /> */}
                 </td>
             </tr>
@@ -482,10 +440,11 @@ class ModelProduct extends React.Component {
 
 
         return (
+
             <>
                 <Modal
                     isOpen={this.state.modal}
-                    // toggle={this.toggle} 
+                    toggle={this.toggle}
                     className={this.props.className} size="lg">
                     <ModalBody style={{ paddingTop: '5%' }}>
                         <ListGroup>
@@ -504,12 +463,12 @@ class ModelProduct extends React.Component {
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={this.toggle2.bind(this)} size="lg" color="secondary" > กลับ</Button>
-                        {/* <Button onClick={this.handleSubmit.bind(this)} type="submit" size="lg" color="success">บันทึก</Button> */}
-                        {/* <Button onClick={this.onDelete.bind(this, this.state.table_edit.table_code)} color="danger" size="lg" >ลบ</Button> */}
                     </ModalFooter>
                 </Modal>
                 <td>
-                    <Button onClick={this.toggle.bind(this)}>แก้ไข</Button>
+                    <Button
+                        onClick={this.toggle.bind(this)}
+                    >แก้ไข</Button>
                 </td>
             </>
         );

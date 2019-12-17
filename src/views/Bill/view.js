@@ -31,20 +31,24 @@ class BillView extends Component {
             x: []
 
         };
-        this.renderBill = this.renderBill.bind(this);
+
         this.onBillDetail = this.onBillDetail.bind(this);
         this.onTableEdit = this.onTableEdit.bind(this);
-        this.renderOrderList = this.renderOrderList.bind(this);
+        // this.onTableAdd = this.onTableAdd.bind(this);
         this.toggle_Bill = this.toggle_Bill.bind(this);
+        this.toggle_Table_Edit = this.toggle_Table_Edit.bind(this);
+        this.toggle_Table_Add = this.toggle_Table_Add.bind(this);
+        this.renderBill = this.renderBill.bind(this);
+        this.renderOrderList = this.renderOrderList.bind(this);
         this.renderZoneMenu = this.renderZoneMenu.bind(this);
         this.renderTableByZone = this.renderTableByZone.bind(this);
         this.renderModalBill = this.renderModalBill.bind(this);
-        this.toggle_Table = this.toggle_Table.bind(this);
-        this.renderModelEdit = this.renderModelEdit.bind(this);
+        this.renderModelTableEdit = this.renderModelTableEdit.bind(this);
+        this.renderModelTableAdd = this.renderModelTableAdd.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onDelete = this.onDelete.bind(this);
         this.start = this.start.bind(this);
-        // this.download = this.download.bind(this);
+        this.download = this.download.bind(this);
 
     }
 
@@ -81,9 +85,16 @@ class BillView extends Component {
     }
 
 
-    toggle_Table() {
+    toggle_Table_Edit() {
         this.setState(prevState => ({
-            modal_table: !prevState.modal_table
+            modal_table_edit: !prevState.modal_table_edit
+
+        }));
+    }
+
+    toggle_Table_Add() {
+        this.setState(prevState => ({
+            modal_table_add: !prevState.modal_table_add
 
         }));
     }
@@ -108,12 +119,23 @@ class BillView extends Component {
             table_edit: table_edit.data
         })
 
-        this.toggle_Table()
+        this.toggle_Table_Edit()
+    }
+
+    async onTableAdd() {
+        const max_code = await table_model.getTableMaxCode()//province data
+        // console.log("max_code", max_code);
+
+        var table_code = 'T' + max_code.data.table_code_max
+        this.setState({
+            table_code_add: table_code
+        })
+        this.toggle_Table_Add()
     }
 
 
     start(order_code) {
-        this.props.history.push('/menu/' + order_code)
+        this.props.history.push('/order/' + order_code)
     }
 
 
@@ -257,7 +279,12 @@ class BillView extends Component {
                     <TabPanel>
                         <Row>
                             {table}
+                            <Col lg="2">
+                                <Button color="success" size="lg" onClick={this.onTableAdd.bind(this)}>เพิ่มโต๊ะ</Button>
+                            </Col>
+
                         </Row>
+
                     </TabPanel>
                 )
 
@@ -265,7 +292,7 @@ class BillView extends Component {
             }
         }
         // return panel;
-        console.log(panel);
+        // console.log("panel",panel);
 
         this.setState({
             x: panel
@@ -312,6 +339,36 @@ class BillView extends Component {
         }
     }
 
+    async insertTable() {
+
+
+        var table_code = document.getElementById('table_code').value
+        var table_name = document.getElementById('table_name').value
+        var table_amount = document.getElementById('table_amount').value
+        var zone_id = document.getElementById('zone_id').value
+
+        var add_table = {
+            table_code: table_code,
+            table_name: table_name,
+            table_amount: table_amount,
+            table_amount: table_amount,
+            zone_id: zone_id
+        }
+
+       var res = await table_model.insertTable(add_table);
+
+        if (add_table != undefined) {
+            swal({
+                title: "เพิ่มข้อมูลโต๊ะเรียบร้อย",
+                icon: "success",
+                button: "Close",
+            });
+            this.toggle_Table_Edit()
+        }
+
+
+    }
+
     async handleSubmit() {
 
 
@@ -336,7 +393,7 @@ class BillView extends Component {
                 icon: "success",
                 button: "Close",
             });
-            this.toggle_Table()
+            this.toggle_Table_Edit()
         }
 
     }
@@ -359,7 +416,7 @@ class BillView extends Component {
                                 swal("success deleted!", {
                                     icon: "success",
                                 });
-                                this.toggle_Table()
+                                this.toggle_Table_Edit()
                                 alert(this.state.tabIndex)
                             } else {
                                 swal("success deleted!", {
@@ -373,7 +430,71 @@ class BillView extends Component {
 
     }
 
-    renderModelEdit() {
+    renderModelTableAdd() {
+
+        let zone_add = []
+
+        for (let i = 0; i < this.state.zone_menu.length; i++) {
+            zone_add.push(
+                <option value={this.state.zone_menu[i].zone_id} >{this.state.zone_menu[i].zone_name}</option>
+            )
+        }
+
+        var tableadd = []
+        tableadd.push(
+            <Modal isOpen={this.state.modal_table_add} toggle={this.toggle_Table_Add} size="lg">
+                <ModalHeader ><div style={{ textAlign: 'center', fontSize: '30px' }} >เพิ่มโต๊ะ</div></ModalHeader>
+                <ModalBody style={{ paddingTop: '2%' }}>
+
+                    <Row>
+                        <Col lg="4" >
+                            <FormGroup>
+                                <label>รหัสโต๊ะ</label>
+                                <Input type="text" id="table_code" name="table_code" class="form-control" value={this.state.table_code_add} readOnly />
+                            </FormGroup>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col lg="4" >
+                            <FormGroup>
+                                <label>ชื่อโต๊ะ</label>
+                                <Input type="text" id="table_name" name="table_name" class="form-control" />
+                            </FormGroup>
+                        </Col>
+                        <Col lg="4" >
+                            <FormGroup>
+                                <Label>จำนวนที่ลองรับ </Label>
+                                <Input type="text" id="table_amount" name="table_amount" class="form-control" />
+                            </FormGroup>
+                        </Col>
+                        <Col lg="4" >
+                            <FormGroup>
+                                <label >โซน</label>
+                                <Input type="select" id="zone_id" name="zone_id" class="form-control" >
+                                    <option value="">Select</option>
+                                    {zone_add}
+                                </Input>
+                            </FormGroup>
+                        </Col>
+                    </Row>
+
+
+                </ModalBody>
+                <ModalFooter>
+                    <Button onClick={this.toggle_Table_Add} size="lg" color="secondary" > กลับ</Button>
+                    <Button onClick={this.insertTable.bind(this)} type="submit" size="lg" color="success">บันทึก</Button>
+                </ModalFooter>
+            </Modal>
+
+        )
+
+        return tableadd;
+
+    }
+
+
+
+    renderModelTableEdit() {
 
         let zone_edit = []
         if (this.state.table_edit != undefined) {
@@ -386,54 +507,41 @@ class BillView extends Component {
         if (this.state.table_edit != undefined) {
             var tableedit = []
             tableedit.push(
-                <Modal style={{ textAlign: 'center', fontSize: '30px' }} isOpen={this.state.modal_table} toggle={this.toggle_Table} className={this.props.className} size="lg">
+                <Modal isOpen={this.state.modal_table_edit} toggle={this.toggle_Table_Edit} className={this.props.className} size="lg">
                     <ModalHeader ><div style={{ textAlign: 'center', fontSize: '30px' }} >{this.state.table_edit.table_name}</div></ModalHeader>
                     <ModalBody style={{ paddingTop: '5%' }}>
                         <Row>
                             <Col lg="6">
                                 <Row>
-                                    <Col lg="12" >
+                                    <Col lg="6" >
                                         <FormGroup>
+                                            <label>รหัสโต๊ะ</label>
                                             <Input type="text" id="table_code" name="table_code" class="form-control" value={this.state.table_edit.table_code} readOnly />
                                         </FormGroup>
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col lg="6" >
+                                    <Col lg="12" >
                                         <FormGroup>
+                                            <label>ชื่อโต๊ะ</label>
                                             <Input type="text" id="table_name" name="table_name" class="form-control" defaultValue={this.state.table_edit.table_name} />
                                         </FormGroup>
                                     </Col>
-                                    <Col lg="6" >
+
+                                </Row>
+                                <Row>
+                                    <Col lg="12" >
                                         <FormGroup>
+                                            <Label>จำนวนที่ลองรับ </Label>
                                             <Input type="text" id="table_amount" name="table_amount" class="form-control" defaultValue={this.state.table_edit.table_amount} />
                                         </FormGroup>
                                     </Col>
+
                                 </Row>
-                            </Col>
-                            <Col lg="6">
                                 <Row>
-                                    <Col lg="12">
-                                        <div>
-                                            <QRCode
-                                                id={this.state.table_edit.table_code}
-                                                // value={this.state.table_edit.table_code}
-                                                value={ this.state.table_edit.table_code}
-                                                size={290}
-                                                level={"H"}
-                                                includeMargin={true}
-                                            />
-                                            <Button onClick={this.download.bind(this,this.state.table_edit.table_code)}> Download QR </Button>
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col lg="6">
-                                <Row>
-                                    <Col lg="12">
+                                    <Col lg="12" >
                                         <FormGroup>
+                                            <label >โซน</label>
                                             <Input type="select" id="zone_id" name="zone_id" class="form-control" defaultValue={this.state.table_edit.zone_id}>
                                                 <option value="">Select</option>
                                                 {zone_edit}
@@ -442,10 +550,32 @@ class BillView extends Component {
                                     </Col>
                                 </Row>
                             </Col>
+                            <Col lg="6">
+                                <Row style={{ textAlign: 'center' }}>
+                                    <Col lg="12">
+                                        <div >
+                                            <QRCode
+                                                id={this.state.table_edit.table_code}
+                                                // value={this.state.table_edit.table_code}
+                                                value={this.state.table_edit.table_code}
+                                                size={250}
+                                                level={"H"}
+                                                includeMargin={true}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row style={{ textAlign: 'center' }}>
+                                    <Col lg="12">
+                                        <Button onClick={this.download.bind(this, this.state.table_edit.table_code)}> Download QR </Button>
+                                    </Col>
+                                </Row>
+                            </Col>
                         </Row>
+
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={this.toggle_Table} size="lg" color="secondary" > กลับ</Button>
+                        <Button onClick={this.toggle_Table_Edit} size="lg" color="secondary" > กลับ</Button>
                         <Button onClick={this.handleSubmit.bind(this)} type="submit" size="lg" color="success">บันทึก</Button>
                         <Button onClick={this.onDelete.bind(this, this.state.table_edit.table_code)} color="danger" size="lg" >ลบ</Button>
                     </ModalFooter>
@@ -457,18 +587,18 @@ class BillView extends Component {
 
     }
 
-     download(code) {
-            const canvas = document.getElementById(code);
-            const pngUrl = canvas
-                .toDataURL("image/png")
-                .replace("image/png", "image/octet-stream");
-            let downloadLink = document.createElement("a");
-            downloadLink.href = pngUrl;
-            downloadLink.download = code + "QR.png";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-     
+    download(code) {
+        const canvas = document.getElementById(code);
+        const pngUrl = canvas
+            .toDataURL("image/png")
+            .replace("image/png", "image/octet-stream");
+        let downloadLink = document.createElement("a");
+        downloadLink.href = pngUrl;
+        downloadLink.download = code + "QR.png";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
     }
 
 
@@ -493,7 +623,7 @@ class BillView extends Component {
                                             <CardHeader style={{ textAlign: 'center', }}>เพิ่มบิล</CardHeader>
                                             <CardBody>
                                                 <CardText style={{ textAlign: 'center' }}>
-                                                    <NavLink exact to={`/menu/`} style={{ width: '100%' }}>
+                                                    <NavLink exact to={`/order/`} style={{ width: '100%' }}>
                                                         <i class="fa fa-plus-square-o" aria-hidden="true" style={{ color: '#515A5A', fontSize: '50px' }}></i>
                                                     </NavLink>
                                                 </CardText>
@@ -521,7 +651,8 @@ class BillView extends Component {
                     </CardBody>
                 </Card>
                 {this.renderModalBill()}
-                {this.renderModelEdit()}
+                {this.renderModelTableEdit()}
+                {this.renderModelTableAdd()}
             </div >
         )
     }

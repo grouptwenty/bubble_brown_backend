@@ -1,100 +1,10 @@
 import GOBALS from '../GOBALS';
-export default class TableModel {
+export default class CustomerModel {
 
     constructor() {
     }
-
-    async getTableBy(data) {
-        return fetch(GOBALS.URL + '/table/getTableBy', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then((response) => response.json())
-            .then((responseJson) => {
-
-                return responseJson;
-            }).catch((error) => {
-                return {
-                    data: [],
-                    error: error,
-                    query_result: false,
-                    server_result:false
-                };
-            });
-    }
-
-    async getTableByZoneCode(data) {
-        return fetch(GOBALS.URL + '/table/getTableByZoneCode', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({zone_id: data})
-        }).then((response) => response.json())
-            .then((responseJson) => {
-
-                return responseJson;
-            }).catch((error) => {
-                return {
-                    data: [],
-                    error: error,
-                    query_result: false,
-                    server_result:false
-                };
-            });
-    }
-
-    async getTableMaxCode(data) {
-        return fetch(GOBALS.URL + '/table/getTableMaxCode', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then((response) => response.json())
-            .then((responseJson) => {
-
-                return responseJson;
-            }).catch((error) => {
-                return {
-                    data: [],
-                    error: error,
-                    query_result: false,
-                    server_result:false
-                };
-            });
-    }
-
-    
-    async getTableByCode(data) {
-        return fetch(GOBALS.URL + '/table/getTableByCode', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ table_code: data })
-        }).then((response) => response.json())
-            .then((responseJson) => {
-
-                return responseJson;
-            }).catch((error) => {
-                return {
-                    data: [],
-                    error: error,
-                    query_result: false,
-                    server_result: false
-                };
-            });
-    }
-
-    async insertTable(data) {
-        return fetch(GOBALS.URL + '/table/insertTable', {
+    async getCustomerBy(data) {
+        return fetch(GOBALS.URL + '/customer/getCustomerBy', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -115,8 +25,73 @@ export default class TableModel {
             });
     }
 
-    async updateTebleBy(data) {
-        return fetch(GOBALS.URL + '/table/updateTebleBy', {
+    async getCustomerMaxCode(data) {
+        return fetch(GOBALS.URL + '/customer/getCustomerMaxCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result:false
+                };
+            });
+    }
+
+    async getCustomerByCode(data) {
+        return fetch(GOBALS.URL + '/customer/getCustomerByCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({customer_code:data})
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+    async deleteCustomerByCode(data) {
+        return fetch(GOBALS.URL + '/customer/deleteCustomerByCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({customer_code:data})
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+
+    async updateCustomerByCode(data) {
+        return fetch(GOBALS.URL + '/customer/updateCustomerByCode', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -137,14 +112,14 @@ export default class TableModel {
             });
     }
 
-    async deleteByCode(data) {
-        return fetch(GOBALS.URL + '/table/deleteByCode', {
+    async insertCustomer(data) {
+        return fetch(GOBALS.URL + '/customer/insertCustomer', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({table_code:data})
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -154,11 +129,52 @@ export default class TableModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
-    
-    
 
+    // async updateCustomer(set, where) {
+    //     return fetch(GOBALS.URL + '/journal/updateCustomer', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({ set, where })
+    //     }).then((response) => response.json())
+    //         .then((responseJson) => {
+
+    //             return responseJson;
+    //         }).catch((error) => {
+    //             return {
+    //                 data: [],
+    //                 error: error,
+    //                 query_result: false,
+    //                 server_result: false
+    //             };
+    //         });
+    // }
+
+    // async deleteCoverPage(data) {
+    //     return fetch(GOBALS.URL + '/journal/deleteCoverPage', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(data)
+    //     }).then((response) => response.json())
+    //         .then((responseJson) => {
+
+    //             return responseJson;
+    //         }).catch((error) => {
+    //             return {
+    //                 data: [],
+    //                 error: error,
+    //                 query_result: false,
+    //                 server_result: false
+    //             };
+    //         });
+    // }
 }
