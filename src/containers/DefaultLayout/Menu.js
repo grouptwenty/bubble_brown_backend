@@ -70,11 +70,16 @@ export default class MenuComponent {
                 ],
             },
 
-            // {
-            //     name: 'ผู้ประกอบการ',
-            //     url: '/entrepreneur/',
-            //     icon: 'icon-briefcase',
-            // },
+            {
+                name: 'ลูกค้า',
+                url: '/customer/',
+                icon: 'icon-briefcase',
+            },
+            {
+                name: 'พนักงาน',
+                url: '/user/',
+                icon: 'icon-briefcase',
+            },
 
             // {
             //     name: 'ร้านซักผ้า',
