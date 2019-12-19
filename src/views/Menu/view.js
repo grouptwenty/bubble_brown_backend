@@ -5,48 +5,47 @@ import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import swal from 'sweetalert';
 
-import UserModel from '../../models/UserModel'
-const user_model = new UserModel
 
-class UserView extends Component {
+import MenuModel from '../../models/MenuModel'
+const menu_model = new MenuModel
+
+class MenuView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
-            user_list: [],
+            menu_list: [],
             refresh: false
         };
         this.onDelete = this.onDelete.bind(this);
-        this.renderUser = this.renderUser.bind(this);
-
+        this.renderMenu = this.renderMenu.bind(this);
     }
 
 
     async componentDidMount() {
-        var user_list = await user_model.getUserBy()
-        console.log("user_list", user_list);
+        var menu_list = await menu_model.getMenuBy()
+        console.log("menu_list", menu_list);
 
         this.setState({
-            user_list: user_list.data
+            menu_list: menu_list.data
         })
 
     }
 
     async onDelete(code) {
-    
+        // console.log("code", code);
         swal({
-            text: "คุณต้องการลบข้อมูลพนักงาน ? ",
+            text: "คุณต้องการลบเมนู ? ",
             icon: "warning",
             buttons: true,
             dengerMode: true,
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    const res = user_model.deleteUserByCode(code)
+                    const res = menu_model.deleteMenuByCode(code)
                         .then((req) => {
                             if (req.data == true) {
                                 this.componentDidMount();
-
                                 swal("success Deleted! ", {
                                     icon: "success",
 
@@ -56,35 +55,46 @@ class UserView extends Component {
                                 swal("success Deleted! ", {
                                     icon: "error",
 
-                            });
-                        }
-                    })
-                    console.log("code", code);
-            }
-        });
+                                });
+                            }
+
+                        })
+
+                }
+
+            });
+
     }
 
-    renderUser() {
-        let tbody_user = []
+    async getMenuByCode(code) {
+        var menu_list = await menu_model.getMenuByCode(code)
+        console.log("menulistbycode", menu_list);
+        this.setState({
+            menu_list: menu_list.data
+        })
+    }
 
-        for (let i = 0; i < this.state.user_list.length; i++) {
+    renderMenu() {
+        let tbody_menu = []
 
-            tbody_user.push(
+        for (let i = 0; i < this.state.menu_list.length; i++) {
+
+            tbody_menu.push(
                 <tr>
                     <td><h6 className="textcenter3">{i + 1}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.user_list[i].user_code}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.user_list[i].user_position}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.user_list[i].user_firstname + " " + this.state.user_list[i].user_lastname}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.user_list[i].user_email}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.user_list[i].user_tel}</h6></td>
-
+                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_code}</h6></td>
+                    {/* <td><h6 className="textcenter3">{this.state.menu_list[i].menu_id}</h6></td> */}
+                    {/* <td><h6 className="textcenter3">{this.state.menu_list[i].menu_type_code}</h6></td> */}
+                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_name}</h6></td>
+                    {/* <td><h6 className="textcenter3">{this.state.menu_list[i].menu_image}</h6></td> */}
+                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_price}</h6></td>
 
                     {<td width={100}>
                         <h6 className="textcenter3">
-                            <NavLink exact to={`/user/update/` + this.state.user_list[i].user_code} style={{ width: '100%' }}>
+                            <NavLink exact to={`/menu/update/` + this.state.menu_list[i].menu_code} style={{ width: '100%' }}>
                                 <i class="fa fa-pencil-square-o" aria-hidden="true" style={{ color: 'blue', marginRight: 30 }}></i>
                             </NavLink>
-                            <Link to={`#`} onClick={this.onDelete.bind(null, this.state.user_list[i].user_code)}>
+                            <Link to={`#`} onClick={this.onDelete.bind(null, this.state.menu_list[i].menu_code)}>
                                 <i class="fa fa-times" aria-hidden="true" style={{ color: 'red' }}></i>
                             </Link>
                         </h6>
@@ -93,19 +103,21 @@ class UserView extends Component {
             )
 
         }
-    return tbody_user;
-}
+        return tbody_menu;
+    }
 
-    render (){
+    render() {
+
+
         return (
             <div className="animated fadeIn">
                 <Row>
                     <Col>
                         <Card>
                             <CardHeader>
-                                จัดการข้อมูลพนักงาน
-                                <NavLink exact to={`/user/insert`} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i>  เพิ่ม</button>
+                                จัดการเมนู
+                                <NavLink exact to={`/menu/insert`} style={{ width: '100%' }}>
+                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i>   เพิ่ม</button>
                                 </NavLink>
                             </CardHeader>
                             <CardBody>
@@ -113,16 +125,16 @@ class UserView extends Component {
                                     <thead>
                                         <tr>
                                             <th className="textcenter3">ลำดับ</th>
-                                            <th className="textcenter3">รหัสพนักงาน</th>
-                                            <th className="textcenter3">ตำแหน่ง</th>
-                                            <th className="textcenter3">ชื่อ-นามสกุล</th>
-                                            <th className="textcenter3">อีเมล</th>
-                                            <th className="textcenter3">เบอร์โทร</th>
+                                            <th className="textcenter3">รหัสเมนู</th>
+                                            {/* <th className="textcenter3">ประเภท</th>  */}
+                                            <th className="textcenter3">ชื่อ</th>
+                                            {/* <th className="textcenter3">รูปภาพ</th> */}
+                                            <th className="textcenter3">ราคา</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.renderUser()}
+                                        {this.renderMenu()}
                                     </tbody>
                                 </Table>
                             </CardBody>
@@ -133,4 +145,4 @@ class UserView extends Component {
         )
     }
 }
-export default (UserView);
+export default (MenuView);

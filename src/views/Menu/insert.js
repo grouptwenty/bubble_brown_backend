@@ -22,8 +22,8 @@ import { NavLink, Link, } from 'react-router-dom';
 import { fonts } from 'pdfmake/build/pdfmake';
 import swal from 'sweetalert';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import CustomerModel from '../../models/CustomerModel'
-const customer_model = new CustomerModel
+import MenuModel from '../../models/MenuModel'
+const menu_model = new MenuModel
 
 class insertView extends Component {
     constructor(props) {
@@ -39,7 +39,7 @@ class insertView extends Component {
 
     async componentDidMount() {
       
-    // console.log("max_code",customer_code_max);
+    // console.log("max_code",menu_code_max);
 }
 
     
@@ -53,26 +53,26 @@ class insertView extends Component {
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime()
         var arr = {};
         
-        const max_code = await customer_model.getCustomerMaxCode()
-        var customer_code = 'CM' + max_code.data.customer_code_max
+        const max_code = await menu_model.getMenuMaxCode()
+        var menu_code = 'MN' + max_code.data.menu_code_max
 
 
         for (let name of data.keys()) {
             arr[name] = form.elements[name.toString()].value;
         }
         
-        arr['customer_code'] = customer_code
+        arr['menu_code'] = menu_code
         if (this.check(arr)) {
-            var res = await customer_model.insertCustomer(arr);
+            var res = await menu_model.insertMenu(arr);
             //   console.log(res)
               if (res.data) {
                 swal({
                   title: "สำเร็จ!",
-                  text: "เพิ่มข้อมูลลูกค้าสำเร็จ",
+                  text: "เพิ่มเมนูสำเร็จ",
                   icon: "success",
                   button: "Close",
                 });
-                this.props.history.push('/customer')
+                this.props.history.push('/menu')
               }
         }
     }
@@ -80,35 +80,28 @@ class insertView extends Component {
 
     check(form) {
  
-        if (form.customer_name == '') {
+        if (form.menu_type_code == '') {
             swal({
-                text: "กรุณากรอก ชื่อ-นามสกุล",
+                text: "กรุณาเลือก ประเภท",
                 icon: "warning",
                 button: "close",
             });
             return false
-        } else if (form.customer_id == '') {
+        } else if (form.menu_name == '') {
             swal({
-                text: "กรุณากรอก ไอดีลูกค้า",
+                text: "กรุณากรอก ชื่อเมนู",
                 icon: "warning",
                 button: "close",
             });
             return false
-        } else if (form.customer_email == '') {
+        } else if (form.menu_price == '') {
             swal({
-                text: "กรุณากรอก อีเมล",
+                text: "กรุณากรอก ราคา",
                 icon: "warning",
                 button: "close",
             });
             return false
-        } else if (form.customer_phone == '') {
-            swal({
-                text: "กรุณากรอก เบอร์โทร",
-                icon: "warning",
-                button: "close",
-            });
-            return false
-        // } else if (form.customer_id == '') {
+        // } else if (form.menu_id == '') {
         //     swal({
         //         text: "กรุณากรอก ไอดีลูกค้า",
         //         icon: "warning",
@@ -132,8 +125,7 @@ class insertView extends Component {
                         <Card>
                             <Form onSubmit={this.handleSubmit} id="myForm">
                             <CardHeader>
-                                เพิ่มข้อมูลลูกค้า
-                                
+                                เพิ่มเมนู
                             </CardHeader>
                             <CardBody>
 
@@ -144,39 +136,46 @@ class insertView extends Component {
             
                                             {/* <Col lg="4">
                                                 <Label className="text_head"> รหัสลูกค้า<font color='red'><b> * </b></font></Label> */}
-                                                {/* <Input type="hidden" id="customer_code" name="customer_code" class="form-control" readOnly ></Input> */}
-                                                {/* <p id="customer_code" className="text_head_sub">Example : CM001</p> */}
+                                                {/* <Input type="hidden" id="menu_code" name="menu_code" class="form-control" readOnly ></Input> */}
+                                                {/* <p id="menu_code" className="text_head_sub">Example : CM001</p> */}
                                             {/* </Col> */}
                                         
                                         <Row>
-                                            <Col lg="6">
-                                                <Label className="text_head"> ชื่อ-นามสกุล <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="customer_name" name="customer_name" class="form-control" autocomplete="off"></Input>
-                                                {/* <p id="customer_name" className="text_head_sub">Example : ชื่อ นามสกุล</p> */}
+                                            <Col lg="4">
+                                                <Label className="text_head"> ประเภท <font color='red'><b> * </b></font></Label>
+                                                <Input type="select" id="menu_type_code" name="menu_type_code" class="form-control" >
+                                                        <option value="">Select</option>
+                                                        <option value="MNT01">เครื่องดื่ม</option>
+                                                        <option value="MNT02">อาหาร</option>
+                                                        <option value="MNT03">เบเกอร์รี่</option>
+                                                        <option value="MNT04">อาหารทานเล่น</option>
+                                                </Input>
+                                                {/* <p id="menu_id" className="text_head_sub">Example : Line, Facebook</p> */}
                                             </Col>
+                                            <Col lg="4">
+                                                <Label className="text_head"> ชื่อเมนู <font color='red'><b> * </b></font></Label>
+                                                <Input type="text" id="menu_name" name="menu_name" class="form-control" ></Input>
+                                                {/* <p id="menu_name" className="text_head_sub">Example : ลาเต้</p> */}
+                                            </Col>
+                                            <Col lg="4">
+                                                <Label className="text_head"> ราคา </Label>
+                                                <Input type="text" id="menu_price" name="menu_price" class="form-control"></Input>
+                                                {/* <p id="menu_price" className="text_head_sub">Example : AAAA@gmail.com</p> */}
+                                            </Col>
+                                        </Row>
+                                        {/* <Row>
+                                            
                                             <Col lg="6">
-                                                <Label className="text_head"> ไอดีลูกค้า </Label>
-                                                <Input type="text" id="customer_id" name="customer_id" class="form-control"  ></Input>
-                                                <p id="customer_id" className="text_head_sub">Example : Line, Facebook</p>
+                                                <Label className="text_head"> เบอร์โทร </Label>
+                                                <Input type="text" id="menu_phone" name="menu_phone" class="form-control" autocomplete="off" ></Input>
+                                                <p id="menu_phone" className="text_head_sub"></p>
                                             </Col>
                                         </Row>
                                         <Row>
                                             <Col lg="6">
-                                                <Label className="text_head"> อีเมล </Label>
-                                                <Input type="text" id="customer_email" name="customer_email" class="form-control"></Input>
-                                                <p id="customer_email" className="text_head_sub">Example : AAAA@gmail.com</p>
-                                            </Col>
-                                            <Col lg="6">
-                                                <Label className="text_head"> เบอร์โทร <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="customer_phone" name="customer_phone" class="form-control"  ></Input>
-                                                <p id="customer_phone" className="text_head_sub"></p>
-                                            </Col>
-                                        </Row>
-                                        {/* <Row>
-                                            <Col lg="6">
                                                 <Label className="text_head"> รูปภาพ </Label>
-                                                <Input type="file" id="customer_img" name="customer_img" class="form-control" autocomplete="off"></Input>
-                                                <p id="customer_img" className="text_head_sub"></p>
+                                                <Input type="file" id="menu_img" name="menu_img" class="form-control" autocomplete="off"></Input>
+                                                <p id="menu_img" className="text_head_sub"></p>
                                             </Col>
                                         </Row> */}
                             
@@ -185,7 +184,7 @@ class insertView extends Component {
 
                             </CardBody>
                             <CardFooter>
-                                <Link to="/customer/">
+                                <Link to="/menu/">
                                     <Button type="buttom" size="lg">ย้อนกลับ</Button>
                                 </Link>
                                 <Button type="reset" size="lg" color="danger">ยกเลิก</Button>

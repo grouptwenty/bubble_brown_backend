@@ -98,8 +98,7 @@ class CustomerView extends Component {
 
     render() {
     
-       
-
+    
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -115,12 +114,12 @@ class CustomerView extends Component {
                                 <Table responsive bordered>
                                     <thead>
                                         <tr>
-                                            <th>ลำดับ</th>
-                                            <th>รหัสลูกค้า</th>
-                                            <th>ชื่อลูกค้า</th>
-                                            <th>ไอดีไลน์</th>
-                                            <th>อีเมล</th>
-                                            <th>เบอร์โทร</th>
+                                            <th className="textcenter3">ลำดับ</th>
+                                            <th className="textcenter3">รหัสลูกค้า</th>
+                                            <th className="textcenter3">ชื่อ-นามสกุล</th>
+                                            <th className="textcenter3">ไอดี</th>
+                                            <th className="textcenter3">อีเมล</th>
+                                            <th className="textcenter3">เบอร์โทร</th>
                                             <th></th>
                                         </tr>
                                     </thead>
