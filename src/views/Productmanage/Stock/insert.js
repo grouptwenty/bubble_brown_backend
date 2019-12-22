@@ -45,7 +45,6 @@ class insertView extends Component {
 
 
 
-
     handleRowDel(stock) {
         var index = this.state.stock.indexOf(stock);
         this.state.stock.splice(index, 1);

@@ -12,7 +12,9 @@ import MenuTypeModel from '../../models/MenuTypeModel'
 import OrderModel from '../../models/OrderModel'
 import OrderListModel from '../../models/OrderListModel'
 import TableModel from '../../models/TableModel'
+import StockOutModel from '../../models/StockOutModel'
 
+const stock_out_model = new StockOutModel
 const menu_model = new MenuModel
 const menutype_model = new MenuTypeModel
 const order_model = new OrderModel
@@ -248,6 +250,7 @@ class OrderView extends Component {
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
         const data = new FormData();
+        var date = Date.now();
         var order_service = document.getElementById('order_service').value
         var order = {
             'table_code': '01',
@@ -255,6 +258,7 @@ class OrderView extends Component {
             'customer_code': 'CM001',
             'order_date': toDay,
             'order_code': order_code,
+            'amount': '2',
             'order_total_price': this.sumtotal()
         }
 
@@ -276,6 +280,28 @@ class OrderView extends Component {
                 order_list_price_sum: this.sumtotal()
             }
             const arr = await order_list_model.insertOrderList(order_list)
+
+
+            const stock_out = await order_model.getRecipeByMenu(this.state.cart[key].code)
+            console.log(stock_out);
+
+            for (var i in stock_out.data) {
+                var recipe = {
+                    order_code: order_code,
+                    menu_code: stock_out.data[i].menu_code,
+                    product_code: stock_out.data[i].product_code,
+                    product_qty: stock_out.data[i].product_qty,
+                    menu_qty: order_list.order_list_qty ,
+                    sell_price: stock_out.data[i].sell_price,
+                    unit: stock_out.data[i].unit,
+                    stock_out_date: date,
+
+                }
+
+
+                const insertstockout = await stock_out_model.insertStockOutByOrder(recipe)
+            }
+
             if (order_list != undefined) {
                 swal({
                     title: "สั่งอาหารเรียบร้อย",
@@ -283,7 +309,7 @@ class OrderView extends Component {
                     icon: "success",
                     button: "Close",
                 });
-                this.props.history.push('/menu/')
+                this.props.history.push('/order/')
             }
         }
 
@@ -296,13 +322,14 @@ class OrderView extends Component {
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
         const data = new FormData();
-
+        var date = Date.now();
         var order_service = document.getElementById('order_service').value
         var order = {
             'table_code': '01',
             'order_service': order_service,
             'customer_code': 'CM001',
             'order_date': toDay,
+            'amount': '10',
             'order_code': this.props.match.params.code,
             'order_total_price': this.sumtotal()
         }
@@ -327,6 +354,30 @@ class OrderView extends Component {
                 order_list_price_sum: this.sumtotal()
             }
             const arr = await order_list_model.insertOrderList(order_list)
+
+            const DeleteStockOut = await stock_out_model.deleteStockOutByOrderCode(this.state.order_old)
+            console.log(DeleteStockOut);
+            
+            const stock_out = await order_model.getRecipeByMenu(this.state.cart[key].code)
+            // console.log(stock_out);
+
+
+            for (var key in stock_out.data) {
+                var recipe = {
+                    order_code: this.state.order_old.order_code,
+                    menu_code: stock_out.data[key].menu_code,
+                    product_code: stock_out.data[key].product_code,
+                    product_qty: stock_out.data[key].product_qty,
+                    menu_qty: order_list.order_list_qty ,
+                    sell_price: stock_out.data[key].sell_price,
+                    unit: stock_out.data[key].unit,
+                    stock_out_date: date,
+
+                }
+
+
+                const insertstockout = await stock_out_model.insertStockOutByOrder(recipe)
+            }
             if (order_list != undefined) {
                 swal({
                     title: "สั่งอาหารเรียบร้อย",
@@ -412,11 +463,11 @@ class OrderView extends Component {
                                     {this.renderMenuby()}
                                     <Col lg="4">
 
-                                        <Card body outline  color="success" style={{borderWidth:"2px",borderStyle:'dashed',padding:0}}>
-                                            <CardBody style={{ textAlign: 'center',alignItems:'center' ,padding:0}}>
+                                        <Card body outline color="success" style={{ borderWidth: "2px", borderStyle: 'dashed', padding: 0 }}>
+                                            <CardBody style={{ textAlign: 'center', alignItems: 'center', padding: 0 }}>
                                                 {/* <i class="fa fa-plus-square-o" aria-hidden="true" style={{ color: 'green', fontSize:'50px' }} /> */}
-                                                <label style={{ color: 'green', fontSize:'60px' }} > + </label>
-                                                </CardBody>
+                                                <label style={{ color: 'green', fontSize: '60px' }} > + </label>
+                                            </CardBody>
                                         </Card>
 
                                         {/* </ClickNHold> */}

@@ -33,47 +33,9 @@ class insertView extends Component {
             recipe: [],
 
         };
-        // this.toggle = this.toggle.bind(this);
+
         this.state.filterText = "";
-        //     this.state.recipes = [
-        //         {
-        //             id: 1,
-        //             category: 'Sporting Goods',
-        //             price: '49.99',
-        //             qty: 12,
-        //             name: 'football'
-        //         }, {
-        //             id: 2,
-        //             category: 'Sporting Goods',
-        //             price: '9.99',
-        //             qty: 15,
-        //             name: 'baseball'
-        //         }, {
-        //             id: 3,
-        //             category: 'Sporting Goods',
-        //             price: '29.99',
-        //             qty: 14,
-        //             name: 'basketball'
-        //         }, {
-        //             id: 4,
-        //             category: 'Electronics',
-        //             price: '99.99',
-        //             qty: 34,
-        //             name: 'iPod Touch'
-        //         }, {
-        //             id: 5,
-        //             category: 'Electronics',
-        //             price: '399.99',
-        //             qty: 12,
-        //             name: 'iPhone 5'
-        //         }, {
-        //             id: 6,
-        //             category: 'Electronics',
-        //             price: '199.99',
-        //             qty: 23,
-        //             name: 'nexus 7'
-        //         }
-        //     ];
+
     }
 
 
@@ -142,7 +104,7 @@ class insertView extends Component {
         return (
             <div>
 
-                <ProductTable onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} recipes={this.state.recipe} filterText={this.state.filterText} />
+                <ProductTable history={this.props.history} onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} recipes={this.state.recipe} filterText={this.state.filterText} />
             </div>
         );
 
@@ -170,61 +132,61 @@ class ProductTable extends React.Component {
 
     async  insertRecipe(code) {
 
+        var product_name = document.getElementsByName('product_name')
+        var product_code = document.getElementsByName('product_code')
+        var product_qty = document.getElementsByName('product_qty')
+        var sell_price = document.getElementsByName('sell_price')
+        var unit = document.getElementsByName('unit')
+        // console.log("product_code", product_code[0].value);
+        var insert = false
+        if (product_name.length > 0) {
+            for (let i = 0; i < product_name.length; i++) {
+                if (product_name[i].value == '' || product_code[i].value == '' || product_qty[i].value == '' || sell_price[i].value == '' || unit[i].value == '') {
+                    swal({
+                        text: "กรุณากรอกข้อมูลให้ครบ",
+                        icon: "warning",
+                        button: "Close",
+                    });
+                    insert = false
+                    break;
+                }
+                insert = true
+            }
+        } if (product_name.length <= 0) {
+            swal({
+                text: "กรุณากรอกข้อมูลให้ครบ",
+                icon: "warning",
+                button: "Close",
+            });
+        }
+        if (insert) {
+            var menu_code = this.props.menuCode
+            var src
+            // console.log(menu_code);
+            const arr = await recipe_model.deleteRecipeByCode(menu_code)
+            for (let i = 0; i < product_name.length; i++) {
 
-        // var product_name = document.getElementsByName('product_name')
-        // var product_code = document.getElementsByName('product_code')
-        // var product_qty = document.getElementsByName('product_qty')
-        // var sell_price = document.getElementsByName('sell_price')
-        // var unit = document.getElementsByName('unit')
-        // // console.log("product_code", product_code[0].value);
-        // var insert = false
-        // if (product_name.length > 0) {
-        //     for (let i = 0; i < product_name.length; i++) {
-        //         if (product_name[i].value == '' || product_code[i].value == '' || product_qty[i].value == '' || sell_price[i].value == '' || unit[i].value == '') {
-        //             swal({
-        //                 text: "กรุณากรอกข้อมูลให้ครบ",
-        //                 icon: "warning",
-        //                 button: "Close",
-        //             });
-        //             insert = false
-        //             break;
-        //         }
-        //         insert = true
-        //     }
-        // } if (product_name.length <= 0) {
-        //     swal({
-        //         text: "กรุณากรอกข้อมูลให้ครบ",
-        //         icon: "warning",
-        //         button: "Close",
-        //     });
-        // }
-        // if (insert) {
-        //     var menu_code = this.props.menuCode
-        //     // console.log(menu_code);
-        //     const arr = await recipe_model.deleteRecipeByCode(menu_code)
-        //     for (let i = 0; i < product_name.length; i++) {
-
-        //         var recipe_list = {
-        //             menu_code: menu_code,
-        //             product_name: product_name[i].value,
-        //             product_code: product_code[i].value,
-        //             product_qty: product_qty[i].value,
-        //             sell_price: sell_price[i].value,
-        //             unit: unit[i].value,
-        //         }
-
-
-
-        //         const src = await recipe_model.insertRecipe(recipe_list)
-        //         if (recipe_list != undefined) {
-        //             swal({
-        //                 title: "จัดการสูตรเรียบร้อย",
-        //                 icon: "success",
-        //                 button: "Close",
-        //             });
-        //         }
-        //     }
-        // }
+                var recipe_list = {
+                    menu_code: menu_code,
+                    product_name: product_name[i].value,
+                    product_code: product_code[i].value,
+                    product_qty: product_qty[i].value,
+                    sell_price: sell_price[i].value,
+                    unit: unit[i].value,
+                }
+                console.log("recipe_list", recipe_list);
+                 src = await recipe_model.insertRecipe(recipe_list)
+            }
+         
+            if (src != undefined) {
+                swal({
+                    title: "จัดการสูตรเรียบร้อย",
+                    icon: "success",
+                    button: "Close",
+                });
+                this.props.history.push('/product-manage/recipe/')
+            }
+        }
     }
 
     render() {
@@ -243,13 +205,13 @@ class ProductTable extends React.Component {
                     <CardBody>
 
                         <table className="table table-bordered"  >
-                            <thead style={{textAlign:'center'}}>
+                            <thead style={{ textAlign: 'center' }}>
                                 <tr>
                                     <th>#</th>
                                     <th>ชื่อวัตถุดิบ</th>
                                     <th>รหัสวัตถุดิบ</th>
                                     <th>จำนวน</th>
-                                    <th>ราคาขาย</th>
+                                    <th>ต้นทุน (หน่วย)</th>
                                     <th>หน่วย</th>
                                     <th></th>
                                 </tr>
@@ -261,10 +223,10 @@ class ProductTable extends React.Component {
                             <tbody>
                                 <tr style={{ textAlign: 'center' }}>
                                     <td colSpan="7">
-                                     
-                                            <i class="fa fa-plus" aria-hidden="true" style={{ color: 'red', fontSize: '23px' }} />
-                                            <label onClick={this.props.onRowAdd} style={{ color: 'red', fontSize: '18px' }}> เพิ่มรายการ</label>
-                                        
+
+                                        <i class="fa fa-plus" aria-hidden="true" style={{ color: 'red', fontSize: '23px' }} />
+                                        <label onClick={this.props.onRowAdd} style={{ color: 'red', fontSize: '18px' }}> เพิ่มรายการ</label>
+
                                     </td>
 
                                 </tr>
@@ -403,7 +365,7 @@ class ProductRow extends React.Component {
 
 
                 <td className="del-cell">
-                <i class="fa fa-times" aria-hidden="true" style={{ color: 'red', fontSize: '23px' }} onClick={this.onDelEvent.bind(this)} />
+                    <i class="fa fa-times" aria-hidden="true" style={{ color: 'red', fontSize: '23px' }} onClick={this.onDelEvent.bind(this)} />
                     {/* <input type="button" onClick={this.onDelEvent.bind(this)} value="X" className="del-btn" /> */}
                 </td>
             </tr>

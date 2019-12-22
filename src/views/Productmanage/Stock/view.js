@@ -42,7 +42,7 @@ class RecipeView extends Component {
 
                         <td ><h6 >{this.state.stock[i].product_name}</h6></td>
                         <td ><h6 className="textcenter3">{this.state.stock[i].product_code}</h6></td>
-                        <td ><h6 className="textcenter3">{this.state.stock[i].sum_stock}</h6></td>
+                <td ><h6 className="textcenter3">{this.state.stock[i].sum_stock} ({this.state.stock[i].sum_stock - this.state.stock[i].sum_stock_out})</h6></td>
                         <td ><h6 style={{ textAlign: 'end' }}>{Number(this.state.stock[i].product_price).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</h6></td>
                         <td ><h6 className="textcenter3">{this.state.stock[i].product_cost}</h6></td>
 
