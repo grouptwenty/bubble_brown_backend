@@ -167,7 +167,7 @@ class BillView extends Component {
                                 </Col>
                                 <Col sm="6">
                                     <CardTitle style={{ textAlign: 'center', fontSize: '18px' }}>
-                                        <label>{this.state.bill_order[i].order_total_price}</label> <i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }}></i>
+                                        <label>{this.state.bill_order[i].amount}</label> <i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }}></i>
                                     </CardTitle>
                                 </Col>
                             </Row>

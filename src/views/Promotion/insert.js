@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, InputGroup, Form, Input, Table, Card, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label } from 'reactstrap';
+import { Button, InputGroup, Form, Input, Table, Card, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { NavLink } from 'react-router-dom';
@@ -7,6 +7,7 @@ import axios, { post } from 'axios';
 import { Modal } from 'react-bootstrap';
 import swal from 'sweetalert';
 import PromotionModel from '../../models/PromotionModel';
+import ImgDefault from '../../assets/img/img_default.png'
 import UploadModel from '../../models/UploadModel';
 import GOBALS from '../../GOBALS';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
@@ -30,8 +31,9 @@ class HomeView extends Component {
         this.state = {
             data: [],
             refresh: false,
-            selectedFile: null,
+            imagePreviewUrl: '',
             file: null,
+            selectedFile: null,
             startdate: today,
             enddate: today,
         };
@@ -59,11 +61,6 @@ class HomeView extends Component {
 
     }
     onChangeHandler = e => {
-        // console.log(event.target.files[0])
-        // this.setState({
-        //     selectedFile: event.target.files[0],
-        //     loaded: 0,
-        // })
         let reader = new FileReader();
         let file = e.target.files[0];
         let files = e.target.files;
@@ -86,37 +83,37 @@ class HomeView extends Component {
             reader.readAsDataURL(file)
         }
     }
-    // onFormSubmit(e) {
-    //     e.preventDefault() // Stop form submit
-    //     this.fileUpload(this.state.file).then((response) => {
-    //         console.log(response.data);
-    //     })
-    // }
 
-    // async fileUpload(file, page, _code) {
-    //     const formData = new FormData();
-    //     var res = file.name.split(".");
-    //     formData.append('_code', _code);
-    //     formData.append('file_type', '.' + res[res.length - 1]);
-    //     formData.append('upload_url', page);
-    //     formData.append('files', file);
-    //     var res_upload = await upload_model.uploadFile(formData);
-    //     console.log(res_upload);
-    //     var data_update = {
-    //         journal_file_path: res_upload.data[0].comment_photo_url
-    //     }
-    //     var data_where = {
-    //         journal_code: _code
-    //     }
-    //     var res_update = journal_model.updateCoverPage(data_update, data_where);
-    //     return res_upload;
-    // }
+    async fileUpload(file, page, _code) {
+        // const url = GOBALS.URL_UPLOAD_OTHER;
+        const formData = new FormData();
+        var res = file.name.split(".");
+        formData.append('_code', _code);
+        formData.append('file_type', '.' + res[res.length - 1]);
+        formData.append('upload_url', page);
+        formData.append('files', file);
+
+        var res_upload = await upload_model.uploadImages(formData);
+        // console.log(res_upload);
+        // var data_update = {
+        //   journal_file_path: res_upload.data[0].comment_photo_url
+        // }
+        // var data_where = {
+        //   journal_code: _code
+        // }
+        // var res_update = journal_model.updateCoverPage(data_update, data_where);
+        return res_upload.data.photo_url;
+    }
     async SavePromotion(event) {
 
         event.preventDefault();
         const form = event.target;
+        const date_now = new Date();
+        var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime()
         var type = form.elements['promotion_type'].value
         var arr
+        // console.log("today :", today);
+
         if (type == "เปอร์เซ็น") {
             arr = {
                 'addby': '1',
@@ -145,6 +142,11 @@ class HomeView extends Component {
                 'enddate': this.state.enddate
             }
         }
+
+
+        if (this.state.selectedFile != null) {
+            arr['promotion_image'] = await this.fileUpload(this.state.selectedFile, 'promotion', form.elements['promotion_header'].value);
+        }
         var res = await promotion_model.insertPromotion(arr);
         if (res.query_result) {
             // await this.fileUpload(this.state.selectedFile, 'CoverPage', res.data.insertId);
@@ -168,12 +170,16 @@ class HomeView extends Component {
 
     }
     render() {
+
         let { imagePreviewUrl } = this.state;
-        let $imagePreview = null;
+        let imagePreview = null;
+        console.log("ddd", imagePreviewUrl);
+
+
         if (imagePreviewUrl) {
-            $imagePreview = (<img className="Imgesupload" style={{ width: '100%' }} src={imagePreviewUrl} />);
+            imagePreview = (<img className="responsive" style={{ width: '100%' }} src={imagePreviewUrl} />);
         } else {
-            $imagePreview = (<div className="previewText"> </div>);
+            imagePreview = (<img className="responsive" style={{ width: '100%' }} src={ImgDefault} />);
         }
         return (
             <Form onSubmit={this.SavePromotion} id="myForm">
@@ -188,69 +194,57 @@ class HomeView extends Component {
                                 </CardHeader>
                                 <CardBody>
                                     <Row style={{ padding: 20 }}>
-                                        <Col llg="12">
+                                        <Col lg="8">
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                <Col lg="3" md="3" sm="3" className="right" >
                                                     ชื่อโปรโมชั่น :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="7" md="7" sm="7" style={{ textAlign: 'left' }}>
                                                     <Input placeholder="promotion_header" type="text" id={"promotion_header"} name={"promotion_header"} required />
                                                 </Col>
-                                                <Col lg="6" md="6" sm="6">
-                                                </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                <Col lg="3" md="3" sm="3" className="right" >
                                                     เงื่อนไข :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="7" md="7" sm="7">
                                                     <Input placeholder="promotion_detail" type="text" id={"promotion_detail"} name={"promotion_detail"} required />
                                                 </Col>
-                                                <Col lg="6" md="6" sm="6">
-                                                </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                <Col lg="3" md="3" sm="3" className="right" >
                                                     ประเภท :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="7" md="7" sm="7">
                                                     <Select options={type} name={"menu_type_code"} required />
                                                 </Col>
-                                                <Col lg="6" md="6" sm="6">
-                                                </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                <Col lg="3" md="3" sm="3" className="right" >
                                                     โค๊ดโปรโมชั่น :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="7" md="7" sm="7">
                                                     <Input placeholder="discount_code" type="text" id={"discount_code"} name={"discount_code"} required />
                                                 </Col>
-                                                <Col lg="6" md="6" sm="6">
-                                                </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                <Col lg="3" md="3" sm="3" className="right" >
                                                     ประเภทส่วนลด :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="7" md="7" sm="7">
                                                     <Select options={promotion_type} name={"promotion_type"} required />
                                                 </Col>
-                                                <Col lg="6" md="6" sm="6">
-                                                </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                <Col lg="3" md="3" sm="3" className="right" >
                                                     จำนวน :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="7" md="7" sm="7">
                                                     <Input placeholder="number" type="text" id={"number"} name={"number"} required />
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2">
+                                                <Col lg="10">
                                                     <Label className="text_head"> วันที่เริ่มต้น<font color='red'><b> * </b></font></Label>
                                                     <DayPickerInput
                                                         format="DD/MM/YYYY"
@@ -265,7 +259,7 @@ class HomeView extends Component {
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2">
+                                                <Col lg="10">
                                                     <Label className="text_head"> วันที่เริ่มต้น<font color='red'><b> * </b></font></Label>
                                                     <DayPickerInput
                                                         format="DD/MM/YYYY"
@@ -284,6 +278,17 @@ class HomeView extends Component {
                                                 <Button className="btn btn-success" type="submit" color="primary">Save</Button>
                                                 <Button variant="secondary" onClick={this.goBack}>Close</Button>
                                             </Row>
+                                        </Col>
+                                        <Col lg="4">
+                                            <FormGroup style={{ textAlign: "center" }}>
+                                                <div class="form-group files">
+                                                    <Col style={{ marginBottom: "15px" }}>
+                                                        {imagePreview}
+                                                    </Col>
+                                                    {/* <Input placeholder="promotion_code" type="hidden" id={"promotion_code"} name={"promotion_code"} required /> */}
+                                                    <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="promotion_image" />
+                                                </div>
+                                            </FormGroup>
                                         </Col>
                                     </Row>
                                 </CardBody>

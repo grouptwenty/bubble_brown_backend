@@ -57,7 +57,7 @@ class PromotionView extends Component {
     cellButton(cell, row, enumObject, rowIndex) {
         return (
             <>
-                <NavLink exact to={'Promotion/edit/' + row.promotion_code}>
+                <NavLink exact to={'../promotion/edit/' + row.promotion_code}>
                     <button class="btn btn-warning">Edit</button>
                 </NavLink>
                 <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>Delete</button>
@@ -83,7 +83,7 @@ class PromotionView extends Component {
         // for(var x=0;x<10;x++)
         for (var key in promotion_list.data) {
             var set_row = {
-                pCode: promotion_list.data[key].promotion_code,
+                promotion_code: promotion_list.data[key].promotion_code,
                 Type: promotion_list.data[key].menu_type_name,
                 Header: promotion_list.data[key].promotion_header,
                 Detail: promotion_list.data[key].promotion_detail,
