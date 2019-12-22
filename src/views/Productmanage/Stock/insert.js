@@ -39,16 +39,8 @@ class insertView extends Component {
 
 
     async componentDidMount() {
-      
-        var stock = await stock_model.getStockBy()
-        console.log(stock);
 
 
-        this.setState({
-            stock: stock.data,
-
-        })
-        // console.log("this.state.code",this.state.code);
     }
 
 
@@ -102,7 +94,7 @@ class insertView extends Component {
         return (
             <div>
 
-                <ProductTable onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} stocks={this.state.stock} filterText={this.state.filterText} />
+                <ProductTable history={this.props.history} onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} stocks={this.state.stock} filterText={this.state.filterText} />
             </div>
         );
 
@@ -134,53 +126,56 @@ class ProductTable extends React.Component {
         var product_code = document.getElementsByName('product_code')
         var stock_qty = document.getElementsByName('stock_qty')
         var stock_cost = document.getElementsByName('stock_cost')
-  
+        var date = Date.now();
 
         //     // console.log("product_code", product_code[0].value);
-            var insert = false
-            if (product_code.length > 0) {
-                for (let i = 0; i < product_code.length; i++) {
-                    if (product_code[i].value == '' || stock_qty[i].value == '' || stock_cost[i].value == '' ) {
-                        swal({
-                            text: "กรุณากรอกข้อมูลให้ครบ",
-                            icon: "warning",
-                            button: "Close",
-                        });
-                        insert = false
-                        break;
-                    }
-                    insert = true
+        var insert = false
+        if (product_code.length > 0) {
+            for (let i = 0; i < product_code.length; i++) {
+                if (product_code[i].value == '' || stock_qty[i].value == '' || stock_cost[i].value == '') {
+                    swal({
+                        text: "กรุณากรอกข้อมูลให้ครบ",
+                        icon: "warning",
+                        button: "Close",
+                    });
+                    insert = false
+                    break;
                 }
-            } if (product_code.length <= 0) {
-                swal({
-                    text: "กรุณากรอกข้อมูลให้ครบ",
-                    icon: "warning",
-                    button: "Close",
-                });
+                insert = true
             }
-            if (insert) {
+        } if (product_code.length <= 0) {
+            swal({
+                text: "กรุณากรอกข้อมูลให้ครบ",
+                icon: "warning",
+                button: "Close",
+            });
+        }
+        if (insert) {
 
-                for (let i = 0; i < product_code.length; i++) {
+            for (let i = 0; i < product_code.length; i++) {
 
-                    var stock_list = {
-                        stock_cost: stock_cost[i].value,
-                        stock_qty: stock_qty[i].value,
-                        product_code: product_code[i].value,
-            
-                    }
+                var stock_list = {
+                    stock_cost: stock_cost[i].value,
+                    stock_qty: stock_qty[i].value,
+                    product_code: product_code[i].value,
+                    stock_date: date,
+
+                }
 
 
 
-                    const src = await stock_model.insertStock(stock_list)
-                    if (stock_list != undefined) {
-                        swal({
-                            title: "จัดการสูตรเรียบร้อย",
-                            icon: "success",
-                            button: "Close",
-                        });
-                    }
+                const src = await stock_model.insertStock(stock_list)
+                if (stock_list != undefined) {
+                    swal({
+                        title: "จัดการสูตรเรียบร้อย",
+                        icon: "success",
+                        button: "Close",
+                    });
+                    this.props.history.push('/product-manage/stock-in/')
+
                 }
             }
+        }
     }
 
     render() {
@@ -275,87 +270,42 @@ class ProductRow extends React.Component {
                 }} /> */}
 
                 <ModelProduct test={this.product_select.bind(this)} />
-                {this.state.data == '' ?
-                    <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "product_name",
-                        value: this.props.stock.product_name,
-                        id: this.props.stock.product_name,
-                        readonly: true
-                    }} />
 
 
-                    : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "product_name",
-                        value: this.state.data.product_name,
-                        id: this.state.data.product_name,
-                        readonly: true
-                    }} />}
+                <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
+                    type: "product_name",
+                    value: this.state.data.product_name,
+                    id: this.state.data.product_name,
+                    readonly: true
+                }} />
 
-                {this.state.data == '' ?
-                    <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "product_code",
-                        value: this.props.stock.product_code,
-                        id: this.props.stock.product_code,
-                        readonly: true
-                    }} />
+                <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
+                    type: "product_code",
+                    value: this.state.data.product_code,
+                    id: this.state.data.product_code,
+                    readonly: true
+                }} />
 
+                <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
+                    type: "product_price",
+                    value: this.state.data.product_price,
+                    id: this.state.data.product_price,
+                    readonly: true
+                }} />
 
-                    : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "product_code",
-                        value: this.state.data.product_code,
-                        id: this.state.data.product_code,
-                        readonly: true
-                    }} />}
+                <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
+                    type: "stock_qty",
+                    value: this.state.data.stock_qty,
+                    id: this.state.data.stock_qty,
+                    readonly: false
+                }} />
 
-                {this.state.data == '' ?
-                    <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "product_price",
-                        value: this.props.stock.product_price,
-                        id: this.props.stock.product_price,
-                        readonly: true
-                    }} />
-
-
-                    : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "product_price",
-                        value: this.state.data.product_price,
-                        id: this.state.data.product_price,
-                        readonly: true
-                    }} />}
-
-                {this.state.data == '' ?
-
-                    <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "stock_qty",
-                        value: this.props.stock.stock_qty,
-                        id: this.props.stock.stock_qty,
-                        readonly: false
-                    }} />
-
-
-                    : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "stock_qty",
-                        value: this.state.data.stock_qty,
-                        id: this.state.data.stock_qty,
-                        readonly: false
-                    }} />}
-
-                {this.state.data == '' ?
-
-                    <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "stock_cost",
-                        value: this.props.stock.stock_cost,
-                        id: this.props.stock.stock_cost,
-                        readonly: false
-                    }} />
-
-
-                    : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "stock_cost",
-                        value: this.state.data.stock_cost,
-                        id: this.state.data.stock_cost,
-                        readonly: false
-                    }} />}
+                <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
+                    type: "stock_cost",
+                    value: this.state.data.stock_cost,
+                    id: this.state.data.stock_cost,
+                    readonly: false
+                }} />
 
 
 

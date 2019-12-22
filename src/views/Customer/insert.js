@@ -22,7 +22,6 @@ import { NavLink, Link, } from 'react-router-dom';
 import { fonts } from 'pdfmake/build/pdfmake';
 import swal from 'sweetalert';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-
 import CustomerModel from '../../models/CustomerModel'
 const customer_model = new CustomerModel
 
@@ -153,7 +152,7 @@ class insertView extends Component {
                                             <Col lg="6">
                                                 <Label className="text_head"> ชื่อ-นามสกุล <font color='red'><b> * </b></font></Label>
                                                 <Input type="text" id="customer_name" name="customer_name" class="form-control" autocomplete="off"></Input>
-                                                <p id="customer_name" className="text_head_sub">Example : ชื่อ นามสกุล</p>
+                                                {/* <p id="customer_name" className="text_head_sub">Example : ชื่อ นามสกุล</p> */}
                                             </Col>
                                             <Col lg="6">
                                                 <Label className="text_head"> ไอดีลูกค้า </Label>
@@ -168,7 +167,7 @@ class insertView extends Component {
                                                 <p id="customer_email" className="text_head_sub">Example : AAAA@gmail.com</p>
                                             </Col>
                                             <Col lg="6">
-                                                <Label className="text_head"> เบอร์โทร </Label>
+                                                <Label className="text_head"> เบอร์โทร <font color='red'><b> * </b></font></Label>
                                                 <Input type="text" id="customer_phone" name="customer_phone" class="form-control"  ></Input>
                                                 <p id="customer_phone" className="text_head_sub"></p>
                                             </Col>

@@ -20,11 +20,11 @@ export default class MenuModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
-    
+
     async getMenuByCode(data) {
         return fetch(GOBALS.URL + '/menu/getMenuByCode', {
             method: 'POST',
@@ -32,7 +32,7 @@ export default class MenuModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({menu_type_code: data})
+            body: JSON.stringify({ menu_type_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -42,97 +42,119 @@ export default class MenuModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
-    // async getUserMaxCode(data) {
-    //     return fetch(GOBALS.URL + '/user/getUserMaxCode', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(data)
-    //     }).then((response) => response.json())
-    //         .then((responseJson) => {
+    async getMenuByMenuCode(data) {
+        return fetch(GOBALS.URL + '/menu/getMenuByMenuCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ menu_code: data })
+        }).then((response) => response.json())
+            .then((responseJson) => {
 
-    //             return responseJson;
-    //         }).catch((error) => {
-    //             return {
-    //                 data: [],
-    //                 error: error,
-    //                 query_result: false,
-    //                 server_result:false
-    //             };
-    //         });
-    // }
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
 
-    // async insertUserBy(data) {
-    //     return fetch(GOBALS.URL + '/user/insertUserBy', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(data)
-    //     }).then((response) => response.json())
-    //         .then((responseJson) => {
+    async getMenuMaxCode(data) {
+        return fetch(GOBALS.URL + '/menu/getMenuMaxCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ menu_type_code: data })
+        }).then((response) => response.json())
+            .then((responseJson) => {
 
-    //             return responseJson;
-    //         }).catch((error) => {
-    //             return {
-    //                 data: [],
-    //                 error: error,
-    //                 query_result: false,
-    //                 server_result:false
-    //             };
-    //         });
-    // }
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
 
-    // async updateUserBy(data) {
-    //     return fetch(GOBALS.URL + '/user/updateUserBy', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(data)
-    //     }).then((response) => response.json())
-    //         .then((responseJson) => {
+    async insertMenu(data) {
+        return fetch(GOBALS.URL + '/menu/insertMenu', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
 
-    //             return responseJson;
-    //         }).catch((error) => {
-    //             return {
-    //                 data: [],
-    //                 error: error,
-    //                 query_result: false,
-    //                 server_result:false
-    //             };
-    //         });
-    // }
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
 
-    // async deleteByCode(data) {
-    //     return fetch(GOBALS.URL + '/user/deleteByCode', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({user_code:data})
-    //     }).then((response) => response.json())
-    //         .then((responseJson) => {
+    async updateMenuByCode(data) {
+        return fetch(GOBALS.URL + '/menu/updateMenuByCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
 
-    //             return responseJson;
-    //         }).catch((error) => {
-    //             return {
-    //                 data: [],
-    //                 error: error,
-    //                 query_result: false,
-    //                 server_result:false
-    //             };
-    //         });
-    // }
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+
+    async deleteMenuByCode(data) {
+        return fetch(GOBALS.URL + '/menu/deleteMenuByCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ menu_code: data })
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
 
     // async getUserByCode(data) {
     //     return fetch(GOBALS.URL + '/user/getUserByCode', {
@@ -155,6 +177,6 @@ export default class MenuModel {
     //             };
     //         });
     // }
-    
+
 
 }

@@ -57,26 +57,26 @@ class editView extends Component {
         for (let name of data.keys()) {
             arr[name] = form.elements[name.toString()].value;
         }
-        
-console.log(arr);
+
+        console.log(arr);
         if (this.check(arr)) {
             var res = await customer_model.updateCustomerByCode(arr);
-              console.log(res)
-              if (res.data) {
+            console.log(res)
+            if (res.data) {
                 swal({
-                  title: "สำเร็จ!",
-                  text: "แก้ไขข้อมูลลูกค้าสำเร็จ",
-                  icon: "success",
-                  button: "Close",
+                    title: "สำเร็จ!",
+                    text: "แก้ไขข้อมูลลูกค้าสำเร็จ",
+                    icon: "success",
+                    button: "Close",
                 });
                 this.props.history.push('/customer/')
-              }
+            }
         }
     }
 
 
     check(form) {
- 
+
         if (form.customer_name == '') {
             swal({
                 text: "กรุณากรอก ชื่อ-นามสกุล",
@@ -105,13 +105,13 @@ console.log(arr);
                 button: "close",
             });
             return false
-        // } else if (form.customer_id == '') {
-        //     swal({
-        //         text: "กรุณากรอก ไอดีลูกค้า",
-        //         icon: "warning",
-        //         button: "close",
-        //     });
-        //     return false
+            // } else if (form.customer_id == '') {
+            //     swal({
+            //         text: "กรุณากรอก ไอดีลูกค้า",
+            //         icon: "warning",
+            //         button: "close",
+            //     });
+            //     return false
         } else {
             return true
         }
@@ -158,16 +158,16 @@ console.log(arr);
                                                 </Col>
                                             </Row>
                                             <Row>
-                                            <Col lg="6">
-                                                <Label className="text_head"> อีเมล </Label>
-                                                <Input type="text" id="customer_email" name="customer_email" class="form-control"></Input>
-                                                <p id="customer_email" className="text_head_sub">Example : AAAA@gmail.com</p>
-                                            </Col>
-                                            <Col lg="6">
-                                                <Label className="text_head"> เบอร์โทร </Label>
-                                                <Input type="text" id="customer_phone" name="customer_phone" class="form-control"  ></Input>
-                                                <p id="customer_phone" className="text_head_sub"></p>
-                                            </Col>
+                                                <Col lg="6">
+                                                    <Label className="text_head"> อีเมล </Label>
+                                                    <Input type="text" id="customer_email" name="customer_email" class="form-control"></Input>
+                                                    <p id="customer_email" className="text_head_sub">Example : AAAA@gmail.com</p>
+                                                </Col>
+                                                <Col lg="6">
+                                                    <Label className="text_head"> เบอร์โทร </Label>
+                                                    <Input type="text" id="customer_phone" name="customer_phone" class="form-control"  ></Input>
+                                                    <p id="customer_phone" className="text_head_sub"></p>
+                                                </Col>
                                             </Row>
                                         </Col>
 

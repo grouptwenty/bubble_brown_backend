@@ -9,6 +9,7 @@ const Recipe = React.lazy(() => import('./views/Productmanage/Recipe'))
 const Stock = React.lazy(() => import('./views/Productmanage/Stock'))
 const Customer = React.lazy(() => import('./views/Customer'))
 const User = React.lazy(() => import('./views/User'))
+const Menu = React.lazy(() => import('./views/Menu'))
 // const Laundry = React.lazy(() => import('./views/Laundry'));
 // const Repair = React.lazy(() => import('./views/Repair'));
 // const News = React.lazy(() => import('./views/News'));
@@ -37,6 +38,7 @@ const routes = [
     { path: '/product-manage/stock-in', name: 'Stock', component: Stock },
     { path: '/customer/', name: 'Customer', component: Customer },
     { path: '/user/', name: 'User', component: User },
+    { path: '/menu/', name: 'Menu', component: Menu },
     // { path: '/laundry/', name: 'Laundry', component: Laundry },
     // { path: '/repair/', name: 'Repair', component: Repair },
     // { path: '/news/', name: 'News', component: News },

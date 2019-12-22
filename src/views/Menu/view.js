@@ -4,29 +4,32 @@ import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHe
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import swal from 'sweetalert';
+import MenuModel from '../../models/MenuModel'
+import MenuTypeModel from '../../models/MenuTypeModel'
 
-import CustomerModel from '../../models/CustomerModel'
-const customer_model = new CustomerModel
+const menu_model = new MenuModel
+const menu_type_model = new MenuTypeModel
 
-class CustomerView extends Component {
+class MenuView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
-            customer_list: [],
+            menu_list: [],
+            menu_type: [],
             refresh: false
         };
         this.onDelete = this.onDelete.bind(this);
-        this.renderCustomer = this.renderCustomer.bind(this);
+        this.renderMenu = this.renderMenu.bind(this);
+
     }
 
 
     async componentDidMount() {
-        var customer_list = await customer_model.getCustomerBy()
-        console.log("customer_list", customer_list);
-
+        var menu_list = await menu_model.getMenuBy()
+        // console.log("menu_list", menu_list);
         this.setState({
-            customer_list: customer_list.data
+            menu_list: menu_list.data
         })
         
     }
@@ -34,14 +37,14 @@ class CustomerView extends Component {
     async onDelete(code) {
         // console.log("code", code);
         swal({
-            text: "คุณต้องการลบข้อมูลลูกค้า ? ",
+            text: "คุณต้องการลบเมนู ? ",
             icon: "warning",
             buttons: true,
             dengerMode: true,
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    const res = customer_model.deleteCustomerByCode(code)
+                    const res = menu_model.deleteMenuByCode(code)
                         .then((req) => {
                             if (req.data == true) {
                                 this.componentDidMount();
@@ -64,27 +67,36 @@ class CustomerView extends Component {
             });
 
     }
- 
-    renderCustomer(){
-        let tbody_customer = []
 
-        for (let i = 0; i < this.state.customer_list.length; i++) {
+    async getMenuByCode(code) {
+        var menu_list = await menu_model.getMenuByCode(code)
+        // console.log("menulistbycode", menu_list);
+        this.setState({
+            menu_list: menu_list.data
+        })
+    }
 
-            tbody_customer.push(
+    renderMenu() {
+        let tbody_menu = []
+
+        for (let i = 0; i < this.state.menu_list.length; i++) {
+
+            tbody_menu.push(
                 <tr>
                     <td><h6 className="textcenter3">{i + 1}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_code}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_name}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_id}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_email}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_phone}</h6></td>
+                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_code}</h6></td>
+                    {/* <td><h6 className="textcenter3">{this.state.menu_list[i].menu_id}</h6></td> */}
+                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_type_name}</h6></td>
+                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_name}</h6></td>
+                    {/* <td><h6 className="textcenter3">{this.state.menu_list[i].menu_image}</h6></td> */}
+                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_price}</h6></td>
 
                     {<td width={100}>
                         <h6 className="textcenter3">
-                            <NavLink exact to={`/customer/update/` + this.state.customer_list[i].customer_code} style={{ width: '100%' }}>
+                            <NavLink exact to={`/menu/update/` + this.state.menu_list[i].menu_code} style={{ width: '100%' }}>
                                 <i class="fa fa-pencil-square-o" aria-hidden="true" style={{ color: 'blue', marginRight: 30 }}></i>
                             </NavLink>
-                            <Link to={`#`} onClick={this.onDelete.bind(null, this.state.customer_list[i].customer_code)}>
+                            <Link to={`#`} onClick={this.onDelete.bind(null, this.state.menu_list[i].menu_code)}>
                                 <i class="fa fa-times" aria-hidden="true" style={{ color: 'red' }}></i>
                             </Link>
                         </h6>
@@ -93,20 +105,20 @@ class CustomerView extends Component {
             )
 
         }
-        return tbody_customer;
+        return tbody_menu;
     }
 
     render() {
-    
-    
+
+
         return (
             <div className="animated fadeIn">
                 <Row>
                     <Col>
                         <Card>
                             <CardHeader>
-                                จัดการข้อมูลลูกค้า
-                                <NavLink exact to={`/customer/insert`} style={{ width: '100%' }}>
+                                จัดการเมนู
+                                <NavLink exact to={`/menu/insert`} style={{ width: '100%' }}>
                                     <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i>   เพิ่ม</button>
                                 </NavLink>
                             </CardHeader>
@@ -115,16 +127,16 @@ class CustomerView extends Component {
                                     <thead>
                                         <tr>
                                             <th className="textcenter3">ลำดับ</th>
-                                            <th className="textcenter3">รหัสลูกค้า</th>
-                                            <th className="textcenter3">ชื่อ-นามสกุล</th>
-                                            <th className="textcenter3">ไอดี</th>
-                                            <th className="textcenter3">อีเมล</th>
-                                            <th className="textcenter3">เบอร์โทร</th>
+                                            <th className="textcenter3">รหัสเมนู</th>
+                                            <th className="textcenter3">ประเภท</th> 
+                                            <th className="textcenter3">ชื่อ</th>
+                                            {/* <th className="textcenter3">รูปภาพ</th> */}
+                                            <th className="textcenter3">ราคา</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.renderCustomer()}
+                                        {this.renderMenu()}
                                     </tbody>
                                 </Table>
                             </CardBody>
@@ -135,4 +147,4 @@ class CustomerView extends Component {
         )
     }
 }
-export default (CustomerView);
+export default (MenuView);

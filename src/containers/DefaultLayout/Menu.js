@@ -25,7 +25,7 @@ export default class MenuComponent {
                 class: ''
             },
             {
-                name: 'สั่งอาการ',
+                name: 'สั่งอาหาร',
                 url: '/order/',
                 icon: 'icon-list',
             },
@@ -37,6 +37,12 @@ export default class MenuComponent {
             {
                 name: 'โปรโมชัน  ',
                 url: '/promotion/',
+                icon: 'icon-list',
+            },
+
+            {
+                name: 'เมนู  ',
+                url: '/menu/',
                 icon: 'icon-list',
             },
 
