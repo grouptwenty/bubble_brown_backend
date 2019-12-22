@@ -4,10 +4,11 @@ import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHe
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import swal from 'sweetalert';
-
-
 import MenuModel from '../../models/MenuModel'
+import MenuTypeModel from '../../models/MenuTypeModel'
+
 const menu_model = new MenuModel
+const menu_type_model = new MenuTypeModel
 
 class MenuView extends Component {
     constructor(props) {
@@ -15,21 +16,22 @@ class MenuView extends Component {
         this.state = {
             data: [],
             menu_list: [],
+            menu_type: [],
             refresh: false
         };
         this.onDelete = this.onDelete.bind(this);
         this.renderMenu = this.renderMenu.bind(this);
+
     }
 
 
     async componentDidMount() {
         var menu_list = await menu_model.getMenuBy()
-        console.log("menu_list", menu_list);
-
+        // console.log("menu_list", menu_list);
         this.setState({
             menu_list: menu_list.data
         })
-
+        
     }
 
     async onDelete(code) {
@@ -68,7 +70,7 @@ class MenuView extends Component {
 
     async getMenuByCode(code) {
         var menu_list = await menu_model.getMenuByCode(code)
-        console.log("menulistbycode", menu_list);
+        // console.log("menulistbycode", menu_list);
         this.setState({
             menu_list: menu_list.data
         })
@@ -84,7 +86,7 @@ class MenuView extends Component {
                     <td><h6 className="textcenter3">{i + 1}</h6></td>
                     <td><h6 className="textcenter3">{this.state.menu_list[i].menu_code}</h6></td>
                     {/* <td><h6 className="textcenter3">{this.state.menu_list[i].menu_id}</h6></td> */}
-                    {/* <td><h6 className="textcenter3">{this.state.menu_list[i].menu_type_code}</h6></td> */}
+                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_type_name}</h6></td>
                     <td><h6 className="textcenter3">{this.state.menu_list[i].menu_name}</h6></td>
                     {/* <td><h6 className="textcenter3">{this.state.menu_list[i].menu_image}</h6></td> */}
                     <td><h6 className="textcenter3">{this.state.menu_list[i].menu_price}</h6></td>
@@ -126,7 +128,7 @@ class MenuView extends Component {
                                         <tr>
                                             <th className="textcenter3">ลำดับ</th>
                                             <th className="textcenter3">รหัสเมนู</th>
-                                            {/* <th className="textcenter3">ประเภท</th>  */}
+                                            <th className="textcenter3">ประเภท</th> 
                                             <th className="textcenter3">ชื่อ</th>
                                             {/* <th className="textcenter3">รูปภาพ</th> */}
                                             <th className="textcenter3">ราคา</th>

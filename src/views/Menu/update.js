@@ -8,34 +8,48 @@ import { formatDate, parseDate, } from 'react-day-picker/moment';
 import 'react-day-picker/lib/style.css';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import MenuModel from '../../models/MenuModel'
-const menu_model = new MenuModel
+import MenuTypeModel from '../../models/MenuTypeModel'
 
+const menu_model = new MenuModel
+const menu_type_model = new MenuTypeModel
 
 class editView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
+            menu_type: [],
+            menu_data: [],
             refresh: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setval = this.setval.bind(this);
+        this.renderMenu = this.renderMenu.bind(this);
     }
 
 
     async componentDidMount() {
         const code = this.props.match.params.code
-        console.log(code);
+       
+    
+          const menu_data = await menu_model.getMenuByMenuCode(code);
+          console.log("menu_data", menu_data);
+         const menu_type = await menu_type_model.getMenuTypeBy();
+        this.setState({
+            menu_type: menu_type.data
+           
+            
+        })
 
-        const menu_data = await menu_model.getMenuByCode(code);
-        console.log(menu_data.data);
-
+      
         this.setval(menu_data.data)
+       
 
     }
 
 
     async setval(data) {
+        // console.log(data.menu_code)
         document.getElementById('menu_code').value = data.menu_code
         // document.getElementById('menu_id').value = data.menu_id
         document.getElementById('menu_type_code').value = data.menu_type_code
@@ -110,6 +124,17 @@ class editView extends Component {
         }
 
     }
+    renderMenu() {
+
+        let menutype = []
+        for (let i = 0; i < this.state.menu_type.length; i++) {
+            menutype.push(
+                <option value={this.state.menu_type[i].menu_type_code}>{this.state.menu_type[i].menu_type_name}</option>
+            )
+
+        }
+        return menutype;
+    }
 
     render() {
         return (
@@ -137,14 +162,11 @@ class editView extends Component {
                                             <br />
                                             <Row>
                                             <Col lg="4">
-                                                <Label className="text_head"> ประเภท <font color='red'><b> * </b></font></Label>
-                                                <Input type="select" id="menu_type_code" name="menu_type_code" class="form-control" >
+                                                    <Label className="text_head"> ประเภท <font color='red'><b> * </b></font></Label>
+                                                    <Input type="select" id="menu_type_code" name="menu_type_code" class="form-control" >
                                                         <option value="">Select</option>
-                                                        <option value="MNT01">เครื่องดื่ม</option>
-                                                        <option value="MNT02">อาหาร</option>
-                                                        <option value="MNT03">เบเกอร์รี่</option>
-                                                        <option value="MNT04">อาหารทานเล่น</option>
-                                                </Input>
+                                                        {this.renderMenu()}
+                                                    </Input>
                                                 {/* <p id="menu_id" className="text_head_sub">Example : Line, Facebook</p> */}
                                             </Col>
                                             <Col lg="4">
