@@ -240,6 +240,7 @@ class OrderView extends Component {
 
     async insertOrder() {
 
+
         var order = []
 
 
@@ -286,14 +287,15 @@ class OrderView extends Component {
             console.log(stock_out);
 
             for (var i in stock_out.data) {
+
                 var recipe = {
                     order_code: order_code,
                     menu_code: stock_out.data[i].menu_code,
                     product_code: stock_out.data[i].product_code,
-                    product_qty: stock_out.data[i].product_qty,
-                    menu_qty: order_list.order_list_qty ,
-                    sell_price: stock_out.data[i].sell_price,
-                    unit: stock_out.data[i].unit,
+                    product_qty: stock_out.data[i].qty_cal,
+                    menu_qty: order_list.order_list_qty,
+                    product_cost: stock_out.data[i].product_cost,
+                    unit: stock_out.data[i].unit_id,
                     stock_out_date: date,
 
                 }
@@ -357,7 +359,7 @@ class OrderView extends Component {
 
             const DeleteStockOut = await stock_out_model.deleteStockOutByOrderCode(this.state.order_old)
             console.log(DeleteStockOut);
-            
+
             const stock_out = await order_model.getRecipeByMenu(this.state.cart[key].code)
             // console.log(stock_out);
 
@@ -367,14 +369,15 @@ class OrderView extends Component {
                     order_code: this.state.order_old.order_code,
                     menu_code: stock_out.data[key].menu_code,
                     product_code: stock_out.data[key].product_code,
-                    product_qty: stock_out.data[key].product_qty,
-                    menu_qty: order_list.order_list_qty ,
-                    sell_price: stock_out.data[key].sell_price,
-                    unit: stock_out.data[key].unit,
+                    product_qty: stock_out.data[key].qty_cal,
+                    menu_qty: order_list.order_list_qty,
+                    product_cost: stock_out.data[key].product_cost,
+                    unit: stock_out.data[key].unit_id,
                     stock_out_date: date,
 
                 }
 
+                console.log("recipe", stock_out.data[key]);
 
                 const insertstockout = await stock_out_model.insertStockOutByOrder(recipe)
             }

@@ -17,7 +17,9 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 import RecipeModel from '../../../models/RecipeModel'
 import ProductModel from '../../../models/ProductModel'
+import UnitModel from '../../../models/UnitModel'
 
+const unit_model = new UnitModel
 const recipe_model = new RecipeModel
 const product_model = new ProductModel
 
@@ -129,19 +131,37 @@ class SearchBar extends React.Component {
 }
 
 class ProductTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.calculatQty = this.calculatQty.bind(this)
+
+    }
+    calculatQty(qty, unit_id) {
+        var unit = ''
+        if (unit_id == 2) {
+            unit = qty
+        } else if (unit_id == 3) {
+            unit = qty * 1000
+        } else if (unit_id == 4) {
+            unit = qty
+        } else if (unit_id == 5) {
+            unit = qty * 1000
+
+        }
+        return unit
+    }
 
     async  insertRecipe(code) {
 
         var product_name = document.getElementsByName('product_name')
         var product_code = document.getElementsByName('product_code')
         var product_qty = document.getElementsByName('product_qty')
-        var sell_price = document.getElementsByName('sell_price')
-        var unit = document.getElementsByName('unit')
-        // console.log("product_code", product_code[0].value);
+        var unit_id = document.getElementsByName('unit_id')
+        console.log("unit_id",unit_id);
         var insert = false
         if (product_name.length > 0) {
             for (let i = 0; i < product_name.length; i++) {
-                if (product_name[i].value == '' || product_code[i].value == '' || product_qty[i].value == '' || sell_price[i].value == '' || unit[i].value == '') {
+                if (product_name[i].value == '' || product_code[i].value == '' || product_qty[i].value == '' ||  unit_id[i].value == '') {
                     swal({
                         text: "กรุณากรอกข้อมูลให้ครบ",
                         icon: "warning",
@@ -165,19 +185,21 @@ class ProductTable extends React.Component {
             // console.log(menu_code);
             const arr = await recipe_model.deleteRecipeByCode(menu_code)
             for (let i = 0; i < product_name.length; i++) {
-
+                var qty_cal = this.calculatQty(product_qty[i].value, unit_id[i].value)
                 var recipe_list = {
                     menu_code: menu_code,
                     product_name: product_name[i].value,
                     product_code: product_code[i].value,
                     product_qty: product_qty[i].value,
-                    sell_price: sell_price[i].value,
-                    unit: unit[i].value,
+                    unit_id: unit_id[i].value,
+                    qty_cal: qty_cal
                 }
-                console.log("recipe_list", recipe_list);
-                 src = await recipe_model.insertRecipe(recipe_list)
+                console.log("unit_id", unit_id[i].value);
+                src = await recipe_model.insertRecipe(recipe_list)
+                // const price_qty = await stock_model.getStockByPriceQty(recipe_list)
+                // console.log("price_qty", price_qty);
             }
-         
+
             if (src != undefined) {
                 swal({
                     title: "จัดการสูตรเรียบร้อย",
@@ -210,9 +232,9 @@ class ProductTable extends React.Component {
                                     <th>#</th>
                                     <th>ชื่อวัตถุดิบ</th>
                                     <th>รหัสวัตถุดิบ</th>
-                                    <th>จำนวน</th>
-                                    <th>ต้นทุน (หน่วย)</th>
+                                    <th>ปริมาณ</th>
                                     <th>หน่วย</th>
+                                    {/* <th>ต้นทุน</th> */}
                                     <th></th>
                                 </tr>
                             </thead>
@@ -257,6 +279,21 @@ class ProductRow extends React.Component {
 
         };
     }
+
+
+
+    async componentDidMount() {
+        var unit_list = await unit_model.getUnitBy()
+        console.log("unit_list", unit_list);
+
+
+        this.setState({
+            unit_list: unit_list.data,
+
+        })
+        // console.log("this.state.code",this.state.code);
+    }
+
     onDelEvent() {
         this.props.onDelEvent(this.props.recipe);
 
@@ -268,6 +305,8 @@ class ProductRow extends React.Component {
         console.log("data", data);
 
     }
+
+
     render() {
 
         return (
@@ -286,7 +325,8 @@ class ProductRow extends React.Component {
                         type: "product_name",
                         value: this.props.recipe.product_name,
                         id: this.props.recipe.product_name,
-                        readonly: true
+                        readonly: true,
+                        types: 'text'
                     }} />
 
 
@@ -294,7 +334,8 @@ class ProductRow extends React.Component {
                         type: "product_name",
                         value: this.state.data.product_name,
                         id: this.state.data.product_name,
-                        readonly: true
+                        readonly: true,
+                        types: 'text'
                     }} />}
 
                 {this.state.data == '' ?
@@ -302,7 +343,8 @@ class ProductRow extends React.Component {
                         type: "product_code",
                         value: this.props.recipe.product_code,
                         id: this.props.recipe.product_code,
-                        readonly: true
+                        readonly: true,
+                        types: 'text'
                     }} />
 
 
@@ -310,7 +352,8 @@ class ProductRow extends React.Component {
                         type: "product_code",
                         value: this.state.data.product_code,
                         id: this.state.data.product_code,
-                        readonly: true
+                        readonly: true,
+                        types: 'text'
                     }} />}
 
                 {this.state.data == '' ?
@@ -319,7 +362,8 @@ class ProductRow extends React.Component {
                         type: "product_qty",
                         value: this.props.recipe.product_qty,
                         id: this.props.recipe.product_qty,
-                        readonly: false
+                        readonly: false,
+                        types: 'text'
                     }} />
 
 
@@ -327,41 +371,32 @@ class ProductRow extends React.Component {
                         type: "product_qty",
                         value: this.state.data.product_qty,
                         id: this.state.data.product_qty,
-                        readonly: false
+                        readonly: false,
+                        types: 'text'
                     }} />}
+
 
                 {this.state.data == '' ?
 
                     <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "sell_price",
-                        value: this.props.recipe.sell_price,
-                        id: this.props.recipe.sell_price,
-                        readonly: false
-                    }} />
-
-
-                    : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "sell_price",
-                        value: this.state.data.sell_price,
-                        id: this.state.data.sell_price,
-                        readonly: false
-                    }} />}
-
-                {this.state.data == '' ?
-
-                    <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "unit",
-                        value: this.props.recipe.unit,
-                        id: this.props.recipe.unit,
-                        readonly: false
+                        type: "unit_id",
+                        value: this.props.recipe.unit_id,
+                        id: this.props.recipe.unit_id,
+                        readonly: false,
+                        types: 'select',
+                        data: this.state.unit_list
                     }} />
 
                     : <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
-                        type: "unit",
-                        value: this.state.data.unit,
-                        id: this.state.data.unit,
-                        readonly: false
+                        type: "unit_id",
+                        value: this.state.data.unit_id,
+                        id: this.state.data.unit_id,
+                        readonly: false,
+                        types: 'select',
+                        data: this.state.unit_list
                     }} />}
+
+     
 
 
                 <td className="del-cell">
@@ -376,11 +411,49 @@ class ProductRow extends React.Component {
 
 }
 class EditableCell extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            refresh: false,
+
+
+        };
+        this.renderUnit = this.renderUnit.bind(this);
+    }
+
+
+    renderUnit() {
+        if (this.props.cellData.data != undefined) {
+            var unit = []
+            for (var key in this.props.cellData.data) {
+                if(this.props.cellData.data[key].unit_id == this.props.cellData.value){
+                    unit.push(
+                        <option selected='true' Value={this.props.cellData.data[key].unit_id} >{this.props.cellData.data[key].unit_name}</option>
+                    )
+                }else{
+                    unit.push(
+                        <option Value={this.props.cellData.data[key].unit_id}>{this.props.cellData.data[key].unit_name}</option>
+                    )
+                }
+          
+            }
+            return unit;
+        }
+
+    }
 
     render() {
         return (
             <td>
-                <Input type='text' name={this.props.cellData.type} id={this.props.cellData.id} Value={this.props.cellData.value} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} />
+                {this.props.cellData.types == 'select' ?
+                    <Input type='select' name={this.props.cellData.type}  onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} >
+                        <option Value="">Select</option>
+                        {this.renderUnit()}
+                    </Input>
+                    : <Input type='text' name={this.props.cellData.type}  Value={this.props.cellData.value} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} />
+                }
+
             </td>
         );
 
