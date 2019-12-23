@@ -97,7 +97,7 @@ export default class UserModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({user_code:data})
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 

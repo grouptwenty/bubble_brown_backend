@@ -1,130 +1,138 @@
-
 import React, { Component } from 'react';
-import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHeader, Col, Row, CardImg, CardBody, CardTitle } from 'reactstrap';
+import { Media, Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHeader, Col, Row, CardImg, CardBody, CardTitle } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import swal from 'sweetalert';
-
 import UserModel from '../../models/UserModel'
-const user_model = new UserModel
-
+var user_model = new UserModel;
 class UserView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
-            user_list: [],
-            refresh: false
+            refresh: false,
+            show_update_model: false,
         };
-        this.onDelete = this.onDelete.bind(this);
-        this.renderUser = this.renderUser.bind(this);
-
     }
 
-
-    async componentDidMount() {
-        var user_list = await user_model.getUserBy()
-        console.log("user_list", user_list);
-
-        this.setState({
-            user_list: user_list.data
-        })
-
-    }
-
-    async onDelete(code) {
-    
+    onClickDelete(cell, row, rowIndex) {
+        console.log('cell', cell);
         swal({
-            text: "คุณต้องการลบข้อมูลพนักงาน ? ",
+            title: "คุณต้องการลบข้อมูลพนักงาน?",
+            text: "เมื่อลบแล้วคุณจะไม่สามารถกู้คืนข้อมูลได้!",
             icon: "warning",
             buttons: true,
-            dengerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    const res = user_model.deleteUserByCode(code)
-                        .then((req) => {
-                            if (req.data == true) {
-                                this.componentDidMount();
-
-                                swal("success Deleted! ", {
-                                    icon: "success",
-
-                                });
-                                // this.componentDidMount()
-                            } else {
-                                swal("success Deleted! ", {
-                                    icon: "error",
-
-                            });
-                        }
-                    })
-                    console.log("code", code);
+            dangerMode: true,
+        }).then(async (willDelete) => {
+            if (willDelete) {
+                var set_data = {
+                    user_code: row.userCode,
+                }
+                console.log('row',row)
+                console.log('------------', set_data)
+                var res = await user_model.deleteUserByCode(set_data);
+                if (res.query_result) {
+                    swal("ลบข้อมูลสำเร็จ!", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("ลบข้อมูลไม่สำเร็จ!", {
+                        icon: "error",
+                    });
+                }
+                this.componentDidMount();
             }
         });
+        console.log('row', row);
+        console.log('rowIndex', rowIndex);
+    }
+    cellButton(cell, row, enumObject, rowIndex) {
+        return (
+            <>
+                <NavLink exact to={'../user/update/' + row.userCode}>
+                    <button class="btn btn-warning">แก้ไข</button>
+                </NavLink>
+                <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>ลบ</button>
+            </>
+        )
     }
 
-    renderUser() {
-        let tbody_user = []
+    showPicture(cell, row, enumObject, rowIndex) {
+        console.log(">>>>>>>>>>>>>>>>>>>>", row.Picture);
 
-        for (let i = 0; i < this.state.user_list.length; i++) {
+        var url = "http://localhost:3003/" + row.Picture;
+        return (
+            <>
+                <img src={url} className="img"></img>
+            </>
+        )
+    }
 
-            tbody_user.push(
-                <tr>
-                    <td><h6 className="textcenter3">{i + 1}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.user_list[i].user_code}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.user_list[i].user_position}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.user_list[i].user_firstname + " " + this.state.user_list[i].user_lastname}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.user_list[i].user_email}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.user_list[i].user_tel}</h6></td>
+    async componentDidMount() {
+        const user_list = await user_model.getUserBy();
+        console.log("user_list", user_list);
 
-
-                    {<td width={100}>
-                        <h6 className="textcenter3">
-                            <NavLink exact to={`/user/update/` + this.state.user_list[i].user_code} style={{ width: '100%' }}>
-                                <i class="fa fa-pencil-square-o" aria-hidden="true" style={{ color: 'blue', marginRight: 30 }}></i>
-                            </NavLink>
-                            <Link to={`#`} onClick={this.onDelete.bind(null, this.state.user_list[i].user_code)}>
-                                <i class="fa fa-times" aria-hidden="true" style={{ color: 'red' }}></i>
-                            </Link>
-                        </h6>
-                    </td>}
-                </tr>
-            )
-
+        const data_user_list = {
+            rows: []
         }
-    return tbody_user;
-}
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in user_list.data) {
+            var set_row = {
+                userCode: user_list.data[key].user_code,
+                Position: user_list.data[key].user_position,
+                Name: user_list.data[key].user_firstname + " " + user_list.data[key].user_lastname,
+                Email: user_list.data[key].user_email,
+                Tel: user_list.data[key].user_tel,
+            }
+            data_user_list.rows.push(set_row);
+            i++;
+        }
+        this.setState({
+            data: data_user_list
+        })
 
-    render (){
+    }
+
+    render() {
+        const { data } = this.state;
         return (
             <div className="animated fadeIn">
+                {/* <h2>พนักงาน</h2>
+                <hr /> */}
                 <Row>
-                    <Col>
+                    <Col lg='12'>
                         <Card>
                             <CardHeader>
                                 จัดการข้อมูลพนักงาน
-                                <NavLink exact to={`/user/insert`} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i>  เพิ่ม</button>
+                                <NavLink exact to={'/user/insert'} style={{ width: '100%' }}>
+                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> เพิ่ม</button>
                                 </NavLink>
                             </CardHeader>
                             <CardBody>
-                                <Table responsive bordered>
-                                    <thead>
-                                        <tr>
-                                            <th className="textcenter3">ลำดับ</th>
-                                            <th className="textcenter3">รหัสพนักงาน</th>
-                                            <th className="textcenter3">ตำแหน่ง</th>
-                                            <th className="textcenter3">ชื่อ-นามสกุล</th>
-                                            <th className="textcenter3">อีเมล</th>
-                                            <th className="textcenter3">เบอร์โทร</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {this.renderUser()}
-                                    </tbody>
-                                </Table>
+                                <Row>
+                                    <Col lg='12'>
+                                        <div>
+                                            <BootstrapTable
+                                                ref='table'
+                                                data={data.rows}
+                                                striped hover pagination
+                                                search={true}
+                                            // className="table-overflow"
+                                            >
+                                                {/* <TableHeaderColumn width={"15%"} dataField='Code' headerAlign="center" dataAlign="center" >Code</TableHeaderColumn> */}
+                                                {/* <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>Picture</TableHeaderColumn> */}
+                                                <TableHeaderColumn dataField='userCode' headerAlign="center" dataAlign="center" dataSort isKey={true}>รหัสพนักงาน</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Position' headerAlign="center" dataAlign="center" dataSort>ตำแหน่ง</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อ-นามสกุล</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Email' headerAlign="center" dataAlign="center" dataSort>อีเมล</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Tel' headerAlign="center" dataAlign="center" dataSort>เบอร์โทร</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Action' headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
+                                            </BootstrapTable>
+                                        </div>
+                                    </Col>
+                                </Row>
                             </CardBody>
                         </Card>
                     </Col>
