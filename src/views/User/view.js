@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import swal from 'sweetalert';
+import GOBALS from '../../GOBALS'
 import UserModel from '../../models/UserModel'
 var user_model = new UserModel;
 class UserView extends Component {

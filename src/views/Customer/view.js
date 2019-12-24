@@ -1,132 +1,130 @@
-
 import React, { Component } from 'react';
-import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHeader, Col, Row, CardImg, CardBody, CardTitle } from 'reactstrap';
+import { Media, Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHeader, Col, Row, CardImg, CardBody, CardTitle } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import swal from 'sweetalert';
-
+import GOBALS from '../../GOBALS'
 import CustomerModel from '../../models/CustomerModel'
-const customer_model = new CustomerModel
-
+var customer_model = new CustomerModel;
 class CustomerView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
-            customer_list: [],
-            refresh: false
+            refresh: false,
+            show_update_model: false,
         };
-        this.onDelete = this.onDelete.bind(this);
-        this.renderCustomer = this.renderCustomer.bind(this);
     }
 
+    onClickDelete(cell, row, rowIndex) {
+        console.log('cell', cell);
+        swal({
+            title: "คุณต้องการลบข้อมูลลูกค้า?",
+            text: "เมื่อลบแล้วคุณจะไม่สามารถกู้คืนข้อมูลได้!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then(async (willDelete) => {
+            if (willDelete) {
+                var set_data = {
+                    customer_code: row.customerCode,
+                }
+                console.log('row',row)
+                console.log('------------', set_data)
+                var res = await customer_model.deleteCustomerByCode(set_data);
+                if (res.query_result) {
+                    swal("ลบข้อมูลสำเร็จ!", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("ลบข้อมูลไม่สำเร็จ!", {
+                        icon: "error",
+                    });
+                }
+                this.componentDidMount();
+            }
+        });
+        console.log('row', row);
+        console.log('rowIndex', rowIndex);
+    }
+    cellButton(cell, row, enumObject, rowIndex) {
+        return (
+            <>
+                {/* <NavLink exact to={'/customer/detail/' + row.customerCode}>
+                    <button class="btn btn-primary">รายละเอียด</button>
+                </NavLink> */}
+                <NavLink exact to={'/customer/update/' + row.customerCode}>
+                    <button class="btn btn-warning">แก้ไข</button>
+                </NavLink>
+                <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>ลบ</button>
+            </>
+        )
+    }
 
     async componentDidMount() {
-        var customer_list = await customer_model.getCustomerBy()
+        const customer_list = await customer_model.getCustomerBy()
         console.log("customer_list", customer_list);
 
+        const data_customer_list = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in customer_list.data) {
+            var set_row = {
+                customerCode: customer_list.data[key].customer_code,
+                Name: customer_list.data[key].customer_name,
+                Id: customer_list.data[key].customer_id,
+                Email: customer_list.data[key].customer_email,
+                Tel: customer_list.data[key].customer_tel,
+                // Img: customer_list.data[key].customer_image
+            }
+            data_customer_list.rows.push(set_row);
+            i++;
+        }
         this.setState({
-            customer_list: customer_list.data
+            data: data_customer_list
         })
         
     }
-
-    async onDelete(code) {
-        // console.log("code", code);
-        swal({
-            text: "คุณต้องการลบข้อมูลลูกค้า ? ",
-            icon: "warning",
-            buttons: true,
-            dengerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    const res = customer_model.deleteCustomerByCode(code)
-                        .then((req) => {
-                            if (req.data == true) {
-                                this.componentDidMount();
-                                swal("success Deleted! ", {
-                                    icon: "success",
-
-                                });
-                                // this.componentDidMount()
-                            } else {
-                                swal("success Deleted! ", {
-                                    icon: "error",
-
-                                });
-                            }
-
-                        })
-
-                }
-
-            });
-
-    }
  
-    renderCustomer(){
-        let tbody_customer = []
-
-        for (let i = 0; i < this.state.customer_list.length; i++) {
-
-            tbody_customer.push(
-                <tr>
-                    <td><h6 className="textcenter3">{i + 1}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_code}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_name}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_id}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_email}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.customer_list[i].customer_phone}</h6></td>
-
-                    {<td width={100}>
-                        <h6 className="textcenter3">
-                            <NavLink exact to={`/customer/update/` + this.state.customer_list[i].customer_code} style={{ width: '100%' }}>
-                                <i class="fa fa-pencil-square-o" aria-hidden="true" style={{ color: 'blue', marginRight: 30 }}></i>
-                            </NavLink>
-                            <Link to={`#`} onClick={this.onDelete.bind(null, this.state.customer_list[i].customer_code)}>
-                                <i class="fa fa-times" aria-hidden="true" style={{ color: 'red' }}></i>
-                            </Link>
-                        </h6>
-                    </td>}
-                </tr>
-            )
-
-        }
-        return tbody_customer;
-    }
-
     render() {
-    
-    
+        const { data } = this.state;
         return (
             <div className="animated fadeIn">
                 <Row>
-                    <Col>
+                    <Col lg='12'>
                         <Card>
                             <CardHeader>
                                 จัดการข้อมูลลูกค้า
-                                <NavLink exact to={`/customer/insert`} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i>   เพิ่ม</button>
+                                <NavLink exact to={'/customer/insert'} style={{ width: '100%' }}>
+                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> เพิ่ม</button>
                                 </NavLink>
                             </CardHeader>
                             <CardBody>
-                                <Table responsive bordered>
-                                    <thead>
-                                        <tr>
-                                            <th className="textcenter3">ลำดับ</th>
-                                            <th className="textcenter3">รหัสลูกค้า</th>
-                                            <th className="textcenter3">ชื่อ-นามสกุล</th>
-                                            <th className="textcenter3">ไอดี</th>
-                                            <th className="textcenter3">อีเมล</th>
-                                            <th className="textcenter3">เบอร์โทร</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {this.renderCustomer()}
-                                    </tbody>
-                                </Table>
+                                <Row>
+                                    <Col lg='12'>
+                                        <div>
+                                            <BootstrapTable
+                                                ref='table'
+                                                data={data.rows}
+                                                striped hover pagination
+                                                search={true}
+                                            // className="table-overflow"
+                                            >
+                                                {/* <TableHeaderColumn width={"15%"} dataField='Code' headerAlign="center" dataAlign="center" >Code</TableHeaderColumn> */}
+                                                {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>Picture</TableHeaderColumn> */}
+                                                <TableHeaderColumn dataField='customerCode' headerAlign="center" dataAlign="center" dataSort isKey={true}>รหัสลูกค้า</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อ-นามสกุล</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Id' headerAlign="center" dataAlign="center" dataSort>ไอดี</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Email' headerAlign="center" dataAlign="center" dataSort>อีเมล</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Tel' headerAlign="center" dataAlign="center" dataSort>เบอร์โทร</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Action' headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
+                                            </BootstrapTable>
+                                        </div>
+                                    </Col>
+                                </Row>
                             </CardBody>
                         </Card>
                     </Col>

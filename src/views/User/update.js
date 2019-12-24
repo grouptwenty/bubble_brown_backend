@@ -82,7 +82,6 @@ class editView extends Component {
     }
 
 
-
     async componentDidMount() {
         const code = this.props.match.params.code
         console.log(code);
@@ -243,16 +242,14 @@ class editView extends Component {
                                     <Row>
                                         <Col lg="12">
                                             <br />
-                                            
                                             <Row>
-                                        
                                                 <Col lg="4">
                                                     <Label className="text_head"> รหัสพนักงาน</Label>
                                                     <Input type="text" id="user_code" name="user_code" class="form-control" readOnly ></Input>
                                                     <p id="user_code" className="text_head_sub">Example : US001</p>
                                                 </Col>
                                             </Row>
-                                            <Col lg="4">
+                                            <Col>
                                                     <FormGroup style={{ textAlign: "center" }}>
                                                         <div class="form-group files">
                                                             <Col style={{ marginBottom: "15px" }}>

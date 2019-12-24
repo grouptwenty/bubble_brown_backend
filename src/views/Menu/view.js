@@ -1,14 +1,14 @@
-
 import React, { Component } from 'react';
-import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHeader, Col, Row, CardImg, CardBody, CardTitle } from 'reactstrap';
+import { Media, Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHeader, Col, Row, CardImg, CardBody, CardTitle } from 'reactstrap';
 import { connect } from 'react-redux';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import swal from 'sweetalert';
+import GOBALS from '../../GOBALS'
 import MenuModel from '../../models/MenuModel'
 import MenuTypeModel from '../../models/MenuTypeModel'
 
-const menu_model = new MenuModel
-const menu_type_model = new MenuTypeModel
+var menu_model = new MenuModel
 
 class MenuView extends Component {
     constructor(props) {
@@ -16,129 +16,126 @@ class MenuView extends Component {
         this.state = {
             data: [],
             menu_list: [],
-            menu_type: [],
-            refresh: false
+            refresh: false,
+            show_update_model: false
         };
-        this.onDelete = this.onDelete.bind(this);
-        this.renderMenu = this.renderMenu.bind(this);
-
     }
 
+    onClickDelete(cell, row, rowIndex) {
+        console.log('cell', cell);
+        swal({
+            title: "คุณต้องการลบเมนู?",
+            text: "เมื่อลบแล้วคุณจะไม่สามารถกู้คืนข้อมูลได้!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then(async (willDelete) => {
+            if (willDelete) {
+                var set_data = {
+                    menu_code: row.menuCode,
+                }
+                console.log('row',row)
+                console.log('------------', set_data)
+                var res = await menu_model.deleteMenuByCode(set_data);
+                if (res.query_result) {
+                    swal("ลบข้อมูลสำเร็จ!", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("ลบข้อมูลไม่สำเร็จ!", {
+                        icon: "error",
+                    });
+                }
+                this.componentDidMount();
+            }
+        });
+        console.log('row', row);
+        console.log('rowIndex', rowIndex);
+    }
+
+    cellButton(cell, row, enumObject, rowIndex) {
+        return (
+            <>
+                <NavLink exact to={'../menu/update/' + row.menuCode}>
+                    <button class="btn btn-warning">แก้ไข</button>
+                </NavLink>
+                <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>ลบ</button>
+            </>
+        )
+    }
+
+    showPicture(cell, row, enumObject, rowIndex) {
+        console.log(">>>>>>>>>>>>>>>>>>>>", row.Picture);
+
+        // var url = "http://localhost:3006/" + row.Picture;
+        return (
+            <>
+                <img src={GOBALS.URL_IMG + "menu/" + row.Img} className="img"></img>
+            </>
+        )
+    }
 
     async componentDidMount() {
         var menu_list = await menu_model.getMenuBy()
         // console.log("menu_list", menu_list);
+        const data_menu_list = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in menu_list.data) {
+            var set_row = {
+                menuCode: menu_list.data[key].menu_code,
+                Type: menu_list.data[key].menu_type_name,
+                Name: menu_list.data[key].menu_name,
+                Price: menu_list.data[key].menu_price,
+                Img: menu_list.data[key].menu_image,
+            }
+            data_menu_list.rows.push(set_row);
+            i++;
+        }
+
         this.setState({
-            menu_list: menu_list.data
+            data: data_menu_list
         })
         
     }
 
-    async onDelete(code) {
-        // console.log("code", code);
-        swal({
-            text: "คุณต้องการลบเมนู ? ",
-            icon: "warning",
-            buttons: true,
-            dengerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    const res = menu_model.deleteMenuByCode(code)
-                        .then((req) => {
-                            if (req.data == true) {
-                                this.componentDidMount();
-                                swal("success Deleted! ", {
-                                    icon: "success",
-
-                                });
-                                // this.componentDidMount()
-                            } else {
-                                swal("success Deleted! ", {
-                                    icon: "error",
-
-                                });
-                            }
-
-                        })
-
-                }
-
-            });
-
-    }
-
-    async getMenuByCode(code) {
-        var menu_list = await menu_model.getMenuByCode(code)
-        // console.log("menulistbycode", menu_list);
-        this.setState({
-            menu_list: menu_list.data
-        })
-    }
-
-    renderMenu() {
-        let tbody_menu = []
-
-        for (let i = 0; i < this.state.menu_list.length; i++) {
-
-            tbody_menu.push(
-                <tr>
-                    <td><h6 className="textcenter3">{i + 1}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_code}</h6></td>
-                    {/* <td><h6 className="textcenter3">{this.state.menu_list[i].menu_id}</h6></td> */}
-                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_type_name}</h6></td>
-                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_name}</h6></td>
-                    {/* <td><h6 className="textcenter3">{this.state.menu_list[i].menu_image}</h6></td> */}
-                    <td><h6 className="textcenter3">{this.state.menu_list[i].menu_price}</h6></td>
-
-                    {<td width={100}>
-                        <h6 className="textcenter3">
-                            <NavLink exact to={`/menu/update/` + this.state.menu_list[i].menu_code} style={{ width: '100%' }}>
-                                <i class="fa fa-pencil-square-o" aria-hidden="true" style={{ color: 'blue', marginRight: 30 }}></i>
-                            </NavLink>
-                            <Link to={`#`} onClick={this.onDelete.bind(null, this.state.menu_list[i].menu_code)}>
-                                <i class="fa fa-times" aria-hidden="true" style={{ color: 'red' }}></i>
-                            </Link>
-                        </h6>
-                    </td>}
-                </tr>
-            )
-
-        }
-        return tbody_menu;
-    }
-
     render() {
-
-
+        const { data } = this.state;
         return (
             <div className="animated fadeIn">
                 <Row>
-                    <Col>
+                    <Col lg='12'>
                         <Card>
                             <CardHeader>
                                 จัดการเมนู
-                                <NavLink exact to={`/menu/insert`} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i>   เพิ่ม</button>
+                                <NavLink exact to={'../menu/insert'} style={{ width: '100%' }}>
+                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> เพิ่ม</button>
                                 </NavLink>
                             </CardHeader>
                             <CardBody>
-                                <Table responsive bordered>
-                                    <thead>
-                                        <tr>
-                                            <th className="textcenter3">ลำดับ</th>
-                                            <th className="textcenter3">รหัสเมนู</th>
-                                            <th className="textcenter3">ประเภท</th> 
-                                            <th className="textcenter3">ชื่อ</th>
-                                            {/* <th className="textcenter3">รูปภาพ</th> */}
-                                            <th className="textcenter3">ราคา</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {this.renderMenu()}
-                                    </tbody>
-                                </Table>
+                                <Row>
+                                    <Col lg='12'>
+                                        <div>
+                                            <BootstrapTable
+                                                ref='table'
+                                                data={data.rows}
+                                                striped hover pagination
+                                                search={true}
+                                                // className="table-overflow"
+                                            >
+                                                <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='menuCode' headerAlign="center" dataAlign="center" dataSort isKey={true}>รหัสเมนู</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Type' headerAlign="center" dataAlign="center" dataSort>ประเภท</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อเมนู</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Price' headerAlign="center" dataAlign="center" dataSort>ราคา</TableHeaderColumn>
+                                                {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
+                                                <TableHeaderColumn dataField='Action' headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
+                                            </BootstrapTable>
+                                        </div>
+                                    </Col>
+                                </Row>
                             </CardBody>
                         </Card>
                     </Col>

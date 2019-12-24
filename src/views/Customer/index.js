@@ -6,7 +6,7 @@ const loading = () => <div className="animated fadeIn pt-3 text-center">Loading.
 const CustomerView = React.lazy(() => import('./view'));
 const CustomerInsert = React.lazy(() => import('./insert'));
 const CustomerUpdate = React.lazy(() => import('./update'));
-// const WashingMachineDetail = React.lazy(() => import('./detail'));
+// const CustomerDetail = React.lazy(() => import('./detail'));
 class Customer extends Component {
 
   async componentDidMount() {
@@ -22,6 +22,7 @@ class Customer extends Component {
             <Route exact path="/customer/" render={props => <CustomerView {...props} />} />
             <Route exact path="/customer/insert" render={props => <CustomerInsert {...props} />} />
             <Route exact path="/customer/update/:code" render={props => <CustomerUpdate {...props} />} />
+            {/* <Route exact path="/customer/detail/:code" render={props => <CustomerDetail {...props} />} /> */}
 
           </Switch>
         </React.Suspense>

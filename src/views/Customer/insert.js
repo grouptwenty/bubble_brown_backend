@@ -1,29 +1,16 @@
 import React, { Component } from 'react';
-import { Button, 
-    Table, 
-    Card,
-    Pagination, 
-    PaginationLink, 
-    PaginationItem, 
-    CardHeader, 
-    CardFooter, 
-    Col, 
-    Row, 
-    CardImg, 
-    CardBody, 
-    CardTitle, 
-    Input, 
-    Label, 
-    Form ,
-    FormGroup
-} from 'reactstrap';
+import { Button, InputGroup, Form, Input, Table, Card, CardHeader,CardFooter, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link, } from 'react-router-dom';
 import { fonts } from 'pdfmake/build/pdfmake';
 import swal from 'sweetalert';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import CustomerModel from '../../models/CustomerModel'
+import ImgDefault from '../../assets/img/img_default.png'
+import UploadModel from '../../models/UploadModel';
+
 const customer_model = new CustomerModel
+var upload_model = new UploadModel();
 
 class insertView extends Component {
     constructor(props) {
@@ -31,11 +18,58 @@ class insertView extends Component {
         this.state = {
             data: [],
             refresh: false ,
+            imagePreviewUrl: '',
+            file: null,
+            selectedFile: null,
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onChangeHandler = this.onChangeHandler.bind(this)    
     }
 
-  
+    onChangeHandler = e => {
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        let files = e.target.files;
+        var today = new Date();
+        var time_now = today.getTime();
+        this.setState({
+            time_now: time_now
+        })
+        const name = time_now + "-" + file.name;
+        file = new File([file], name, { type: files.type });
+        console.log('files', file);
+        if (file != undefined) {
+            reader.onloadend = () => {
+                this.setState({
+                    file: file,
+                    imagePreviewUrl: reader.result,
+                    selectedFile: file
+                });
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+
+    async fileUpload(file, page, _code) {
+        // const url = GOBALS.URL_UPLOAD_OTHER;
+        const formData = new FormData();
+        var res = file.name.split(".");
+        formData.append('_code', _code);
+        formData.append('file_type', '.' + res[res.length - 1]);
+        formData.append('upload_url', page);
+        formData.append('files', file);
+
+        var res_upload = await upload_model.uploadImages(formData);
+        // console.log(res_upload);
+        // var data_update = {
+        //   journal_file_path: res_upload.data[0].comment_photo_url
+        // }
+        // var data_where = {
+        //   journal_code: _code
+        // }
+        // var res_update = journal_model.updateCoverPage(data_update, data_where);
+        return res_upload.data.photo_url;
+    }
 
     async componentDidMount() {
       
@@ -60,8 +94,13 @@ class insertView extends Component {
         for (let name of data.keys()) {
             arr[name] = form.elements[name.toString()].value;
         }
+
+        if (this.state.selectedFile != null) {
+            arr['customer_image'] = await this.fileUpload(this.state.selectedFile, 'customer', '123');
+        }
         
         arr['customer_code'] = customer_code
+
         if (this.check(arr)) {
             var res = await customer_model.insertCustomer(arr);
             //   console.log(res)
@@ -73,7 +112,7 @@ class insertView extends Component {
                   button: "Close",
                 });
                 this.props.history.push('/customer')
-              }
+            }
         }
     }
 
@@ -101,7 +140,7 @@ class insertView extends Component {
                 button: "close",
             });
             return false
-        } else if (form.customer_phone == '') {
+        } else if (form.customer_tel == '') {
             swal({
                 text: "กรุณากรอก เบอร์โทร",
                 icon: "warning",
@@ -124,7 +163,17 @@ class insertView extends Component {
 
     render() {
 
-       
+        let { imagePreviewUrl } = this.state;
+        let imagePreview = null;
+        console.log("ddd", imagePreviewUrl);
+
+
+        if (imagePreviewUrl) {
+            imagePreview = (<img className="responsive" style={{ width: '100%' }} src={imagePreviewUrl} />);
+        } else {
+            imagePreview = (<img className="responsive" style={{ width: '100%' }} src={ImgDefault} />);
+        }
+
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -147,7 +196,16 @@ class insertView extends Component {
                                                 {/* <Input type="hidden" id="customer_code" name="customer_code" class="form-control" readOnly ></Input> */}
                                                 {/* <p id="customer_code" className="text_head_sub">Example : CM001</p> */}
                                             {/* </Col> */}
-                                        
+                                        <Col>
+                                            <FormGroup style={{ textAlign: "center" }}>
+                                                <div class="form-group files">
+                                                    <Col style={{ marginBottom: "15px" }}>
+                                                        {imagePreview}
+                                                    </Col>
+                                                    <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="customer_image" />
+                                                </div>
+                                            </FormGroup>
+                                            </Col>
                                         <Row>
                                             <Col lg="6">
                                                 <Label className="text_head"> ชื่อ-นามสกุล <font color='red'><b> * </b></font></Label>
@@ -168,18 +226,10 @@ class insertView extends Component {
                                             </Col>
                                             <Col lg="6">
                                                 <Label className="text_head"> เบอร์โทร <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="customer_phone" name="customer_phone" class="form-control"  ></Input>
-                                                <p id="customer_phone" className="text_head_sub"></p>
+                                                <Input type="text" id="customer_tel" name="customer_tel" class="form-control"  ></Input>
+                                                <p id="customer_tel" className="text_head_sub"></p>
                                             </Col>
                                         </Row>
-                                        {/* <Row>
-                                            <Col lg="6">
-                                                <Label className="text_head"> รูปภาพ </Label>
-                                                <Input type="file" id="customer_img" name="customer_img" class="form-control" autocomplete="off"></Input>
-                                                <p id="customer_img" className="text_head_sub"></p>
-                                            </Col>
-                                        </Row> */}
-                            
                                     </Col>
                                 </Row>
 

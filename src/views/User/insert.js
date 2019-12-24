@@ -219,7 +219,7 @@ class insertView extends Component {
                                                 {/* <p id="user_code" className="text_head_sub">Example : US001</p> */}
                                             {/* </Col> */}
                                     
-                                            <Col lg="4">
+                                            <Col>
                                             <FormGroup style={{ textAlign: "center" }}>
                                                 <div class="form-group files">
                                                     <Col style={{ marginBottom: "15px" }}>

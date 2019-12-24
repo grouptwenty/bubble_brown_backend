@@ -75,7 +75,7 @@ export default class CustomerModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({customer_code:data})
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 
