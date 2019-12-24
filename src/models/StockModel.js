@@ -26,8 +26,50 @@ export default class StockModel {
             });
     }
 
-    async getSumStockBy(data) {
-        return fetch(GOBALS.URL + '/stock/getSumStockBy', {
+    async getProductBy(data) {
+        return fetch(GOBALS.URL + '/stock/getProductBy', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+    async getSumStockInBy(data) {
+        return fetch(GOBALS.URL + '/stock/getSumStockInBy', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+    async getSumStockOutBy(data) {
+        return fetch(GOBALS.URL + '/stock/getSumStockOutBy', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -163,6 +205,28 @@ export default class StockModel {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({stock_id: data})
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result:false
+                };
+            });
+    }
+
+    async getStockByPriceQty(data) {
+        return fetch(GOBALS.URL + '/stock/getStockByPriceQty', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 

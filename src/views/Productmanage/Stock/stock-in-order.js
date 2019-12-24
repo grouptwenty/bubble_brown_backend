@@ -34,7 +34,6 @@ class detailView extends Component {
         this.renderStockOrder = this.renderStockOrder.bind(this)
         this.toggle_StockEdit = this.toggle_StockEdit.bind(this);
         this.renderModalEdit = this.renderModalEdit.bind(this);
-        this.onEditStock = this.onEditStock.bind(this);
         // this.updateStock = this.updateStock.bind(this);
     }
 
@@ -58,19 +57,6 @@ class detailView extends Component {
         }));
     }
 
-    async onEditStock(stock_id) {
-
-        var stock_set = await stock_model.getStockByCode(stock_id)
-
-        this.setState({
-            stock_set: stock_set.data
-        })
-
-        console.log(stock_set);
-
-        this.toggle_StockEdit()
-
-    }
 
     // async  updateStock(stock_id) {
 
@@ -166,10 +152,8 @@ class detailView extends Component {
                         <td style={{ textAlign: 'end' }}>{this.state.stock_order[i].stock_qty}</td>
                         <td style={{ textAlign: 'end' }}>{this.state.stock_order[i].stock_cost}</td>
                         <td style={{ textAlign: 'center' }}>
-                            <Button color="info"
-                             onClick={this.onEditStock.bind(this, this.state.stock_order[i].stock_id)}
-                             >แก้ไข</Button>{' '}
-                            <Button color="danger">ลบ</Button>{' '}
+                          
+                            <Button color="danger">ลบ</Button>
                         </td>
                     </tr>
 

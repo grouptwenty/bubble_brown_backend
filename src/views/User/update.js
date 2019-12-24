@@ -1,41 +1,86 @@
 import React, { Component } from 'react';
-import {
-    Button,
-    Table,
-    Card,
-    Pagination,
-    PaginationLink,
-    PaginationItem,
-    CardHeader,
-    CardFooter,
-    Col,
-    Row,
-    CardImg,
-    CardBody,
-    CardTitle,
-    Input,
-    Label,
-    Form,
-    FormGroup
-} from 'reactstrap';
+import { Button, InputGroup, Form, Input, Table, Card, CardHeader, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link, } from 'react-router-dom';
 import { fonts } from 'pdfmake/build/pdfmake';
 import swal from 'sweetalert';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import UserModel from '../../models/UserModel'
-const user_model = new UserModel
+import ImgDefault from '../../assets/img/img_default.png'
+import UploadModel from '../../models/UploadModel';
+import GOBALS from '../../GOBALS';
+import 'react-day-picker/lib/style.css';
+
+var user_model = new UserModel
+var upload_model = new UploadModel();
+var today = new Date();
 
 class editView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
-            refresh: false
+            refresh: false,
+            imagePreviewUrl: '',
+            file: '',
+            user_img_old: null,
+            user: [],
+            row_img: [],
+            fileSelected: false
         };
+        this.onChangeHandler = this.onChangeHandler.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setval = this.setval.bind(this);
     }
+    onChangeHandler = e => {
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        let files = e.target.files;
+        var today = new Date();
+        var time_now = today.getTime();
+        this.setState({
+            time_now: time_now,
+        })
+        const name = time_now + "-" + file.name;
+        file = new File([file], name, { type: files.type });
+        console.log('files', file);
+        if (file != undefined) {
+            reader.onloadend = () => {
+                this.setState({
+                    file: file,
+                    imagePreviewUrl: reader.result,
+                    selectedFile: file,
+
+                });
+            }
+            reader.readAsDataURL(file);
+        }
+        this.componentDidMount();
+    }
+
+    async fileUpload(file, page, _code) {
+        // const url = GOBALS.URL_UPLOAD_OTHER;
+        const formData = new FormData();
+        var res = file.name.split(".");
+        formData.append('_code', _code);
+        formData.append('file_type', '.' + res[res.length - 1]);
+        formData.append('upload_url', page);
+        formData.append('files', file);
+
+        var res_upload = await upload_model.uploadImages(formData);
+        // console.log(res_upload);
+        // var data_update = {
+        //   journal_file_path: res_upload.data[0].comment_photo_url
+        // }
+        // var data_where = {
+        //   journal_code: _code
+        // }
+        // var res_update = journal_model.updateCoverPage(data_update, data_where);
+        console.log("res_upload.data.photo_url :", res_upload.data.photo_url);
+
+        return res_upload.data.photo_url;
+    }
+
 
 
     async componentDidMount() {
@@ -43,18 +88,21 @@ class editView extends Component {
         console.log(code);
 
         const user_data = await user_model.getUserByCode(code);
-        console.log(user_data.data);
-        
+        console.log("user_data.user_image",user_data.data.user_image);
+        this.setState({
+            user_img_old: user_data.data.user_image
+        })
         this.setval(user_data.data)
 
     }
 
     async setval(data) {
+        console.log('data', data)
         document.getElementById('user_code').value = data.user_code
         document.getElementById('user_position').value = data.user_position
         document.getElementById('user_firstname').value = data.user_firstname
         document.getElementById('user_lastname').value = data.user_lastname
-        // document.getElementById('user_img').value = data.user_img
+        // document.getElementById('user_image').value = data.user_image
         document.getElementById('user_tel').value = data.user_tel
         document.getElementById('user_email').value = data.user_email
         document.getElementById('user_address').value = data.user_address
@@ -66,11 +114,27 @@ class editView extends Component {
         event.preventDefault();
         const form = event.target;
         const data = new FormData(form);
-        // const date_now = new Date();
+        const date_now = new Date();
+        var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime()
         var arr = {};
 
         for (let name of data.keys()) {
             arr[name] = form.elements[name.toString()].value;
+        }
+
+        if (this.state.selectedFile != null) {
+
+            if (this.state.user_img_old != "" && this.state.user_img_old != null) {
+                var req = await upload_model.deleteImages(this.state.user_img_old, "user")
+                console.log("Delect :" + req);
+            }
+
+            arr['user_image'] = await this.fileUpload(this.state.selectedFile, 'user', this.state.user_code + "_" + toDay);
+            // console.log("this.state.selectedFile :", this.state.selectedFile);
+
+        } else {
+            arr['user_image'] = this.state.user_img_old
+
         }
 
         console.log(arr);
@@ -151,6 +215,19 @@ class editView extends Component {
         }
     }
     render() {
+        let { imagePreviewUrl } = this.state;
+        let imagePreview = null;
+
+        if (imagePreviewUrl) {
+            imagePreview = (<img className="responsive" style={{ width: '100%' }} src={imagePreviewUrl} />);
+        } else {
+            imagePreview = (<img className="responsive" style={{ width: '100%' }} src={ImgDefault} />);
+        }
+
+        if (this.state.user_img_old != null && this.state.user_img_old != undefined && !imagePreviewUrl && this.state.user_img_old != '') {
+            imagePreview = (<img className="responsive" style={{ width: '100%' }} src={GOBALS.URL_IMG + "user/" + this.state.user_img_old} />);
+        }
+
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -164,16 +241,27 @@ class editView extends Component {
                                 <CardBody>
 
                                     <Row>
-
                                         <Col lg="12">
                                             <br />
+                                            
                                             <Row>
+                                        
                                                 <Col lg="4">
                                                     <Label className="text_head"> รหัสพนักงาน</Label>
                                                     <Input type="text" id="user_code" name="user_code" class="form-control" readOnly ></Input>
                                                     <p id="user_code" className="text_head_sub">Example : US001</p>
                                                 </Col>
                                             </Row>
+                                            <Col lg="4">
+                                                    <FormGroup style={{ textAlign: "center" }}>
+                                                        <div class="form-group files">
+                                                            <Col style={{ marginBottom: "15px" }}>
+                                                                {imagePreview}
+                                                            </Col>
+                                                            <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="user_image" />
+                                                        </div>
+                                                    </FormGroup>
+                                                </Col>
                                             <Row>
                                                 <Col lg="4">
                                                     <Label className="text_head"> ตำแหน่ง <font color='red'><b> * </b></font></Label>

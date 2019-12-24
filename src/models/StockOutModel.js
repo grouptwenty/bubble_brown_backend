@@ -1,33 +1,11 @@
 import GOBALS from '../GOBALS';
-export default class ProductModel {
+export default class StockOutModel {
 
     constructor() {
     }
-   
-    async getProductBy(data) {
-        return fetch(GOBALS.URL + '/product/getProductBy', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({menu_code: data})
-        }).then((response) => response.json())
-            .then((responseJson) => {
 
-                return responseJson;
-            }).catch((error) => {
-                return {
-                    data: [],
-                    error: error,
-                    query_result: false,
-                    server_result:false
-                };
-            });
-    }
-
-    async updateProductCost(data) {
-        return fetch(GOBALS.URL + '/product/updateProductCost', {
+    async insertStockOutByOrder(data) {
+        return fetch(GOBALS.URL + '/stockout/insertStockOutByOrder', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -43,10 +21,32 @@ export default class ProductModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
-   
+    async deleteStockOutByOrderCode(data) {
+        return fetch(GOBALS.URL + '/stockout/deleteStockOutByOrderCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+
+  
 
 }

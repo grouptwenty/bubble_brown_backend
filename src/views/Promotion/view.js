@@ -18,8 +18,8 @@ class PromotionView extends Component {
     onClickDelete(cell, row, rowIndex) {
         console.log('cell', cell);
         swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this imaginary file!",
+            title: "คุณต้องการลบข้อมูลโปรโมชั่น?",
+            text: "เมื่อลบแล้วคุณจะไม่สามารถกู้คืนข้อมูลนี้ได้!",
             icon: "warning",
             buttons: true,
             dangerMode: true,
@@ -31,11 +31,11 @@ class PromotionView extends Component {
                 console.log('------------', set_data)
                 var res = await promotion_model.deletePromotion(set_data);
                 if (res.query_result) {
-                    swal("Poof! Your imaginary file has been deleted!", {
+                    swal("ลบข้อมูลสำเร็จ!", {
                         icon: "success",
                     });
                 } else {
-                    swal("deleted Fail", {
+                    swal("ลบข้อมูลไม่สำเร็จ!", {
                         icon: "error",
                     });
                 }
@@ -106,7 +106,7 @@ class PromotionView extends Component {
                             <CardHeader>
                                 Promotion
                                 <NavLink exact to={'../Promotion/insert'} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> เพิ่ม</button>
                                 </NavLink>
                             </CardHeader>
                             <CardBody>
@@ -122,13 +122,13 @@ class PromotionView extends Component {
 
                                             >
                                                 {/* <TableHeaderColumn width={"15%"} dataField='Code' headerAlign="center" dataAlign="center" >Code</TableHeaderColumn> */}
-                                                {/* <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>Picture</TableHeaderColumn> */}
-                                                <TableHeaderColumn dataField='Header' headerAlign="center" dataAlign="center" dataSort isKey={true}>Header</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='Detail' headerAlign="center" dataAlign="center" dataSort>Detail</TableHeaderColumn>
-                                                <TableHeaderColumn width={'10%'} dataField='Type' headerAlign="center" dataAlign="center" dataSort>Type</TableHeaderColumn>
-                                                <TableHeaderColumn width={'10%'} dataField='Start' headerAlign="center" dataAlign="center" dataSort>Startdate</TableHeaderColumn>
-                                                <TableHeaderColumn width={'10%'} dataField='End' headerAlign="center" dataAlign="center" dataSort>Enddate</TableHeaderColumn>
-                                                <TableHeaderColumn width={'20%'} dataField='Action' headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}>Action</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Header' headerAlign="center" dataAlign="center" dataSort isKey={true}>โปรโมชั่น</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Detail' headerAlign="center" dataAlign="center" dataSort>รายละเอียด</TableHeaderColumn>
+                                                <TableHeaderColumn width={"10%"} dataField='Type' headerAlign="center" dataAlign="center" dataSort>ประเภท</TableHeaderColumn>
+                                                <TableHeaderColumn width={"10%"} dataField='Start' headerAlign="center" dataAlign="center" dataSort>วันที่เริ่ม</TableHeaderColumn>
+                                                <TableHeaderColumn width={"10%"} dataField='End' headerAlign="center" dataAlign="center" dataSort>หมดเขต</TableHeaderColumn>
+                                                <TableHeaderColumn width={"20%"} dataField='Action' headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
                                             </BootstrapTable>
                                         </div>
                                     </Col>
