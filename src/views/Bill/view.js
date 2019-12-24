@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Nav, NavItem, TabContent, TabPane, Col, Row, CardHeader, Card, Input, CardText, CardBody, CardTitle, Button, Label, FormGroup, Form, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Nav, NavItem, Table, TabContent, TabPane, Col, Row, CardHeader, Card, Input, CardText, CardBody, CardTitle, Button, Label, FormGroup, Form, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -28,14 +28,17 @@ class BillView extends Component {
             table_list: [],
             tabIndex: 0,
             refresh: false,
-            x: []
+            x: [],
+            recive: 0
 
         };
 
         this.onBillDetail = this.onBillDetail.bind(this);
         this.onTableEdit = this.onTableEdit.bind(this);
+        this.onCheckBill = this.onCheckBill.bind(this);
         // this.onTableAdd = this.onTableAdd.bind(this);
         this.toggle_Bill = this.toggle_Bill.bind(this);
+        this.toggle_Check_Bill = this.toggle_Check_Bill.bind(this);
         this.toggle_Table_Edit = this.toggle_Table_Edit.bind(this);
         this.toggle_Table_Add = this.toggle_Table_Add.bind(this);
         this.renderBill = this.renderBill.bind(this);
@@ -45,6 +48,7 @@ class BillView extends Component {
         this.renderModalBill = this.renderModalBill.bind(this);
         this.renderModelTableEdit = this.renderModelTableEdit.bind(this);
         this.renderModelTableAdd = this.renderModelTableAdd.bind(this);
+        // this.renderModelCheckBill = this.renderModelCheckBill.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onDelete = this.onDelete.bind(this);
         this.start = this.start.bind(this);
@@ -99,6 +103,13 @@ class BillView extends Component {
         }));
     }
 
+    toggle_Check_Bill() {
+        this.setState(prevState => ({
+            modal_check_bill: !prevState.modal_check_bill
+
+        }));
+    }
+
 
     async onBillDetail(order_code) {
         var order_list = await orderlist_model.getOrderListBy(order_code)
@@ -131,6 +142,14 @@ class BillView extends Component {
             table_code_add: table_code
         })
         this.toggle_Table_Add()
+    }
+
+    onCheckBill(check_bill) {
+        console.log(check_bill);
+        this.setState({
+            check_bill: check_bill
+        })
+        this.toggle_Check_Bill()
     }
 
 
@@ -175,7 +194,7 @@ class BillView extends Component {
                         <Row >
                             <Col lg="6" >
                                 <div style={{ textAlign: 'end' }}>
-                                    <Button color="secondary">ชำระเงิน</Button>
+                                    <Button onClick={this.onCheckBill.bind(this, this.state.bill_order[i])} color="secondary">ชำระเงิน</Button>
                                 </div>
                             </Col>
                             <Col lg="6">
@@ -355,7 +374,7 @@ class BillView extends Component {
             zone_id: zone_id
         }
 
-       var res = await table_model.insertTable(add_table);
+        var res = await table_model.insertTable(add_table);
 
         if (add_table != undefined) {
             swal({
@@ -602,6 +621,42 @@ class BillView extends Component {
     }
 
 
+    calculatePayment(number) {
+        console.log("number", number);
+
+        this.setState({
+            recive: parseInt(this.state.recive + number)
+        })
+    }
+
+    calculatePaymentSet(number) {
+        console.log("number", number);
+
+        this.setState({
+            recive: parseInt(number)
+        })
+    }
+
+    calculatePaymentDelete() {
+        var array = String(this.state.recive.toString().replace(/,/g, ''));
+        let strArr = [...array];
+
+        if (strArr.length > 1) {
+            strArr.splice(strArr.length - 1, 1);
+            strArr = strArr.toString().replace(/,/g, '')
+            console.log("strArr", strArr);
+        }else{
+            strArr = 0
+            strArr = strArr.toString().replace(/,/g, '')
+        }
+
+        this.setState({
+            recive: Number(strArr.toString().replace(/,/g, ''))
+        });
+
+    }
+
+
     render() {
 
         return (
@@ -650,9 +705,111 @@ class BillView extends Component {
 
                     </CardBody>
                 </Card>
+                {this.state.check_bill != undefined ? <Modal isOpen={this.state.modal_check_bill} toggle={this.toggle_Check_Bill} size="lg" >
+                    <ModalHeader toggle={this.toggle_Check_Bill}  ><h3 style={{ textAlign: 'center' }}>ชำระเงิน {this.state.check_bill.zone_name} - {this.state.check_bill.table_name}</h3></ModalHeader>
+                    <ModalBody >
+
+                        <Row>
+                            <Col lg="8">
+                                <Card body>
+                                    <Row>
+
+                                        <Col lg="6">
+                                            <h3 > ได้รับแล้ว</h3>
+                                        </Col>
+
+                                        <Col lg="6" style={{ textAlign: 'end' }}>
+                                            <h3 >ยอดชำระ</h3>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col lg="6">
+                                            <label style={{ fontSize: '18px' }}> {Number(this.state.recive).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</label>
+                                        </Col>
+
+                                        <Col lg="6" style={{ textAlign: 'end' }}>
+                                            <h4 >{this.state.check_bill.amount} </h4>
+                                        </Col>
+                                    </Row>
+                                </Card>
+                            </Col>
+                            <Col lg="4" >
+                                <Card body>
+                                    <Row>
+
+                                        <Col lg="12" style={{ textAlign: 'end' }}>
+                                            <h3 >เงินทอน</h3>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+
+                                        <Col lg="12" style={{ textAlign: 'end' }}>
+                                            <h4 >xxx.xx</h4>
+                                        </Col>
+                                    </Row>
+                                </Card>
+
+                            </Col>
+                        </Row>
+                        <Row style={{ borderWidth: '1px', borderStyle: 'groove', marginLeft: '5px', marginRight: ' 5px', paddingTop: '20px', paddingBottom: '20px', textAlign: 'center' }}>
+                            <Col lg="4" onClick={this.calculatePaymentSet.bind(this, '100')}>
+                                <h4 style={{ fontSize: '25px', borderRight: 'groove' }}> 100</h4>
+                            </Col>
+                            <Col lg="4" onClick={this.calculatePaymentSet.bind(this, '500')}>
+                                <h4 style={{ fontSize: '25px', borderRight: 'groove' }}> 500</h4>
+                            </Col>
+                            <Col lg="4" onClick={this.calculatePaymentSet.bind(this, '1000')}>
+                                <h4 style={{ fontSize: '25px' }}> 1000</h4>
+                            </Col>
+                        </Row>
+                        <Row style={{ marginLeft: '5px', marginRight: ' 5px', paddingTop: '20px', paddingBottom: '20px', textAlign: 'center' }}>
+                            <br />
+                            <br />
+                            <Table bordered>
+
+                                <tbody>
+
+                                    <tr>
+                                        <td onClick={this.calculatePayment.bind(this, '7')}>7</td>
+                                        <td onClick={this.calculatePayment.bind(this, '8')}>8</td>
+                                        <td onClick={this.calculatePayment.bind(this, '9')}>9</td>
+                                        <td rowSpan='2' onClick={this.calculatePaymentDelete.bind(this)}>ลบ</td>
+                                    </tr>
+                                    <tr>
+                                        <td onClick={this.calculatePayment.bind(this, '4')}>4</td>
+                                        <td onClick={this.calculatePayment.bind(this, '5')}>5</td>
+                                        <td onClick={this.calculatePayment.bind(this, '6')}>6</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td onClick={this.calculatePayment.bind(this, '1')}>1</td>
+                                        <td onClick={this.calculatePayment.bind(this, '2')}>2</td>
+                                        <td onClick={this.calculatePayment.bind(this, '3')}>3</td>
+                                        <td rowSpan='2'>แก้</td>
+                                    </tr>
+                                    <tr>
+                                        <td onClick={this.calculatePayment.bind(this, '0')}>0</td>
+                                        <td onClick={this.calculatePayment.bind(this, '00')}></td>
+                                        <td onClick={this.calculatePayment.bind(this, '.')}>.</td>
+
+                                    </tr>
+
+
+                                </tbody>
+                            </Table>
+                        </Row>
+
+                    </ModalBody>
+                    <ModalFooter>
+
+                    </ModalFooter>
+                </Modal> : ''}
+
+
                 {this.renderModalBill()}
                 {this.renderModelTableEdit()}
                 {this.renderModelTableAdd()}
+                {/* {this.renderModelCheckBill()} */}
             </div >
         )
     }

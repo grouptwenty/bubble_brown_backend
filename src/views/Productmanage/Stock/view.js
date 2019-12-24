@@ -18,6 +18,7 @@ class RecipeView extends Component {
         };
         this.renderProductList = this.renderProductList.bind(this);
         this.calculatQty = this.calculatQty.bind(this);
+        this.calculatQtyShow = this.calculatQtyShow.bind(this);
     }
 
 
@@ -31,18 +32,18 @@ class RecipeView extends Component {
             var sum_stock_in = 0
             var sum_stock_out = 0
             for (var i in stock_in.data) {
-                sum_stock_in += this.calculatQty(stock_in.data[i].stock_in,stock_in.data[i].unit)
-                
+                sum_stock_in += this.calculatQty(stock_in.data[i].stock_in, stock_in.data[i].unit)
+
             }
             for (var i in stock_out.data) {
-                sum_stock_out += this.calculatQty(stock_out.data[i].stock_out,stock_out.data[i].unit)
+                sum_stock_out += this.calculatQty(stock_out.data[i].stock_out, stock_out.data[i].unit)
             }
             stock.data[key].sum_stock_in = sum_stock_in
             stock.data[key].sum_stock_out = sum_stock_out
 
         }
-        console.log("stock.data",stock.data);
-        
+        console.log("stock.data", stock.data);
+
         this.setState({
             stock: stock.data,
         })
@@ -67,12 +68,29 @@ class RecipeView extends Component {
         return unit
     }
 
+    calculatQtyShow(qty, unit_id) {
+        console.log("qty", qty);
+        console.log("unit_id", unit_id);
+
+        var unit = ''
+        if (unit_id == 2) {
+            unit = qty
+        } else if (unit_id == 3) {
+            unit = qty / 1000
+        } else if (unit_id == 4) {
+            unit = qty
+        } else if (unit_id == 5) {
+            unit = qty / 1000
+
+        }
+        return unit
+    }
     renderProductList() {
         if (this.state.stock != undefined) {
             let stock_list = []
             for (let i = 0; i < this.state.stock.length; i++) {
 
-                // var check_stock_out = this.calculatQty(this.state.stock[i].sum_stock_out, this.state.stock[i].unit_id)
+                var stock_out_show = this.calculatQtyShow(this.state.stock[i].sum_stock_in, this.state.stock[i].unit_id)
 
 
                 stock_list.push(
@@ -80,9 +98,9 @@ class RecipeView extends Component {
 
                         <td ><h6 >{this.state.stock[i].product_name}</h6></td>
                         <td ><h6 className="textcenter3">{this.state.stock[i].product_code}</h6></td>
-                        <td ><h6 className="textcenter3">{this.state.stock[i].sum_stock_in} ({this.state.stock[i].sum_stock_in - this.state.stock[i].sum_stock_out})</h6></td>
-                        <td ><h6 style={{ textAlign: 'end' }}>{Number(this.state.stock[i].product_price).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</h6></td>
-                        <td ><h6 className="textcenter3">{this.state.stock[i].product_cost}</h6></td>
+                        <td style={{ textAlign: 'end' }}>{stock_out_show} ({this.calculatQtyShow(this.state.stock[i].sum_stock_in, this.state.stock[i].unit_id) - this.calculatQtyShow(this.state.stock[i].sum_stock_out, this.state.stock[i].unit_id)})</td>
+                        <td style={{ textAlign: 'end' }}>{this.state.stock[i].unit_name}</td>
+                        <td style={{ textAlign: 'end' }} >{Number(this.state.stock[i].product_cost).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
 
                         <td >
                             < h6 className="textcenter3">
@@ -125,7 +143,7 @@ class RecipeView extends Component {
                                             <th>วัตถุดิบ</th>
                                             <th>รหัสวัตถุดิบ</th>
                                             <th>คงเหลือ</th>
-                                            <th>ราคา</th>
+                                            <th>หน่วย</th>
                                             <th>ต้นทุน</th>
                                             <th>#</th>
                                         </tr>
