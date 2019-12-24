@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import PromotionModel from '../../models/PromotionModel';
 import swal from 'sweetalert';
+import GOBALS from '../../GOBALS'
 var promotion_model = new PromotionModel;
 class PromotionView extends Component {
     constructor(props) {
@@ -61,10 +62,10 @@ class PromotionView extends Component {
     showPicture(cell, row, enumObject, rowIndex) {
         console.log(">>>>>>>>>>>>>>>>>>>>", row.Picture);
 
-        var url = "http://localhost:3003/" + row.Picture;
+        // var url = "http://localhost:3006/" + row.Picture;
         return (
             <>
-                <img src={url} className="img"></img>
+                <img src={GOBALS.URL_IMG + "promotion/" + row.Picture} className="img"></img>
             </>
         )
     }
@@ -118,11 +119,10 @@ class PromotionView extends Component {
                                                 data={data.rows}
                                                 striped hover pagination
                                                 search={true}
-                                                // className="table-overflow"
+                                            // className="table-overflow"
 
                                             >
-                                                {/* <TableHeaderColumn width={"15%"} dataField='Code' headerAlign="center" dataAlign="center" >Code</TableHeaderColumn> */}
-                                                <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Header' headerAlign="center" dataAlign="center" dataSort isKey={true}>โปรโมชั่น</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Detail' headerAlign="center" dataAlign="center" dataSort>รายละเอียด</TableHeaderColumn>
                                                 <TableHeaderColumn width={"10%"} dataField='Type' headerAlign="center" dataAlign="center" dataSort>ประเภท</TableHeaderColumn>
