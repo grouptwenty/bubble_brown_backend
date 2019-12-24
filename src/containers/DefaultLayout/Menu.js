@@ -87,11 +87,11 @@ export default class MenuComponent {
                 icon: 'icon-briefcase',
             },
 
-            // {
-            //     name: 'ร้านซักผ้า',
-            //     url: '/laundry/',
-            //     icon: 'icon-basket',
-            // },
+            {
+                name: 'จองโต๊ะ',
+                url: '/booking/',
+                icon: 'icon-pencil',
+            },
             // {
 
             // {

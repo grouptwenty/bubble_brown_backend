@@ -6,6 +6,7 @@ const loading = () => <div className="animated fadeIn pt-3 text-center">Loading.
 const PromotionView = React.lazy(() => import('./view'));
 const PromotionInsert = React.lazy(() => import('./insert'));
 const PromotionEdit = React.lazy(() => import('./edit'));
+const PromotionDetail = React.lazy(() => import('./detail'));
 class Home extends Component {
   async componentDidMount() {
     console.log("hhhh");
@@ -18,6 +19,7 @@ class Home extends Component {
             <Route exact path="/promotion" render={props => <PromotionView {...props} />} />
             <Route exact path="/promotion/insert" render={props => <PromotionInsert {...props} />} />
             <Route exact path="/promotion/edit/:code" render={props => <PromotionEdit {...props} />} />
+            <Route exact path="/promotion/detail/:code" render={props => <PromotionDetail {...props} />} />
           </Switch>
         </React.Suspense>
       </HashRouter>

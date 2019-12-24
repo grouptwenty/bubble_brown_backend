@@ -10,7 +10,7 @@ const Stock = React.lazy(() => import('./views/Productmanage/Stock'))
 const Customer = React.lazy(() => import('./views/Customer'))
 const User = React.lazy(() => import('./views/User'))
 const Menu = React.lazy(() => import('./views/Menu'))
-// const Laundry = React.lazy(() => import('./views/Laundry'));
+const Booking = React.lazy(() => import('./views/Booking'));
 // const Repair = React.lazy(() => import('./views/Repair'));
 // const News = React.lazy(() => import('./views/News'));
 // const Contact = React.lazy(() => import('./views/Contact'));
@@ -39,7 +39,7 @@ const routes = [
     { path: '/customer/', name: 'Customer', component: Customer },
     { path: '/user/', name: 'User', component: User },
     { path: '/menu/', name: 'Menu', component: Menu },
-    // { path: '/laundry/', name: 'Laundry', component: Laundry },
+    { path: '/booking/', name: 'Booking', component: Booking },
     // { path: '/repair/', name: 'Repair', component: Repair },
     // { path: '/news/', name: 'News', component: News },
     // { path: '/contact/', name: 'Contact', component: Contact },

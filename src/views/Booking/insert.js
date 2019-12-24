@@ -12,7 +12,6 @@ import UploadModel from '../../models/UploadModel';
 import GOBALS from '../../GOBALS';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { formatDate, parseDate, } from 'react-day-picker/moment';
-import moment from 'moment'
 import 'react-day-picker/lib/style.css';
 var promotion_model = new PromotionModel();
 var upload_model = new UploadModel();
@@ -113,8 +112,6 @@ class HomeView extends Component {
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime()
         var type = form.elements['promotion_type'].value
         var arr
-        var startdate = moment(this.state.startdate).format("MMM Do YY");
-        var enddate = moment(this.state.enddate).format("MMM Do YY");
         // console.log("today :", today);
 
         if (type == "เปอร์เซ็น") {

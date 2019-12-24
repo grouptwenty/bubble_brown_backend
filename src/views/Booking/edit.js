@@ -3,16 +3,15 @@ import { Button, InputGroup, Form, Input, Table, Card, CardHeader, Col, Row, Car
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { NavLink } from 'react-router-dom';
-import axios, { post } from 'axios';
+import { formatDate, parseDate, } from 'react-day-picker/moment';
 import { Modal } from 'react-bootstrap';
+import axios, { post } from 'axios';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 import swal from 'sweetalert';
 import PromotionModel from '../../models/PromotionModel';
 import ImgDefault from '../../assets/img/img_default.png'
 import UploadModel from '../../models/UploadModel';
 import GOBALS from '../../GOBALS';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import { formatDate, parseDate, } from 'react-day-picker/moment';
-import moment from 'moment'
 import 'react-day-picker/lib/style.css';
 var promotion_model = new PromotionModel();
 var upload_model = new UploadModel();
@@ -33,19 +32,18 @@ class HomeView extends Component {
             data: [],
             refresh: false,
             imagePreviewUrl: '',
-            file: null,
-            selectedFile: null,
-            startdate: today,
-            enddate: today,
+            file: '',
+            promotion_img_old: null,
+            promotion: [],
+            row_img: [],
+            fileSelected: false
         };
-        this.SavePromotion = this.SavePromotion.bind(this)
         this.onChangeHandler = this.onChangeHandler.bind(this)
-        // this.fileUpload = this.fileUpload.bind(this)
+        this.SavePromotion = this.SavePromotion.bind(this)
         this.goBack = this.goBack.bind(this);
         this.handleDayChangestart = this.handleDayChangestart.bind(this);
         this.handleDayChangeend = this.handleDayChangeend.bind(this);
     }
-
     goBack() {
         this.props.history.goBack();
     }
@@ -68,7 +66,7 @@ class HomeView extends Component {
         var today = new Date();
         var time_now = today.getTime();
         this.setState({
-            time_now: time_now
+            time_now: time_now,
         })
         const name = time_now + "-" + file.name;
         file = new File([file], name, { type: files.type });
@@ -78,11 +76,13 @@ class HomeView extends Component {
                 this.setState({
                     file: file,
                     imagePreviewUrl: reader.result,
-                    selectedFile: file
+                    selectedFile: file,
+
                 });
             }
-            reader.readAsDataURL(file)
+            reader.readAsDataURL(file);
         }
+        this.componentDidMount();
     }
 
     async fileUpload(file, page, _code) {
@@ -103,23 +103,40 @@ class HomeView extends Component {
         //   journal_code: _code
         // }
         // var res_update = journal_model.updateCoverPage(data_update, data_where);
+        console.log("res_upload.data.photo_url :", res_upload.data.photo_url);
+
         return res_upload.data.photo_url;
     }
-    async SavePromotion(event) {
 
+    async componentDidMount() {
+        var promotion_code = this.props.match.params.code;
+        const promotion = await promotion_model.getPromotionByCol({ 'promotion_code': promotion_code });
+        console.log("promotion :", promotion.data[0])
+        this.setState({
+            promotion_code: this.props.match.params.code,
+            promotion: promotion.data[0],
+            startdate: promotion.data[0].startdate,
+            enddate: promotion.data[0].enddate,
+            discount_percent: promotion.data[0].discount_percent,
+            discount_price: promotion.data[0].discount_price,
+            promotion_img_old: promotion.data[0].promotion_image,
+        });
+        console.log("setState", this.state.promotion.promotion);
+    }
+
+    async SavePromotion(event) {
         event.preventDefault();
         const form = event.target;
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime()
-        var type = form.elements['promotion_type'].value
         var arr
-        var startdate = moment(this.state.startdate).format("MMM Do YY");
-        var enddate = moment(this.state.enddate).format("MMM Do YY");
-        // console.log("today :", today);
+        var promotion_img
+        var type = form.elements['promotion_type'].value
 
         if (type == "เปอร์เซ็น") {
             arr = {
-                'addby': '1',
+                'promotion_code': this.props.match.params.code,
+                'updateby': '1',
                 'promotion_header': form.elements['promotion_header'].value,
                 'promotion_detail': form.elements['promotion_detail'].value,
                 'menu_type_code': form.elements['menu_type_code'].value,
@@ -130,32 +147,64 @@ class HomeView extends Component {
                 'startdate': this.state.startdate,
                 'enddate': this.state.enddate
             }
+            if (this.state.selectedFile != null) {
+
+                if (this.state.promotion_img_old != "" && this.state.promotion_img_old != null) {
+                    var req = await upload_model.deleteImages(this.state.promotion_img_old, "promotion")
+                    console.log("Delect :" + req);
+                }
+    
+                arr['promotion_image'] = await this.fileUpload(this.state.selectedFile, 'promotion', this.state.promotion_code + "_" + toDay);
+                // console.log("this.state.selectedFile :", this.state.selectedFile);
+    
+            } else {
+                arr['promotion_image'] = this.state.promotion_img_old
+    
+            }
         }
         if (type == "ส่วนลด") {
             arr = {
-                'addby': '1',
+                'promotion_code': this.props.match.params.code,
+                'updateby': '1',
                 'promotion_header': form.elements['promotion_header'].value,
                 'promotion_detail': form.elements['promotion_detail'].value,
                 'menu_type_code': form.elements['menu_type_code'].value,
                 'discount_code': form.elements['discount_code'].value,
                 'promotion_type': form.elements['promotion_type'].value,
-                'discount_price': form.elements['number'].value,
                 'discount_percent': "",
+                'discount_price': form.elements['number'].value,
                 'startdate': this.state.startdate,
                 'enddate': this.state.enddate
             }
-        }
+            if (this.state.selectedFile != null) {
 
-
-        if (this.state.selectedFile != null) {
-            arr['promotion_image'] = await this.fileUpload(this.state.selectedFile, 'promotion', form.elements['promotion_header'].value);
+                if (this.state.promotion_img_old != "" && this.state.promotion_img_old != null) {
+                    var req = await upload_model.deleteImages(this.state.promotion_img_old, "promotion")
+                    console.log("Delect :" + req);
+                }
+    
+                arr['promotion_image'] = await this.fileUpload(this.state.selectedFile, 'promotion', this.state.promotion_code + "_" + toDay);
+                // console.log("this.state.selectedFile :", this.state.selectedFile);
+    
+            } else {
+                arr['promotion_image'] = this.state.promotion_img_old
+    
+            }
         }
-        var res = await promotion_model.insertPromotion(arr);
+        
+
+        var res = await promotion_model.updatePromotion(arr);
+        console.log("data:", arr);
+
         if (res.query_result) {
-            // await this.fileUpload(this.state.selectedFile, 'CoverPage', res.data.insertId);
+            // if (this.state.imagePreviewUrl) {
+            //     await upload_model.fileDelete(this.state.journal.journal_file_path);
+            //     await this.fileUpload(this.state.selectedFile, 'CoverPage', this.props.match.params.code);
+            // }
+
             swal({
                 title: "Good job!",
-                text: "Insert Promotion  Ok",
+                text: "Insert Position  Ok",
                 icon: "success",
                 button: "Close",
             });
@@ -163,27 +212,26 @@ class HomeView extends Component {
         } else {
             swal({
                 title: "Error !",
-                text: "Insert Promotion Error ",
+                text: "Insert Position Error ",
                 icon: "error",
                 button: "Close",
             });
         }
     }
-    async componentDidMount() {
-
-    }
     render() {
-
         let { imagePreviewUrl } = this.state;
         let imagePreview = null;
-        console.log("ddd", imagePreviewUrl);
-
 
         if (imagePreviewUrl) {
             imagePreview = (<img className="responsive" style={{ width: '100%' }} src={imagePreviewUrl} />);
         } else {
             imagePreview = (<img className="responsive" style={{ width: '100%' }} src={ImgDefault} />);
         }
+
+        if (this.state.promotion_img_old != null && this.state.promotion_img_old != undefined && !imagePreviewUrl && this.state.promotion_img_old != '') {
+            imagePreview = (<img className="responsive" style={{ width: '100%' }} src={GOBALS.URL_IMG + "promotion/" + this.state.promotion_img_old} />);
+        }
+
         return (
             <Form onSubmit={this.SavePromotion} id="myForm">
                 <div className="animated fadeIn">
@@ -193,67 +241,86 @@ class HomeView extends Component {
                         <Col>
                             <Card>
                                 <CardHeader>
-                                    Insert Promotion
+                                    Edit Promotion
                                 </CardHeader>
                                 <CardBody>
                                     <Row style={{ padding: 20 }}>
                                         <Col lg="8">
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     ชื่อโปรโมชั่น :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7" style={{ textAlign: 'left' }}>
-                                                    <Input placeholder="promotion_header" type="text" id={"promotion_header"} name={"promotion_header"} required />
+                                                <Col lg="4" md="4" sm="4">
+                                                    <Input placeholder="promotion_header" type="text" id={"promotion_header"} name={"promotion_header"} defaultValue={this.state.promotion.promotion_header} required />
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     เงื่อนไข :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7">
-                                                    <Input placeholder="promotion_detail" type="text" id={"promotion_detail"} name={"promotion_detail"} required />
+                                                <Col lg="4" md="4" sm="4">
+                                                    <Input placeholder="promotion_detail" type="text" id={"promotion_detail"} name={"promotion_detail"} defaultValue={this.state.promotion.promotion_detail} required />
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     ประเภท :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7">
-                                                    <Select options={type} name={"menu_type_code"} required />
+                                                <Col lg="4" md="4" sm="4">
+                                                    {this.state.promotion.menu_type_code ?
+                                                        <Select options={type} value={{ value: this.state.promotion.menu_type_code, label: this.state.promotion.menu_type_code }} name={"menu_type_code"} />
+                                                        : null}
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     โค๊ดโปรโมชั่น :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7">
-                                                    <Input placeholder="discount_code" type="text" id={"discount_code"} name={"discount_code"} required />
+                                                <Col lg="4" md="4" sm="4">
+                                                    <Input placeholder="discount_code" type="text" id={"discount_code"} name={"discount_code"} defaultValue={this.state.promotion.discount_code} required />
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     ประเภทส่วนลด :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7">
-                                                    <Select options={promotion_type} name={"promotion_type"} required />
+                                                <Col lg="4" md="4" sm="4">
+                                                    {this.state.promotion.promotion_type ?
+                                                        <Select options={promotion_type} value={{ value: this.state.promotion.promotion_type, label: this.state.promotion.promotion_type }} name={"promotion_type"} />
+                                                        : null}
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     จำนวน :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7">
-                                                    <Input placeholder="number" type="text" id={"number"} name={"number"} required />
+                                                <Col lg="4" md="4" sm="4">
+                                                    {this.state.promotion.promotion_type == "เปอร์เซ็น" ?
+                                                        < Input placeholder="number" type="text" id={"number"} name={"number"} defaultValue={this.state.promotion.discount_percent} required />
+                                                        : <Input placeholder="number" type="text" id={"number"} name={"number"} defaultValue={this.state.promotion.discount_price} required />
+                                                    }
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="10">
+                                                <Col lg="6">
                                                     <Label className="text_head"> วันที่เริ่มต้น<font color='red'><b> * </b></font></Label>
                                                     <DayPickerInput
                                                         format="DD/MM/YYYY"
                                                         formatDate={formatDate}
                                                         onDayChange={this.handleDayChangestart.bind(this)}
-                                                        value={this.state.startdate}
+                                                        value={this.state.promotion.startdate}
                                                         selecteDay={this.state.startdate}
                                                         dayPickerProps={{ disabledDays: { before: new Date() } }}
                                                     // inputProps = {{readOnly}}
@@ -262,13 +329,13 @@ class HomeView extends Component {
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="10">
-                                                    <Label className="text_head"> วันที่เริ่มต้น<font color='red'><b> * </b></font></Label>
+                                                <Col lg="6">
+                                                    <Label className="text_head"> วันที่สิ้นสุด<font color='red'><b> * </b></font></Label>
                                                     <DayPickerInput
                                                         format="DD/MM/YYYY"
                                                         formatDate={formatDate}
                                                         onDayChange={this.handleDayChangeend.bind(this)}
-                                                        value={this.state.enddate}
+                                                        value={this.state.promotion.enddate}
                                                         selecteDay={this.state.enddate}
                                                         dayPickerProps={{ disabledDays: { before: new Date() } }}
                                                     // inputProps = {{readOnly}}
@@ -288,7 +355,6 @@ class HomeView extends Component {
                                                     <Col style={{ marginBottom: "15px" }}>
                                                         {imagePreview}
                                                     </Col>
-                                                    {/* <Input placeholder="promotion_code" type="hidden" id={"promotion_code"} name={"promotion_code"} required /> */}
                                                     <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="promotion_image" />
                                                 </div>
                                             </FormGroup>
@@ -306,7 +372,7 @@ class HomeView extends Component {
 // const mapStatetoProps = (state) => {
 //     return {
 //         member: state.member,
-//     }
+// }
 // }
 // export default connect(mapStatetoProps)(HomeView);
 export default (HomeView);

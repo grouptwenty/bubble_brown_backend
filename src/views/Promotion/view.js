@@ -15,15 +15,6 @@ class PromotionView extends Component {
             show_update_model: false,
         };
     }
-    // onClickUpdate(cell, row, rowIndex) {
-    //     console.log('cell', cell);
-    //     console.log('row', row);
-    //     console.log('rowIndex', rowIndex);
-    //     this.setState({
-    //         promotion_code: row.promotion_code,
-    //     })
-    //     // this.props.history.push('/admin/coverpage/');
-    // }
     onClickDelete(cell, row, rowIndex) {
         console.log('cell', cell);
         swal({
@@ -57,6 +48,9 @@ class PromotionView extends Component {
     cellButton(cell, row, enumObject, rowIndex) {
         return (
             <>
+                <NavLink exact to={'../promotion/detail/' + row.promotion_code}>
+                    <button class="btn btn-primary">Detail</button>
+                </NavLink>
                 <NavLink exact to={'../promotion/edit/' + row.promotion_code}>
                     <button class="btn btn-warning">Edit</button>
                 </NavLink>
@@ -131,10 +125,10 @@ class PromotionView extends Component {
                                                 {/* <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>Picture</TableHeaderColumn> */}
                                                 <TableHeaderColumn dataField='Header' headerAlign="center" dataAlign="center" dataSort isKey={true}>Header</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Detail' headerAlign="center" dataAlign="center" dataSort>Detail</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='Type' headerAlign="center" dataAlign="center" dataSort>Type</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='Start' headerAlign="center" dataAlign="center" dataSort>Startdate</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='End' headerAlign="center" dataAlign="center" dataSort>Enddate</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='Action' headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}>Action</TableHeaderColumn>
+                                                <TableHeaderColumn width={'10%'} dataField='Type' headerAlign="center" dataAlign="center" dataSort>Type</TableHeaderColumn>
+                                                <TableHeaderColumn width={'10%'} dataField='Start' headerAlign="center" dataAlign="center" dataSort>Startdate</TableHeaderColumn>
+                                                <TableHeaderColumn width={'10%'} dataField='End' headerAlign="center" dataAlign="center" dataSort>Enddate</TableHeaderColumn>
+                                                <TableHeaderColumn width={'20%'} dataField='Action' headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}>Action</TableHeaderColumn>
                                             </BootstrapTable>
                                         </div>
                                     </Col>
