@@ -58,11 +58,11 @@ class BookingView extends Component {
     cellButton(cell, row, enumObject, rowIndex) {
         return (
             <>
-                <button class="btn btn-primary" onClick={() => this.onBookingDetail(row.booking_code)}>Detail</button>
-                <NavLink exact to={'../booking/edit/' + row.booking_code}>
-                    <button class="btn btn-warning">Edit</button>
-                </NavLink>
-                <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>Cancel</button>
+                <button class="btn btn-primary" onClick={() => this.onBookingDetail(row.booking_code)}>รายละเอียด</button>
+                {/* <NavLink exact to={'../booking/edit/' + row.booking_code}>
+                    <button class="btn btn-warning">แก้ไข</button>
+                </NavLink> */}
+                <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>ลบ</button>
             </>
         )
     }
@@ -116,13 +116,13 @@ class BookingView extends Component {
         const { data } = this.state;
         return (
             <div className="animated fadeIn">
-                <h2>Booking</h2>
-                <hr />
+                {/* <h2>การจองโต๊ะ</h2>
+                <hr /> */}
                 <Row>
                     <Col lg='12'>
                         <Card>
                             <CardHeader>
-                                Booking
+                                การจองโต๊ะ
                                 <NavLink exact to={'../Booking/insert'} style={{ width: '100%' }}>
                                     <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> Add</button>
                                 </NavLink>

@@ -50,12 +50,12 @@ class PromotionView extends Component {
         return (
             <>
                 <NavLink exact to={'../promotion/detail/' + row.promotion_code}>
-                    <button class="btn btn-primary">Detail</button>
+                    <button class="btn btn-primary">รายละเอียด</button>
                 </NavLink>
                 <NavLink exact to={'../promotion/edit/' + row.promotion_code}>
-                    <button class="btn btn-warning">Edit</button>
+                    <button class="btn btn-warning">แก้ไข</button>
                 </NavLink>
-                <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>Delete</button>
+                <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>ยกเลิก</button>
             </>
         )
     }
@@ -99,13 +99,13 @@ class PromotionView extends Component {
         const { data } = this.state;
         return (
             <div className="animated fadeIn">
-                <h2>Promotion</h2>
-                <hr />
+                {/* <h2>Promotion</h2>
+                <hr /> */}
                 <Row>
                     <Col lg='12'>
                         <Card>
                             <CardHeader>
-                                Promotion
+                                โปรโมชั่น
                                 <NavLink exact to={'../Promotion/insert'} style={{ width: '100%' }}>
                                     <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> เพิ่ม</button>
                                 </NavLink>
