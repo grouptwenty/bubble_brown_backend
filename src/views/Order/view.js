@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Col, Row, Container, Card, CardImg, CardText, FormGroup, Input, CardBody, CardTitle, Button } from 'reactstrap';
+import { Col, Row, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardImg, CardText, FormGroup, Input, CardBody, CardTitle, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 // import ClickNHold from 'react-click-n-hold';
 import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
@@ -21,6 +22,9 @@ const order_model = new OrderModel
 const order_list_model = new OrderListModel
 const table_model = new TableModel
 var cart = [];
+
+
+
 class OrderView extends Component {
     constructor(props) {
         super(props);
@@ -36,6 +40,9 @@ class OrderView extends Component {
         this.deleteItem = this.deleteItem.bind(this);
         this.rendertotal = this.rendertotal.bind(this);
         this.sumtotal = this.sumtotal.bind(this);
+        this.toggle_cancel = this.toggle_cancel.bind(this);
+        this.renderTable = this.renderTable.bind(this);
+        
 
 
     }
@@ -56,7 +63,13 @@ class OrderView extends Component {
             menulist: menulist.data
         })
 
-        if (code != undefined) {
+        var table_list = await table_model.getTableBy()
+        // console.log("menulistbycode", table_list);
+        this.setState({
+            table_list: table_list.data
+        })
+
+      if (code != undefined) {
 
             var order_old = await order_model.getOrderByCode(code)
             var orderlist_old = await order_list_model.getOrderListByOrderCode(code)
@@ -69,12 +82,17 @@ class OrderView extends Component {
             })
             for (var i in orderlist_old.data) {
 
-
                 this.addItemTocart(orderlist_old.data[i].order_list_name, orderlist_old.data[i].order_list_price_qty, orderlist_old.data[i].menu_code, orderlist_old.data[i].order_list_qty)
             }
 
         }
 
+    }
+
+    toggle_cancel() {
+        this.setState(prevState => ({
+            setDropdownOpen: !prevState.setDropdownOpen
+        }));
     }
 
     async getMenuByCode(code) {
@@ -211,7 +229,7 @@ class OrderView extends Component {
 
     renderMenuby() {
         if (this.state.menu_list != undefined) {
-            console.log("5555", this.state.menu_list);
+            // console.log("5555", this.state.menu_list);
             var menulist = []
             for (let i = 0; i < this.state.menu_list.length; i++) {
                 menulist.push(
@@ -236,6 +254,19 @@ class OrderView extends Component {
         }
     }
 
+    renderTable() {
+        if (this.state.table_list != undefined) {
+            var table = []
+            for (var key in this.state.table_list) {
+
+                table.push(
+                    <option value={this.state.table_list[key].table_code} >{this.state.table_list[key].table_name}</option>
+                )
+            }
+            return table;
+        }
+
+    }
 
 
     async insertOrder() {
@@ -246,15 +277,16 @@ class OrderView extends Component {
 
         const max_code = await order_model.getOrderMaxCode()//province data
         var order_code = 'OD' + max_code.data.order_code_max
-        console.log(max_code);
+        // console.log(max_code);
 
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
         const data = new FormData();
         var date = Date.now();
         var order_service = document.getElementById('order_service').value
+        var table_code = document.getElementById('table_code').value
         var order = {
-            'table_code': '01',
+            'table_code': table_code,
             'order_service': order_service,
             'customer_code': 'CM001',
             'order_date': toDay,
@@ -283,7 +315,7 @@ class OrderView extends Component {
             const arr = await order_list_model.insertOrderList(order_list)
 
 
-       
+
 
             if (order_list != undefined) {
                 swal({
@@ -292,7 +324,7 @@ class OrderView extends Component {
                     icon: "success",
                     button: "Close",
                 });
-                this.props.history.push('/order/')
+                this.props.history.push('/bill/')
             }
         }
 
@@ -336,15 +368,15 @@ class OrderView extends Component {
                 order_list_price_sum_qty: this.state.cart[key].count * this.state.cart[key].price,
                 order_list_price_sum: this.sumtotal()
             }
-            console.log("===>",order_list);
-            
+            // console.log("===>", order_list);
+
             const arr = await order_list_model.insertOrderList(order_list)
 
             const DeleteStockOut = await stock_out_model.deleteStockOutByOrderCode(this.state.order_old)
-            console.log(DeleteStockOut);
+            // console.log(DeleteStockOut);
 
             const stock_out = await order_model.getRecipeByMenu(this.state.cart[key].code)
-            console.log(stock_out);
+            // console.log(stock_out);
 
 
             for (var key in stock_out.data) {
@@ -360,7 +392,7 @@ class OrderView extends Component {
 
                 }
 
-                console.log("recipe", recipe);
+                // console.log("recipe", recipe);
 
                 const insertstockout = await stock_out_model.insertStockOutByOrder(recipe)
             }
@@ -371,6 +403,7 @@ class OrderView extends Component {
                     icon: "success",
                     button: "Close",
                 });
+                this.props.history.push('/bill/')
             }
         }
 
@@ -393,8 +426,8 @@ class OrderView extends Component {
             var sum = 0;
             for (let i = 0; i < this.state.cart.length; i++) {
                 sum += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
-                console.log("..........", this.state.cart[i].count);
-                console.log("..1........", this.state.cart[i].price);
+                // console.log("..........", this.state.cart[i].count);
+                // console.log("..1........", this.state.cart[i].price);
             }
             order_total.push(
                 <Row>
@@ -429,6 +462,10 @@ class OrderView extends Component {
 
     }
 
+    checkCancelOrder()  {
+         alert('555555')
+    }
+
     render() {
 
 
@@ -447,17 +484,7 @@ class OrderView extends Component {
                                 {/* <TabPanel > */}
                                 <Row style={{ paddingTop: '5%', overflowY: 'scroll', }}>
                                     {this.renderMenuby()}
-                                    <Col lg="4">
 
-                                        <Card body outline color="success" style={{ borderWidth: "2px", borderStyle: 'dashed', padding: 0 }}>
-                                            <CardBody style={{ textAlign: 'center', alignItems: 'center', padding: 0 }}>
-                                                {/* <i class="fa fa-plus-square-o" aria-hidden="true" style={{ color: 'green', fontSize:'50px' }} /> */}
-                                                <label style={{ color: 'green', fontSize: '60px' }} > + </label>
-                                            </CardBody>
-                                        </Card>
-
-                                        {/* </ClickNHold> */}
-                                    </Col>
                                 </Row>
                                 {/* </TabPanel>
                                 </Tabs> */}
@@ -466,18 +493,49 @@ class OrderView extends Component {
 
 
                             <Col lg="6" style={{ borderStyle: 'solid', borderWidth: 1, overflowY: 'scroll' }}>
-                                <Row style={{ padding: '2%' }}>
-                                    <Col lg="3">
+                                {this.props.match.params.code == undefined ?
+                                    <Row style={{ padding: '2%' }}>
+                                        <Col lg="4">
+                                            <FormGroup>
+                                                <Input type="select" id="order_service" name="order_service" class="form-control" >
+                                                    <option value="ทานที่ร้าน">ทานที่ร้าน</option>
+                                                    <option value="สั่งกลับบ้าน">สั่งกลับบ้าน</option>
+                                                </Input>
+                                            </FormGroup>
+                                        </Col>
+                                        <Col lg="4">
+                                            <FormGroup>
+                                                <Input type="select" id="table_code" name="table_code" class="form-control">
+                                                    <option>เลือกโต๊ะ</option>
+                                                    {this.renderTable()}
+                                                </Input>
+                                            </FormGroup>
+                                        </Col>
+                                        {/* <Col lg="3">
                                         <FormGroup>
                                             <Input type="select" id="order_service" name="order_service" class="form-control" >
                                                 <option value="ทานที่ร้าน">ทานที่ร้าน</option>
                                                 <option value="สั่งกลับบ้าน">สั่งกลับบ้าน</option>
                                             </Input>
                                         </FormGroup>
-                                    </Col>
+                                    </Col> */}
+                                    </Row>
+                                    : ''}
+                                {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ?
+                                    <Row style={{ padding: '2%' }}>
+                                        <Col lg="4">
+                                            <label>{this.state.order_old.order_service}</label>
+                                        </Col>
+                                        <Col lg="6">
+                                            <a>{this.state.order_old.zone_name} - {this.state.order_old.table_name}</a>
+                                        </Col>
+                                        <Col lg="2">
+                                            <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '15px' }} /> <a>{this.state.order_old.table_amount}</a>
+                                        </Col>
 
+                                    </Row>
 
-                                </Row>
+                                    : ''}
                                 <Row >
                                     <div style={{ paddingTop: '10px', paddingLeft: '10px', paddingBottom: '30px' }}> รายการอาหาร</div>
 
@@ -488,7 +546,39 @@ class OrderView extends Component {
                                 {this.rendertotal()}
                                 {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code == undefined ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.insertOrder.bind(this)}><label>สั่งอาหาร</label></Button></div></Row> : ''}
                                 {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? <Row ><div style={{ paddingTop: '30px', textAlign: 'end' }}><Button onClick={this.updateOrder.bind(this)}><label>แก้ไขการสั่งอาหาร</label></Button></div></Row> : ''}
-
+                                {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ?
+                                    <Row style={{ textAlign: 'end' }}>
+                                        <Col lg="12">
+                                            <Dropdown direction="up" isOpen={this.state.setDropdownOpen} toggle={this.toggle_cancel}>
+                                                <DropdownToggle size="lg">
+                                                    <i class="fa fa-ellipsis-h" aria-hidden="true" style={{ color: '#515A5A' }} />
+                                                </DropdownToggle>
+                                                <DropdownMenu style={{ backgroundColor: '#797D7F' }}>
+                                                    <DropdownItem style={{ hover: '#CD6155' }}>
+                                                        <Row>
+                                                            <Col sm="6">
+                                                                <a style={{ color: '#fff' }} > ย้ายโต๊ะ</a>
+                                                            </Col>
+                                                            <Col sm="6" style={{ textAlign: 'end' }}>
+                                                                <i class="fa fa-arrows" aria-hidden="true" style={{ color: '#fff' }} />
+                                                            </Col>
+                                                        </Row>
+                                                    </DropdownItem>
+                                                    <DropdownItem style={{ hover: '#CD6155' }} onClick={this.checkCancelOrder.bind(this)} >
+                                                        <Row >
+                                                            <Col sm="6">
+                                                                <a style={{ color: '#fff' }}  >ยกเลิกออเดอร์</a>
+                                                            </Col>
+                                                            <Col sm="6" style={{ textAlign: 'end' }}>
+                                                                <i class="fa fa-trash-o" aria-hidden="true" style={{ color: '#fff' }} />
+                                                            </Col>
+                                                        </Row>
+                                                    </DropdownItem>
+                                                </DropdownMenu>
+                                            </Dropdown>
+                                        </Col>
+                                    </Row>
+                                    : ''}
                             </Col>
                         </Row>
                     </CardBody>

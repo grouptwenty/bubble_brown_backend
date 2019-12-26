@@ -186,11 +186,11 @@ class ProductTable extends React.Component {
                     stock_qty_cal: stock_qty_cal
 
                 }
-                console.log("stock_list", stock_list);
+                // console.log("stock_list", stock_list);
 
                 const src = await stock_model.insertStock(stock_list)
                 const price_qty = await stock_model.getStockByPriceQty(stock_list)
-                console.log("price_qty", price_qty);
+                // console.log("price_qty", price_qty);
 
                 const product_qty = await product_model.updateProductCost(price_qty.data)
 
@@ -280,7 +280,7 @@ class ProductRow extends React.Component {
 
     async componentDidMount() {
         var unit_list = await unit_model.getUnitBy()
-        console.log("unit_list", unit_list);
+        // console.log("unit_list", unit_list);
 
 
         this.setState({
@@ -297,7 +297,7 @@ class ProductRow extends React.Component {
         this.setState({
             data: data
         })
-        console.log("data454564654", data);
+        // console.log("data454564654", data);
 
     }
     render() {
@@ -451,7 +451,7 @@ class ModelProduct extends React.Component {
         this.toggle()
     }
     toggle() {
-        console.log("kkk");
+        // console.log("kkk");
 
         this.setState({
             modal: !this.state.modal

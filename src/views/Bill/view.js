@@ -5,7 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import ClickNHold from 'react-click-n-hold';
 import swal from 'sweetalert';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import ReactToPrint from 'react-to-print';
 
 import OrderModel from '../../models/OrderModel'
@@ -13,12 +13,14 @@ import OrderListModel from '../../models/OrderListModel'
 import ZoneModel from '../../models/ZoneModel'
 import TableModel from '../../models/TableModel'
 import StockOutModel from '../../models/StockOutModel'
+import PaymentModel from '../../models/PaymentModel'
 
 const stock_out_model = new StockOutModel
 const order_model = new OrderModel
 const orderlist_model = new OrderListModel
 const zone_model = new ZoneModel
 const table_model = new TableModel
+const payment_model = new PaymentModel
 var QRCode = require('qrcode.react');
 
 class BillView extends Component {
@@ -158,7 +160,8 @@ class BillView extends Component {
     }
 
 
-    async confirm(order_code) {
+    async confirm(check_bill) {
+
         Swal.fire({
             title: 'ต้องการชำระเงิน ?',
             icon: 'question',
@@ -170,40 +173,19 @@ class BillView extends Component {
         }).then((result) => {
             if (result.value) {
 
-                this.Payment(order_code)
+                this.Payment(check_bill)
             }
         })
     }
 
 
-    async Payment(order_code) {
+    async Payment(check_bill) {
 
-        var date = Date.now();
-        var Payment = await order_model.Payment(order_code)
+        console.log("check_bill====>",check_bill);
+        
+        // var payment = await order_model.Payment(order_code)
+        // var updatepayment = await payment_model.Payment(order_code)
 
-        var order_list = await orderlist_model.getOrderListBy(order_code)
-        for (var key in order_list.data) {
-            const stock_out = await order_model.getRecipeByMenu(order_list.data[key].product_code)
-
-
-            for (var i in stock_out.data) {
-
-                var recipe = {
-                    order_code: order_code,
-                    menu_code: stock_out.data[i].menu_code,
-                    product_code: stock_out.data[i].product_code,
-                    product_qty: stock_out.data[i].qty_cal,
-                    menu_qty: order_list.order_list_qty,
-                    product_cost: stock_out.data[i].product_cost,
-                    unit: stock_out.data[i].unit_id,
-                    stock_out_date: date,
-
-                }
-
-
-                const insertstockout = await stock_out_model.insertStockOutByOrder(recipe)
-            }
-        }
     }
 
 
@@ -226,8 +208,6 @@ class BillView extends Component {
 
             // console.log(order_list_confirm);
         }
-
-
 
         console.log("order_list", order_list);
 
@@ -254,8 +234,42 @@ class BillView extends Component {
 
 
     async updateConfirmOrder(order_code) {
+
+
         var order_list_confirm = await order_model.updateConfirmOrder(order_code)
-        this.componentDidMount()
+
+        var date = Date.now();
+        var order_list = await orderlist_model.getOrderListBy(order_code)
+        console.log("order_list ==>", order_list);
+        console.log("order_list ==>", order_list.order_list_qty);
+      
+      
+        for (var key in order_list.data) {
+            const stock_out = await order_model.getRecipeByMenu(order_list.data[key].menu_code)
+
+            console.log("stock_out ==>", stock_out);
+            for (var i in stock_out.data) {
+
+                var recipe = {
+                    order_code: order_code,
+                    menu_code: stock_out.data[i].menu_code,
+                    product_code: stock_out.data[i].product_code,
+                    product_qty: stock_out.data[i].qty_cal,
+                    menu_qty: order_list.data[key].order_list_qty,
+                    product_cost: stock_out.data[i].product_cost,
+                    unit: stock_out.data[i].unit_id,
+                    stock_out_date: date,
+
+                }
+                console.log("recipe ==>", recipe);
+
+
+
+                const insertstockout = await stock_out_model.insertStockOutByOrder(recipe)
+                // console.log("insertstockout ==>", insertstockout);
+            }
+        }
+        // this.componentDidMount()
     }
 
     renderBill() {
@@ -269,11 +283,11 @@ class BillView extends Component {
                     <Card body outline color="success">
                         <Row style={{ borderBottomStyle: 'ridge' }}>
                             <Col sm="6">
-                                <CardTitle style={{ textAlign: 'center', fontSize: '23px' }}>โต๊ะ {this.state.bill_order[i].table_id}</CardTitle>
+                                <CardTitle style={{ textAlign: 'center', fontSize: '23px' }}> {this.state.bill_order[i].table_name}</CardTitle>
                             </Col>
                             <Col sm="6">
                                 <CardTitle style={{ textAlign: 'center', fontSize: '23px' }}>
-                                    <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '20px' }}></i> 2</CardTitle>
+                                    <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '20px' }}></i> {this.state.bill_order[i].table_amount}</CardTitle>
                             </Col>
                         </Row>
 
@@ -305,7 +319,7 @@ class BillView extends Component {
                             : <Row >
                                 <Col lg="12" >
                                     <div style={{ textAlign: 'end' }}>
-                                        <Button onClick={this.confirmOrder.bind(this, this.state.bill_order[i])} color="secondary">ออกบิล</Button>
+                                        <Button onClick={this.confirmOrder.bind(this, this.state.bill_order[i])} color="secondary">ยืนยันออเดอร์</Button>
                                     </div>
                                 </Col>
                             </Row>}
@@ -960,7 +974,7 @@ class BillView extends Component {
 
                         <Row style={{ textAlign: 'center' }}>
                             <Col lg="12">
-                                <Button outline color="success" size="lg" block style={{ borderWidth: '2px' }} onClick={this.confirm.bind(this, this.state.check_bill.order_code)} >ยืนยันการชำระเงิน</Button>
+                                <Button outline color="success" size="lg" block style={{ borderWidth: '2px' }} onClick={this.confirm.bind(this, this.state.check_bill)} >ยืนยันการชำระเงิน</Button>
                             </Col>
                         </Row>
 

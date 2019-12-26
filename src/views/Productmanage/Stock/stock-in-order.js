@@ -49,7 +49,7 @@ class detailView extends Component {
             stock_order: stock_order.data,
 
         })
-        console.log(stock_order.data);
+        // console.log(stock_order.data);
 
     }
 
@@ -70,7 +70,7 @@ class detailView extends Component {
         })
             .then(async (willDelete) => {
                 if (willDelete) {
-                    console.log(stock_id);
+                    // console.log(stock_id);
                     
                     var stock_code = { product_code: this.props.match.params.code }
                     const stock = await stock_model.deleteStockBy(stock_id)
@@ -81,8 +81,8 @@ class detailView extends Component {
                     const product_qty = await product_model.updateProductCost(price_qty.data)
 
 
-                    console.log(price_qty);
-                    console.log(stock);
+                    // console.log(price_qty);
+                    // console.log(stock);
 
                     if (product_qty != undefined && product_qty != stock) {
                         this.componentDidMount();
