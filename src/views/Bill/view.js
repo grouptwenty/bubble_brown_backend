@@ -162,29 +162,60 @@ class BillView extends Component {
 
     async confirm(check_bill) {
 
-        Swal.fire({
-            title: 'ต้องการชำระเงิน ?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'ยืนยัน',
-            cancelButtonText: 'กลับ'
-        }).then((result) => {
-            if (result.value) {
+        // console.log(Number(this.state.recive) - Number(this.state.charge));
+        
+        if (Number(this.state.recive) - Number(check_bill.order_total_price) >= 0) {
+            Swal.fire({
+                title: 'ต้องการชำระเงิน ?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'กลับ'
+            }).then((result) => {
+                if (result.value) {
 
-                this.Payment(check_bill)
-            }
-        })
+                    this.Payment(check_bill)
+                }
+            })
+
+        } else {
+            Swal.fire({
+                title: 'กรุณากรอกจำนวนเงินให้ถูกต้อง !',
+                icon: 'wrong',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ปิด',
+            }).then((result) => {
+
+            })
+        }
+
     }
 
 
     async Payment(check_bill) {
 
-        console.log("check_bill====>",check_bill);
-        
-        // var payment = await order_model.Payment(order_code)
-        // var updatepayment = await payment_model.Payment(order_code)
+        console.log("check_bill====>", check_bill);
+
+        var payment = {
+            payment_sum: check_bill.order_total_price,
+            order_code: check_bill.order_code,
+            payment_money_received: this.state.recive,
+            payment_change: this.state.charge
+
+        }
+
+        console.log("payment", payment);
+
+        var updare_order_status = await order_model.Payment(check_bill.order_code)
+        var insertPayment = await payment_model.insertPayment(payment)
+        var printbutton = document.getElementById('print')
+        printbutton.click()
+        this.toggle_Check_Bill()
+        this.componentDidMount()
+
 
     }
 
@@ -242,8 +273,8 @@ class BillView extends Component {
         var order_list = await orderlist_model.getOrderListBy(order_code)
         console.log("order_list ==>", order_list);
         console.log("order_list ==>", order_list.order_list_qty);
-      
-      
+
+
         for (var key in order_list.data) {
             const stock_out = await order_model.getRecipeByMenu(order_list.data[key].menu_code)
 

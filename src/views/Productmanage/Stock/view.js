@@ -32,6 +32,8 @@ class RecipeView extends Component {
             var stock_out = await stock_model.getSumStockOutBy(stock.data[key])
             var sum_stock_in = 0
             var sum_stock_out = 0
+            var minimum_stock = this.calculatQty(stock.data[key].product_minimum,stock.data[key].unit_id)
+            
             for (var i in stock_in.data) {
                 sum_stock_in += this.calculatQty(stock_in.data[i].stock_in, stock_in.data[i].unit)
 
@@ -41,6 +43,7 @@ class RecipeView extends Component {
             }
             stock.data[key].sum_stock_in = sum_stock_in
             stock.data[key].sum_stock_out = sum_stock_out
+            stock.data[key].minimum_stock = minimum_stock
 
         }
         // console.log("stock.data", stock.data);
@@ -89,19 +92,23 @@ class RecipeView extends Component {
     renderProductList() {
         if (this.state.stock != undefined) {
             let stock_list = []
+            console.log(this.state.stock);
+            
             for (let i = 0; i < this.state.stock.length; i++) {
 
                 var stock_out_show = this.calculatQtyShow(this.state.stock[i].sum_stock_in, this.state.stock[i].unit_id)
 
 
                 stock_list.push(
-                    <tr>
+
+                    <tr style={{backgroundColor:this.state.stock[i].minimum_stock >= (this.state.stock[i].sum_stock_in - this.state.stock[i].sum_stock_out) ? 'yellow' :'transparent'}}>
 
                         <td ><h6 >{this.state.stock[i].product_name}</h6></td>
                         <td ><h6 className="textcenter3">{this.state.stock[i].product_code}</h6></td>
                         <td style={{ textAlign: 'end' }}>{stock_out_show} ({this.calculatQtyShow(this.state.stock[i].sum_stock_in, this.state.stock[i].unit_id) - this.calculatQtyShow(this.state.stock[i].sum_stock_out, this.state.stock[i].unit_id)})</td>
                         <td style={{ textAlign: 'end' }}>{this.state.stock[i].unit_name}</td>
                         <td style={{ textAlign: 'end' }} >{Number(this.state.stock[i].product_cost).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td style={{ textAlign: 'end' }} >{Number(this.state.stock[i].minimum_stock).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
 
                         <td >
                             < h6 className="textcenter3">
@@ -146,6 +153,7 @@ class RecipeView extends Component {
                                             <th>คงเหลือ</th>
                                             <th>หน่วย</th>
                                             <th>ต้นทุน</th>
+                                            <th>จุดสั่งซื้อ</th>
                                             <th>#</th>
                                         </tr>
                                     </thead>
