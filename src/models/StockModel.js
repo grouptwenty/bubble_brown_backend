@@ -171,7 +171,7 @@ export default class StockModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -192,7 +192,7 @@ export default class StockModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -204,7 +204,7 @@ export default class StockModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({stock_id: data})
+            body: JSON.stringify({ stock_id: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -214,7 +214,7 @@ export default class StockModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -236,11 +236,33 @@ export default class StockModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
 
-    
+    async deleteStockBy(data) {
+        return fetch(GOBALS.URL + '/stock/deleteStockBy', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ stock_id: data })
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+
+
 
 }

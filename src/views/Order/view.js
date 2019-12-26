@@ -283,26 +283,7 @@ class OrderView extends Component {
             const arr = await order_list_model.insertOrderList(order_list)
 
 
-            const stock_out = await order_model.getRecipeByMenu(this.state.cart[key].code)
-            console.log(stock_out);
-
-            for (var i in stock_out.data) {
-
-                var recipe = {
-                    order_code: order_code,
-                    menu_code: stock_out.data[i].menu_code,
-                    product_code: stock_out.data[i].product_code,
-                    product_qty: stock_out.data[i].qty_cal,
-                    menu_qty: order_list.order_list_qty,
-                    product_cost: stock_out.data[i].product_cost,
-                    unit: stock_out.data[i].unit_id,
-                    stock_out_date: date,
-
-                }
-
-
-                const insertstockout = await stock_out_model.insertStockOutByOrder(recipe)
-            }
+       
 
             if (order_list != undefined) {
                 swal({
@@ -355,13 +336,15 @@ class OrderView extends Component {
                 order_list_price_sum_qty: this.state.cart[key].count * this.state.cart[key].price,
                 order_list_price_sum: this.sumtotal()
             }
+            console.log("===>",order_list);
+            
             const arr = await order_list_model.insertOrderList(order_list)
 
             const DeleteStockOut = await stock_out_model.deleteStockOutByOrderCode(this.state.order_old)
             console.log(DeleteStockOut);
 
             const stock_out = await order_model.getRecipeByMenu(this.state.cart[key].code)
-            // console.log(stock_out);
+            console.log(stock_out);
 
 
             for (var key in stock_out.data) {
@@ -377,7 +360,7 @@ class OrderView extends Component {
 
                 }
 
-                console.log("recipe", stock_out.data[key]);
+                console.log("recipe", recipe);
 
                 const insertstockout = await stock_out_model.insertStockOutByOrder(recipe)
             }

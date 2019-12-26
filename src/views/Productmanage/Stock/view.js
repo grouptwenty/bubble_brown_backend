@@ -6,6 +6,7 @@ import { NavLink, Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import StockModel from '../../../models/StockModel'
 import ProductModel from '../../../models/ProductModel'
+
 const stock_model = new StockModel
 
 const product_model = new ProductModel
@@ -42,7 +43,7 @@ class RecipeView extends Component {
             stock.data[key].sum_stock_out = sum_stock_out
 
         }
-        console.log("stock.data", stock.data);
+        // console.log("stock.data", stock.data);
 
         this.setState({
             stock: stock.data,
@@ -51,8 +52,8 @@ class RecipeView extends Component {
     }
 
     calculatQty(qty, unit_id) {
-        console.log("qty", qty);
-        console.log("unit_id", unit_id);
+        // console.log("qty", qty);
+        // console.log("unit_id", unit_id);
 
         var unit = ''
         if (unit_id == 2) {
@@ -69,8 +70,8 @@ class RecipeView extends Component {
     }
 
     calculatQtyShow(qty, unit_id) {
-        console.log("qty", qty);
-        console.log("unit_id", unit_id);
+        // console.log("qty", qty);
+        // console.log("unit_id", unit_id);
 
         var unit = ''
         if (unit_id == 2) {
