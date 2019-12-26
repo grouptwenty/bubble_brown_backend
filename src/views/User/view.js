@@ -62,10 +62,10 @@ class UserView extends Component {
     showPicture(cell, row, enumObject, rowIndex) {
         console.log(">>>>>>>>>>>>>>>>>>>>", row.Picture);
 
-        var url = "http://localhost:3003/" + row.Picture;
+        // var url = "http://localhost:3006/" + row.Picture;
         return (
             <>
-                <img src={url} className="img"></img>
+                <img src={GOBALS.URL_IMG + "user/" + row.Img} className="Img"></img>
             </>
         )
     }
@@ -86,6 +86,7 @@ class UserView extends Component {
                 Name: user_list.data[key].user_firstname + " " + user_list.data[key].user_lastname,
                 Email: user_list.data[key].user_email,
                 Tel: user_list.data[key].user_tel,
+                Img: user_list.data[key].user_image,
             }
             data_user_list.rows.push(set_row);
             i++;
@@ -123,7 +124,7 @@ class UserView extends Component {
                                             // className="table-overflow"
                                             >
                                                 {/* <TableHeaderColumn width={"15%"} dataField='Code' headerAlign="center" dataAlign="center" >Code</TableHeaderColumn> */}
-                                                {/* <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>Picture</TableHeaderColumn> */}
+                                                <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='userCode' headerAlign="center" dataAlign="center" dataSort isKey={true}>รหัสพนักงาน</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Position' headerAlign="center" dataAlign="center" dataSort>ตำแหน่ง</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อ-นามสกุล</TableHeaderColumn>

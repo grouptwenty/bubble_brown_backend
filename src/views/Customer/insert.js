@@ -209,7 +209,7 @@ class insertView extends Component {
                                         <Row>
                                             <Col lg="6">
                                                 <Label className="text_head"> ชื่อ-นามสกุล <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="customer_name" name="customer_name" class="form-control" autocomplete="off"></Input>
+                                                <Input type="text" id="customer_name" name="customer_name" class="form-control"></Input>
                                                 {/* <p id="customer_name" className="text_head_sub">Example : ชื่อ นามสกุล</p> */}
                                             </Col>
                                             <Col lg="6">
