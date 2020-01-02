@@ -192,6 +192,11 @@ class insertView extends Component {
                                                     <Input type="text" id="product_name" name="product_name" class="form-control" autocomplete="off"></Input>
                                                     {/* <p id="washing_machine_brand_name" className="text_head_sub">Example : SAMSUNG</p> */}
                                                 </Col>
+                                                <Col lg="6">
+                                                    <Label className="text_head"> จุดสั่งซื้อ <font color='red'><b> * </b></font></Label>
+                                                    <Input type="text" id="product_minimum" name="product_minimum" class="form-control" autocomplete="off"></Input>
+                                                    {/* <p id="washing_machine_brand_name" className="text_head_sub">Example : SAMSUNG</p> */}
+                                                </Col>
 
                                             </Row>
                                             <Row>

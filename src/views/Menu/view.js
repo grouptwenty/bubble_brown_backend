@@ -3,6 +3,7 @@ import { Media, Button, Table, Card, Pagination, PaginationLink, PaginationItem,
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import ImgDefault from '../../assets/img/img_default.png'
 import swal from 'sweetalert';
 import GOBALS from '../../GOBALS'
 import MenuModel from '../../models/MenuModel'
@@ -70,7 +71,8 @@ class MenuView extends Component {
         // var url = "http://localhost:3006/" + row.Picture;
         return (
             <>
-                <img src={GOBALS.URL_IMG + "menu/" + row.Img} className="img"></img>
+     <img src={ row.Img != "" && row.Img != null ? GOBALS.URL_IMG + "menu/" + row.Img : ImgDefault} className="img"></img>
+
             </>
         )
     }

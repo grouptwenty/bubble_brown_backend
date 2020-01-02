@@ -61,6 +61,7 @@ console.log(product.data);
         document.getElementById('product_name').value = data.product_name
         document.getElementById('unit_id').value = data.unit_id
         document.getElementById('product_type_code').value = data.product_type_code
+        document.getElementById('product_minimum').value = data.product_minimum
 
     }
 
@@ -180,6 +181,11 @@ console.log(product.data);
                                             <Col lg="6">
                                                 <Label className="text_head"> ชื่อสินค้า<font color='red'><b> * </b></font></Label>
                                                 <Input type="text" id="product_name" name="product_name" class="form-control" autocomplete="off"></Input>
+                                                {/* <p id="washing_machine_brand_name" className="text_head_sub">Example : SAMSUNG</p> */}
+                                            </Col>
+                                            <Col lg="6">
+                                                <Label className="text_head"> จุดสั่งซื้อ <font color='red'><b> * </b></font></Label>
+                                                <Input type="text" id="product_minimum" name="product_minimum" class="form-control" autocomplete="off"></Input>
                                                 {/* <p id="washing_machine_brand_name" className="text_head_sub">Example : SAMSUNG</p> */}
                                             </Col>
                                             

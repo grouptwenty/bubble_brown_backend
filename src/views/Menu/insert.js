@@ -194,63 +194,55 @@ class insertView extends Component {
                                     เพิ่มเมนู
                             </CardHeader>
                                 <CardBody>
-
+                                    <br />
                                     <Row>
+                                    <br />
+                                        <Col lg="6">
+                                            <Row>
+                                                <Col lg="12">
+                                                    <FormGroup >
+                                                        <Label className="text_head"> ชื่อเมนู <font color='red'><b> * </b></font></Label>
+                                                        <Input type="text" id="menu_name" name="menu_name" class="form-control" ></Input>
+                                                        {/* <p id="menu_name" className="text_head_sub">Example : ลาเต้</p> */}
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col lg="12">
+                                                    <FormGroup >
+                                                        <Label className="text_head"> ราคา </Label>
+                                                        <Input type="text" id="menu_price" name="menu_price" class="form-control"></Input>
+                                                        {/* <p id="menu_price" className="text_head_sub">Example : AAAA@gmail.com</p> */}
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col lg="12">
+                                                    <FormGroup >
+                                                        <Label className="text_head"> ประเภท <font color='red'><b> * </b></font></Label>
+                                                        <Input type="select" id="menu_type_code" name="menu_type_code" class="form-control" >
+                                                            <option value="">Select</option>
+                                                            {this.renderMenu()}
+                                                        </Input>
+                                                        {/* <p id="menu_id" className="text_head_sub">Example : Line, Facebook</p> */}
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        <Col lg="6">
 
-                                        <Col lg="12">
-                                            <br />
                                             {/* 
                                             <Col lg="4">
                                                 <Label className="text_head"> รหัสเมนู<font color='red'><b> * </b></font></Label>
                                                 <Input id="menu_code" name="menu_code" class="form-control" readOnly ></Input>
                                                 <p id="menu_code" className="text_head_sub">Example : CM001</p>
                                             </Col> */}
-                                            <Col>
-                                                <FormGroup style={{ textAlign: "center" }}>
-                                                    <div class="form-group files">
-                                                        <Col style={{ marginBottom: "15px" }}>
-                                                            {imagePreview}
-                                                        </Col>
-                                                        <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="menu_image" />
-                                                    </div>
-                                                </FormGroup>
-                                            </Col>
-                                            <Row>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> ประเภท <font color='red'><b> * </b></font></Label>
-                                                    <Input type="select" id="menu_type_code" name="menu_type_code" class="form-control" >
-                                                        <option value="">Select</option>
-                                                        {this.renderMenu()}
-                                                    </Input>
-                                                    {/* <p id="menu_id" className="text_head_sub">Example : Line, Facebook</p> */}
-                                                </Col>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> ชื่อเมนู <font color='red'><b> * </b></font></Label>
-                                                    <Input type="text" id="menu_name" name="menu_name" class="form-control" ></Input>
-                                                    {/* <p id="menu_name" className="text_head_sub">Example : ลาเต้</p> */}
-                                                </Col>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> ราคา </Label>
-                                                    <Input type="text" id="menu_price" name="menu_price" class="form-control"></Input>
-                                                    {/* <p id="menu_price" className="text_head_sub">Example : AAAA@gmail.com</p> */}
-                                                </Col>
-                                            </Row>
-                                            {/* <Row>
-                                            
-                                            <Col lg="6">
-                                                <Label className="text_head"> เบอร์โทร </Label>
-                                                <Input type="text" id="menu_phone" name="menu_phone" class="form-control" autocomplete="off" ></Input>
-                                                <p id="menu_phone" className="text_head_sub"></p>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col lg="6">
-                                                <Label className="text_head"> รูปภาพ </Label>
-                                                <Input type="file" id="menu_img" name="menu_img" class="form-control" autocomplete="off"></Input>
-                                                <p id="menu_img" className="text_head_sub"></p>
-                                            </Col>
-                                        </Row> */}
 
+                                            <FormGroup style={{ textAlign: "center" }}>
+                                                <div class="form-group files">
+                                                    <Col ol lg="12" style={{ marginBottom: "15px" }}>
+                                                        {imagePreview}
+                                                        <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="menu_image" />
+
+                                                    </Col>
+                                                </div>
+                                            </FormGroup>
                                         </Col>
                                     </Row>
 

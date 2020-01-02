@@ -258,8 +258,11 @@ class BillView extends Component {
             cancelButtonText: 'กลับ'
         }).then((result) => {
             if (result.value) {
+                
                 this.updateConfirmOrder(bill_order.order_code)
+                
             }
+            // this.componentDidMount()
         })
     }
 
@@ -300,7 +303,7 @@ class BillView extends Component {
                 // console.log("insertstockout ==>", insertstockout);
             }
         }
-        // this.componentDidMount()
+        this.componentDidMount()
     }
 
     renderBill() {
