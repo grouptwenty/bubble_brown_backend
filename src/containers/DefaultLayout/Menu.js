@@ -92,6 +92,12 @@ export default class MenuComponent {
                 url: '/booking/',
                 icon: 'icon-pencil',
             },
+
+            {
+                name: 'รายงาน',
+                url: '/dashboard/',
+                icon: 'icon-pencil',
+            },
             // {
 
             // {

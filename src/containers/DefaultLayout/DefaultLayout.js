@@ -68,21 +68,21 @@ class DefaultLayout extends Component {
             <DefaultHeader onLogout={e => this.signOut(e)} />
           </Suspense>
         </AppHeader>
-        <div className="app-body">
+        <div className="app-body" >
           <AppSidebar fixed display="lg">
 
             <AppSidebarHeader />
             <AppSidebarForm />
             <Suspense>
-                     {/* <DefaultMenu />   */}
+              {/* <DefaultMenu />   */}
               <AppSidebarNav navConfig={items} {...this.props} />
             </Suspense>
             <AppSidebarFooter />
             <AppSidebarMinimizer />
           </AppSidebar>
-          <main className="main"  style={{ padding: 0+'!important' }}>
+          <main className="main" style={{ padding: 0 + '!important', backgroundColor: '#ebedef' }}>
             {/* <AppBreadcrumb appRoutes={routes} /> */}
-            <Container fluid style={{ padding: 0+'!important' }}>
+            <Container fluid style={{ padding: 0 + '!important' }}>
               <Suspense fallback={this.loading()}>
                 <Switch>
                   {routes.map((route, idx) => {

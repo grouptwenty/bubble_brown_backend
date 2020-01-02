@@ -12,6 +12,7 @@ const Customer = React.lazy(() => import('./views/Customer'))
 const User = React.lazy(() => import('./views/User'))
 const Menu = React.lazy(() => import('./views/Menu'))
 const Booking = React.lazy(() => import('./views/Booking'));
+const Report = React.lazy(() => import('./views/Report'));
 
 
 
@@ -29,6 +30,7 @@ const routes = [
     { path: '/user/', name: 'User', component: User },
     { path: '/menu/', name: 'Menu', component: Menu },
     { path: '/booking/', name: 'Booking', component: Booking },
+    { path: '/dashboard/', name: 'Report', component: Report },
 
 ]
 export default routes;
