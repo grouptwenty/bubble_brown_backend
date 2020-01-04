@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Row, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardImg, CardText, FormGroup, Input, CardBody, CardTitle, Button } from 'reactstrap';
+import { Col, Row, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, ListGroup, ListGroupItem, CustomInput, FormGroup, Input, CardBody, CardTitle, Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 // import ClickNHold from 'react-click-n-hold';
@@ -14,6 +14,7 @@ import OrderModel from '../../models/OrderModel'
 import OrderListModel from '../../models/OrderListModel'
 import TableModel from '../../models/TableModel'
 import StockOutModel from '../../models/StockOutModel'
+import OrderCencelModel from '../../models/OrderCencelModel'
 
 const stock_out_model = new StockOutModel
 const menu_model = new MenuModel
@@ -21,6 +22,7 @@ const menutype_model = new MenuTypeModel
 const order_model = new OrderModel
 const order_list_model = new OrderListModel
 const table_model = new TableModel
+const ordercencel_model = new OrderCencelModel
 var cart = [];
 
 
@@ -41,8 +43,10 @@ class OrderView extends Component {
         this.rendertotal = this.rendertotal.bind(this);
         this.sumtotal = this.sumtotal.bind(this);
         this.toggle_cancel = this.toggle_cancel.bind(this);
+        this.toggle_order_cancel = this.toggle_order_cancel.bind(this);
         this.renderTable = this.renderTable.bind(this);
-        
+        this.renderCencelOrder = this.renderCencelOrder.bind(this);
+
 
 
     }
@@ -69,7 +73,7 @@ class OrderView extends Component {
             table_list: table_list.data
         })
 
-      if (code != undefined) {
+        if (code != undefined) {
 
             var order_old = await order_model.getOrderByCode(code)
             var orderlist_old = await order_list_model.getOrderListByOrderCode(code)
@@ -92,6 +96,12 @@ class OrderView extends Component {
     toggle_cancel() {
         this.setState(prevState => ({
             setDropdownOpen: !prevState.setDropdownOpen
+        }));
+    }
+
+    toggle_order_cancel() {
+        this.setState(prevState => ({
+            modal_order_cancel: !prevState.modal_order_cancel
         }));
     }
 
@@ -462,9 +472,107 @@ class OrderView extends Component {
 
     }
 
-    checkCancelOrder()  {
-         alert('555555')
+    async checkCancelOrder() {
+
+        var order_cencel = await ordercencel_model.getOrderCencelBy()
+        // // alert(order_cencel)
+        // console.log("order_cencel", order_cencel);
+        this.setState({
+            order_cencel: order_cencel.data
+        })
+        this.toggle_order_cancel()
+
     }
+
+    renderCencelOrder() {
+
+        var order_cencel_list = []
+
+        if (this.state.order_cencel != undefined) {
+            for (var key in this.state.order_cencel) {
+                order_cencel_list.push(
+
+                    <ListGroup>
+                        <ListGroupItem action>
+                            <Row style={{ textAlign: 'center', fontSize: '15pt', alignItems: 'center' }}>
+                                <Col lg="6" >
+                                    <label>{this.state.order_cencel[key].cencel_list_name}</label>
+                                </Col>
+                                <Col lg="6" >
+
+                                    <CustomInput type="radio" id={this.state.order_cencel[key].cencel_list_id} name="cencel_list_id"
+                                        onClick={this.updateCencel.bind(this, this.state.order_cencel[key].cencel_list_id)}
+                                    />
+
+                                </Col>
+                            </Row>
+
+                        </ListGroupItem>
+                    </ListGroup>
+
+                )
+                console.log(this.state.order_cencel[key].cencel_list_id);
+
+            }
+        }
+
+        var cancel = []
+        cancel.push(
+            <Modal isOpen={this.state.modal_order_cancel} toggle={this.toggle_order_cancel} size="sm">
+
+                <ModalBody style={{ paddingTop: '2%' }}>
+                    <Row>
+                        <Col lg="12">
+                            <div style={{ textAlign: 'center', fontSize: '20pt' }} >โปรดเลือกเหตุผล</div>
+                        </Col>
+                    </Row>
+                    <hr />
+                    {order_cencel_list}
+                </ModalBody>
+                <ModalFooter>
+                    <Button onClick={this.toggle_order_cancel} size="lg" color="secondary" > กลับ</Button>
+                    {/* <Button onClick={this.updateCencel.bind(this)} type="submit" size="lg" color="success">บันทึก</Button> */}
+                </ModalFooter>
+            </Modal>
+        )
+        return cancel;
+
+
+    }
+
+    async updateCencel(order_cencel_id) {
+        console.log("order_cencel_id", order_cencel_id);
+
+
+        var cencel = {
+            order_cencel_id: order_cencel_id,
+            order_code: this.props.match.params.code
+
+        }
+
+        // this.componentDidMount()
+        swal({
+            title: "คุณแน่ใจ ?",
+            text: "คุณแน่ใจว่าต้องการยกเลิกออเดอร์",
+            buttons: true,
+            dangerMode: true,
+        })
+
+            .then(async (willDelete) => {
+                var updare_cencel_order = await order_model.updateCencelOrder(cencel)
+                const deleteStockOut = await stock_out_model.deleteStockOutByOrderCode(this.state.order_old)
+                if (willDelete) {
+                    swal({
+                        title: "ยกเลิกออเดอร์เรียบร้อย",
+                        icon: "success",
+                    });
+                }
+
+                this.props.history.push('/bill/')
+            });
+
+    }
+
 
     render() {
 
@@ -577,12 +685,15 @@ class OrderView extends Component {
                                                 </DropdownMenu>
                                             </Dropdown>
                                         </Col>
+                                        {this.renderCencelOrder()}
                                     </Row>
+
                                     : ''}
                             </Col>
                         </Row>
                     </CardBody>
                 </Card>
+
             </div>
 
         )

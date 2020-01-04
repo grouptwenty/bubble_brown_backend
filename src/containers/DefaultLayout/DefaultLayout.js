@@ -108,11 +108,11 @@ class DefaultLayout extends Component {
             </Suspense>
           </AppAside>
         </div>
-        <AppFooter>
+        {/* <AppFooter>
           <Suspense fallback={this.loading()}>
             <DefaultFooter />
           </Suspense>
-        </AppFooter>
+        </AppFooter> */}
       </div>
     );
   }
