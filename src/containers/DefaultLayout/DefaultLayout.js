@@ -1,3 +1,4 @@
+
 import React, { Component, Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
@@ -22,7 +23,7 @@ import {
 import routes from '../../routes';
 var items = []
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
-const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
+// const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 var menu = new MenuComponent();
 
@@ -77,10 +78,10 @@ class DefaultLayout extends Component {
               {/* <DefaultMenu />   */}
               <AppSidebarNav navConfig={items} {...this.props} />
             </Suspense>
-            <AppSidebarFooter />
+            {/* <AppSidebarFooter /> */}
             <AppSidebarMinimizer />
           </AppSidebar>
-          <main className="main" style={{ padding: 0 + '!important', backgroundColor: '#ebedef' }}>
+          <main className="main" style={{ padding: 0 + '!important', backgroundColor: '#ebedef' ,paddingBottom:0 }}>
             {/* <AppBreadcrumb appRoutes={routes} /> */}
             <Container fluid style={{ padding: 0 + '!important' }}>
               <Suspense fallback={this.loading()}>
