@@ -31,6 +31,10 @@ class editView extends Component {
         this.onChangeHandler = this.onChangeHandler.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setval = this.setval.bind(this);
+        this.goBack = this.goBack.bind(this);
+    }
+    goBack() {
+        this.props.history.goBack();
     }
     onChangeHandler = e => {
         let reader = new FileReader();
@@ -238,91 +242,102 @@ class editView extends Component {
 
                                 </CardHeader>
                                 <CardBody>
-
-                                    <Row>
-                                        <Col lg="12">
-                                            <br />
-                                            <Row>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> รหัสพนักงาน</Label>
+                                    <Row style={{ padding: 20 }}>
+                                        <Col lg="8">
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    รหัสพนักงาน :
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
                                                     <Input type="text" id="user_code" name="user_code" class="form-control" readOnly ></Input>
-                                                    <p id="user_code" className="text_head_sub">Example : US001</p>
                                                 </Col>
                                             </Row>
-                                            <Col>
-                                                    <FormGroup style={{ textAlign: "center" }}>
-                                                        <div class="form-group files">
-                                                            <Col style={{ marginBottom: "15px" }}>
-                                                                {imagePreview}
-                                                            </Col>
-                                                            <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="user_image" />
-                                                        </div>
-                                                    </FormGroup>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ตำแหน่ง : <font color='red'><b> * </b></font>
                                                 </Col>
-                                            <Row>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> ตำแหน่ง <font color='red'><b> * </b></font></Label>
+                                                <Col lg="5" md="5" sm="5">
                                                     <Input type="select" id="user_position" name="user_position" class="form-control" >
                                                         <option value="">Select</option>
                                                         <option value="แอดมิน">แอดมิน</option>
                                                         <option value="แคชเชียร์">แคชเชียร์</option>
                                                         <option value="พนักงานเสิร์ฟ">พนักงานเสิร์ฟ</option>
                                                     </Input>
-                                                    {/* <p id="user_position" className="text_head_sub">Example : ชื่อ นามสกุล</p> */}
                                                 </Col>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> ชื่อจริง <font color='red'><b> * </b></font></Label>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ชื่อ : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
                                                     <Input type="text" id="user_firstname" name="user_firstname" class="form-control" autocomplete="off"></Input>
                                                 </Col>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> นามสกุล <font color='red'><b> * </b></font></Label>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    นามสกุล : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
                                                     <Input type="text" id="user_lastname" name="user_lastname" class="form-control"  ></Input>
                                                 </Col>
                                             </Row>
-                                            <Row>
-                                                <Col lg="6">
-                                                    <Label className="text_head"> อีเมล </Label>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    อีเมล :
+                                                </Col>
+                                                <Col lg="7" md="7" sm="7">
                                                     <Input type="text" id="user_email" name="user_email" class="form-control"></Input>
                                                     <p id="user_email" className="text_head_sub">Example : AAAA@gmail.com</p>
                                                 </Col>
-                                                <Col lg="6">
-                                                    <Label className="text_head"> เบอร์โทร </Label>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    เบอร์โทร : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
                                                     <Input type="text" id="user_tel" name="user_tel" class="form-control"  ></Input>
                                                 </Col>
                                             </Row>
-                                            <Row>
-                                                <Col lg="12">
-                                                    <Label className="text_head"> ที่อยู่ </Label>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ที่อยู่ :
+                                                </Col>
+                                                <Col lg="7" md="7" sm="7">
                                                     <textarea type="text" id="user_address" name="user_address" class="form-control"  ></textarea>
                                                     <p id="user_address" className="text_head_sub">Example : 271/55 ตรอกวัดท่าตะโก</p>
                                                 </Col>
                                             </Row>
-                                            <Row>
-                                                <Col lg="3">
-                                                    <Label className="text_head">รหัสผู้ใช้ </Label>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ชื่อผู้ใช้ : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
                                                     <Input type="text" id="user_username" name="user_username" class="form-control"></Input>
-                                                    {/* <p id="user_username" className="text_head_sub">Example : AAAA@gmail.com</p> */}
                                                 </Col>
                                             </Row>
-                                            <Row>
-                                                <Col lg="3">
-                                                    <Label className="text_head"> รหัสผ่าน </Label>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    รหัสผ่าน : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
                                                     <Input type="password" id="user_password" name="user_password" class="form-control"  ></Input>
                                                 </Col>
                                             </Row>
-                                            {/* <Row>
-                                            <Col lg="3">
-                                                    <Label className="text_head"> ยืนยันรหัสผ่าน </Label>
-                                                    <Input type="password" id="user_password" name="user_password" class="form-control"  ></Input>
-                                            </Col>
-                                            </Row> */}
+                                        </Col>
+                                        <Col lg="4">
+                                            <FormGroup style={{ textAlign: "center" }}>
+                                                <div class="form-group files">
+                                                    <Col style={{ marginBottom: "15px" }}>
+                                                        {imagePreview}
+                                                    </Col>
+                                                    <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="user_image" />
+                                                </div>
+                                            </FormGroup>
                                         </Col>
                                     </Row>
                                 </CardBody>
                                 <CardFooter>
-                                    <Link to="/user/">
-                                        <Button type="buttom" size="lg">ย้อนกลับ</Button>
-                                    </Link>
+                                    <Button variant="secondary" size="lg" onClick={this.goBack}>ย้อนกลับ</Button>
                                     <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
                                     <Button type="submit " size="lg" color="success">บันทึก</Button>
                                 </CardFooter>

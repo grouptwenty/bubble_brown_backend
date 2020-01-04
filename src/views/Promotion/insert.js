@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, InputGroup, Form, Input, Table, Card, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
+import { Button, InputGroup, Form, Input, Table, Card, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup, CardFooter } from 'reactstrap';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { NavLink } from 'react-router-dom';
@@ -187,67 +187,65 @@ class HomeView extends Component {
         return (
             <Form onSubmit={this.SavePromotion} id="myForm">
                 <div className="animated fadeIn">
-                    <h2>Promotion</h2>
-                    <hr />
                     <Row>
                         <Col>
                             <Card>
                                 <CardHeader>
-                                    Insert Promotion
+                                    เพิ่มโปรโมชั่น
                                 </CardHeader>
                                 <CardBody>
                                     <Row style={{ padding: 20 }}>
                                         <Col lg="8">
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     ชื่อโปรโมชั่น :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7" style={{ textAlign: 'left' }}>
+                                                <Col lg="9" md="9" sm="9" style={{ textAlign: 'left' }}>
                                                     <Input placeholder="promotion_header" type="text" id={"promotion_header"} name={"promotion_header"} required />
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     เงื่อนไข :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7">
+                                                <Col lg="9" md="9" sm="9">
                                                     <Input placeholder="promotion_detail" type="text" id={"promotion_detail"} name={"promotion_detail"} required />
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     ประเภท :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7">
+                                                <Col lg="5" md="5" sm="5">
                                                     <Select options={type} name={"menu_type_code"} required />
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     โค๊ดโปรโมชั่น :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7">
+                                                <Col lg="4" md="4" sm="4">
                                                     <Input placeholder="discount_code" type="text" id={"discount_code"} name={"discount_code"} required />
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     ประเภทส่วนลด :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7">
+                                                <Col lg="5" md="5" sm="5">
                                                     <Select options={promotion_type} name={"promotion_type"} required />
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="3" md="3" sm="3" className="right" >
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     จำนวน :
                                                     </Col>
-                                                <Col lg="7" md="7" sm="7">
+                                                <Col lg="4" md="4" sm="4">
                                                     <Input placeholder="number" type="text" id={"number"} name={"number"} required />
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="10">
+                                                <Col lg="6">
                                                     <Label className="text_head"> วันที่เริ่มต้น<font color='red'><b> * </b></font></Label>
                                                     <DayPickerInput
                                                         format="DD/MM/YYYY"
@@ -262,7 +260,7 @@ class HomeView extends Component {
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="10">
+                                                <Col lg="6">
                                                     <Label className="text_head"> วันที่เริ่มต้น<font color='red'><b> * </b></font></Label>
                                                     <DayPickerInput
                                                         format="DD/MM/YYYY"
@@ -277,10 +275,6 @@ class HomeView extends Component {
                                                 </Col>
                                             </Row>
 
-                                            <Row className="center" style={{ marginTop: '5%' }}>
-                                                <Button className="btn btn-success" type="submit" color="primary">Save</Button>
-                                                <Button variant="secondary" onClick={this.goBack}>Close</Button>
-                                            </Row>
                                         </Col>
                                         <Col lg="4">
                                             <FormGroup style={{ textAlign: "center" }}>
@@ -295,6 +289,11 @@ class HomeView extends Component {
                                         </Col>
                                     </Row>
                                 </CardBody>
+                                <CardFooter>
+                                    <Button variant="secondary" size="lg" onClick={this.goBack}>ย้อนกลับ</Button>
+                                    <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
+                                    <Button className="btn btn-success" type="submit" size="lg" color="primary">บันทึก</Button>
+                                </CardFooter>
                             </Card>
                         </Col>
                     </Row>

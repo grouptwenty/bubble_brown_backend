@@ -221,58 +221,62 @@ class editView extends Component {
 
                             </CardHeader>
                                 <CardBody>
-
-                                    <Row>
-                                        <Col lg="12">
-                                            <br />
-                                            <Row>
-                                                <Col lg="4">
+                                    <Row style={{ padding: 20 }}>
+                                        <Col lg="8">
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     <Label className="text_head"> รหัสลูกค้า<font color='red'><b> * </b></font></Label>
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
                                                     <Input type="text" id="customer_code" name="customer_code" class="form-control" readOnly ></Input>
-                                                    <p id="customer_code" className="text_head_sub">Example : CM001</p>
                                                 </Col>
-                                                <br />
-
                                             </Row>
-                                            <br />
-                                            <Col>
-                                                    <FormGroup style={{ textAlign: "center" }}>
-                                                        <div class="form-group files">
-                                                            <Col style={{ marginBottom: "15px" }}>
-                                                                {imagePreview}
-                                                            </Col>
-                                                            <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="customer_image" />
-                                                        </div>
-                                                    </FormGroup>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ชื่อ - นามสกุล : <font color='red'><b> * </b></font>
                                                 </Col>
-                                            <Row>
-                                                <Col lg="6">
-                                                    <Label className="text_head"> ชื่อ-นามสกุล <font color='red'><b> * </b></font></Label>
+                                                <Col lg="6" md="6" sm="6">
                                                     <Input type="text" id="customer_name" name="customer_name" class="form-control" autocomplete="off"></Input>
-                                                    <p id="customer_name" className="text_head_sub">Example : ชื่อ นามสกุล</p>
                                                 </Col>
-                                                <Col lg="6">
-                                                    <Label className="text_head"> ไอดีลูกค้า </Label>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ไอดีลูกค้า :
+                                                </Col>
+                                                <Col lg="7" md="7" sm="7">
                                                     <Input type="text" id="customer_id" name="customer_id" class="form-control"  ></Input>
                                                     <p id="customer_id" className="text_head_sub">Example : Line, Facebook</p>
                                                 </Col>
                                             </Row>
-                                            <Row>
-                                                <Col lg="6">
-                                                    <Label className="text_head"> อีเมล </Label>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    อีเมล : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
                                                     <Input type="text" id="customer_email" name="customer_email" class="form-control"></Input>
                                                     <p id="customer_email" className="text_head_sub">Example : AAAA@gmail.com</p>
                                                 </Col>
-                                                <Col lg="6">
-                                                    <Label className="text_head"> เบอร์โทร </Label>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    เบอร์โทร : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
                                                     <Input type="text" id="customer_tel" name="customer_tel" class="form-control"  ></Input>
-                                                    <p id="customer_tel" className="text_head_sub"></p>
                                                 </Col>
                                             </Row>
                                         </Col>
-
+                                        <Col lg="4">
+                                            <FormGroup style={{ textAlign: "center" }}>
+                                                <div class="form-group files">
+                                                    <Col style={{ marginBottom: "15px" }}>
+                                                        {imagePreview}
+                                                    </Col>
+                                                    <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="customer_image" />
+                                                </div>
+                                            </FormGroup>
+                                        </Col>
                                     </Row>
-
                                 </CardBody>
                                 <CardFooter>
                                     <Link to="/customer/">

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, InputGroup, Form, Input, Table, Card, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
+import { Button, InputGroup, Form, Input, Table, Card, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup, CardFooter } from 'reactstrap';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { NavLink } from 'react-router-dom';
@@ -153,13 +153,13 @@ class HomeView extends Component {
                     var req = await upload_model.deleteImages(this.state.promotion_img_old, "promotion")
                     console.log("Delect :" + req);
                 }
-    
+
                 arr['promotion_image'] = await this.fileUpload(this.state.selectedFile, 'promotion', this.state.promotion_code + "_" + toDay);
                 // console.log("this.state.selectedFile :", this.state.selectedFile);
-    
+
             } else {
                 arr['promotion_image'] = this.state.promotion_img_old
-    
+
             }
         }
         if (type == "ส่วนลด") {
@@ -182,16 +182,16 @@ class HomeView extends Component {
                     var req = await upload_model.deleteImages(this.state.promotion_img_old, "promotion")
                     console.log("Delect :" + req);
                 }
-    
+
                 arr['promotion_image'] = await this.fileUpload(this.state.selectedFile, 'promotion', this.state.promotion_code + "_" + toDay);
                 // console.log("this.state.selectedFile :", this.state.selectedFile);
-    
+
             } else {
                 arr['promotion_image'] = this.state.promotion_img_old
-    
+
             }
         }
-        
+
 
         var res = await promotion_model.updatePromotion(arr);
         console.log("data:", arr);
@@ -235,13 +235,11 @@ class HomeView extends Component {
         return (
             <Form onSubmit={this.SavePromotion} id="myForm">
                 <div className="animated fadeIn">
-                    <h2>Promotion</h2>
-                    <hr />
                     <Row>
                         <Col>
                             <Card>
                                 <CardHeader>
-                                    Edit Promotion
+                                    แก้ไขโปรโมชั่น
                                 </CardHeader>
                                 <CardBody>
                                     <Row style={{ padding: 20 }}>
@@ -250,32 +248,28 @@ class HomeView extends Component {
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     ชื่อโปรโมชั่น :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="9" md="9" sm="9">
                                                     <Input placeholder="promotion_header" type="text" id={"promotion_header"} name={"promotion_header"} defaultValue={this.state.promotion.promotion_header} required />
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     เงื่อนไข :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
-                                                    <Input placeholder="promotion_detail" type="text" id={"promotion_detail"} name={"promotion_detail"} defaultValue={this.state.promotion.promotion_detail} required />
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
+                                                <Col lg="9" md="9" sm="9">
+                                                    <Input placeholder="promotion_detail" type="textarea" id={"promotion_detail"} name={"promotion_detail"} defaultValue={this.state.promotion.promotion_detail} required />
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     ประเภท :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="5" md="5" sm="5">
                                                     {this.state.promotion.menu_type_code ?
                                                         <Select options={type} value={{ value: this.state.promotion.menu_type_code, label: this.state.promotion.menu_type_code }} name={"menu_type_code"} />
                                                         : null}
                                                 </Col>
-                                                <Col lg="6" md="6" sm="6">
+                                                <Col lg="5" md="5" sm="5">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
@@ -285,19 +279,17 @@ class HomeView extends Component {
                                                 <Col lg="4" md="4" sm="4">
                                                     <Input placeholder="discount_code" type="text" id={"discount_code"} name={"discount_code"} defaultValue={this.state.promotion.discount_code} required />
                                                 </Col>
-                                                <Col lg="6" md="6" sm="6">
-                                                </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     ประเภทส่วนลด :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="5" md="5" sm="5">
                                                     {this.state.promotion.promotion_type ?
                                                         <Select options={promotion_type} value={{ value: this.state.promotion.promotion_type, label: this.state.promotion.promotion_type }} name={"promotion_type"} />
                                                         : null}
                                                 </Col>
-                                                <Col lg="6" md="6" sm="6">
+                                                <Col lg="5" md="5" sm="5">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
@@ -309,8 +301,6 @@ class HomeView extends Component {
                                                         < Input placeholder="number" type="text" id={"number"} name={"number"} defaultValue={this.state.promotion.discount_percent} required />
                                                         : <Input placeholder="number" type="text" id={"number"} name={"number"} defaultValue={this.state.promotion.discount_price} required />
                                                     }
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
@@ -343,11 +333,6 @@ class HomeView extends Component {
                                                     <p id="enddate" className="text_head_sub">Example : 10-09-2019</p>
                                                 </Col>
                                             </Row>
-
-                                            <Row className="center" style={{ marginTop: '5%' }}>
-                                                <Button className="btn btn-success" type="submit" color="primary">Save</Button>
-                                                <Button variant="secondary" onClick={this.goBack}>Close</Button>
-                                            </Row>
                                         </Col>
                                         <Col lg="4">
                                             <FormGroup style={{ textAlign: "center" }}>
@@ -361,6 +346,11 @@ class HomeView extends Component {
                                         </Col>
                                     </Row>
                                 </CardBody>
+                                <CardFooter>
+                                    <Button variant="secondary" size="lg" onClick={this.goBack}>ย้อนกลับ</Button>
+                                    <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
+                                    <Button className="btn btn-success" type="submit" size="lg" color="primary">บันทึก</Button>
+                                </CardFooter>
                             </Card>
                         </Col>
                     </Row>

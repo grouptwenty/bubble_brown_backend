@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, InputGroup, Form, Input, Table, Card, CardHeader,CardFooter, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
+import { Button, InputGroup, Form, Input, Table, Card, CardHeader, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link, } from 'react-router-dom';
 import { fonts } from 'pdfmake/build/pdfmake';
@@ -17,7 +17,7 @@ class insertView extends Component {
         super(props);
         this.state = {
             data: [],
-            refresh: false ,
+            refresh: false,
             imagePreviewUrl: '',
             file: null,
             selectedFile: null,
@@ -72,24 +72,24 @@ class insertView extends Component {
     }
 
     async componentDidMount() {
-      
-    // console.log("max_code",user_code_max);
-}
 
-    
+        // console.log("max_code",user_code_max);
+    }
+
+
 
     async handleSubmit(event) {
-        event.preventDefault(); 
+        event.preventDefault();
 
         const form = event.target;
         const data = new FormData(form);
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime()
         var arr = {};
-        
+
         const max_code = await user_model.getUserMaxCode()
         var user_code = 'US' + max_code.data.user_code_max
- 
+
         for (let name of data.keys()) {
             arr[name] = form.elements[name.toString()].value;
         }
@@ -98,29 +98,29 @@ class insertView extends Component {
         if (this.state.selectedFile != null) {
             arr['user_image'] = await this.fileUpload(this.state.selectedFile, 'user', '123');
         }
-        
+
         arr['user_code'] = user_code
-        
+
         if (this.check(arr)) {
-        
+
             var res = await user_model.insertUserBy(arr);
-           
+
             //   console.log(res);
-              if (res.data) {
+            if (res.data) {
                 swal({
-                  title: "สำเร็จ!",
-                  text: "เพิ่มข้อมูลพนักงานสำเร็จ",
-                  icon: "success",
-                  button: "Close",
+                    title: "สำเร็จ!",
+                    text: "เพิ่มข้อมูลพนักงานสำเร็จ",
+                    icon: "success",
+                    button: "Close",
                 });
                 this.props.history.push('/user')
-              }
+            }
         }
     }
 
 
     check(form) {
- 
+
         if (form.user_position == '') {
             swal({
                 text: "กรุณากรอก ตำแหน่ง",
@@ -142,13 +142,13 @@ class insertView extends Component {
                 button: "close",
             });
             return false
-        // } else if (form.user_email == '') {
-        //     swal({
-        //         text: "กรุณากรอก อีเมล",
-        //         icon: "warning",
-        //         button: "close",
-        //     });
-        //     return false
+            // } else if (form.user_email == '') {
+            //     swal({
+            //         text: "กรุณากรอก อีเมล",
+            //         icon: "warning",
+            //         button: "close",
+            //     });
+            //     return false
         } else if (form.user_tel == '') {
             swal({
                 text: "กรุณากรอก เบอร์โทร",
@@ -156,13 +156,13 @@ class insertView extends Component {
                 button: "close",
             });
             return false
-        // } else if (form.user_address == '') {
-        //     swal({
-        //         text: "กรุณากรอก ที่อยู่",
-        //         icon: "warning",
-        //         button: "close",
-        //     });
-        //     return false
+            // } else if (form.user_address == '') {
+            //     swal({
+            //         text: "กรุณากรอก ที่อยู่",
+            //         icon: "warning",
+            //         button: "close",
+            //     });
+            //     return false
         } else if (form.user_username == '') {
             swal({
                 text: "กรุณากรอก รหัสผู้ใช้",
@@ -202,24 +202,85 @@ class insertView extends Component {
                     <Col>
                         <Card>
                             <Form onSubmit={this.handleSubmit} id="myForm">
-                            <CardHeader>
-                                เพิ่มข้อมูลพนักงาน
-                                
-                            </CardHeader>
-                            <CardBody>
-
-                                <Row>
-                                  
-                                    <Col lg="12">
-                                        <br />
-            
-                                            {/* <Col lg="4">
-                                                <Label className="text_head"> รหัสพนักงาน<font color='red'><b> * </b></font></Label> */}
-                                                {/* <Input type="hidden" id="user_code" name="user_code" class="form-control" readOnly ></Input> */}
-                                                {/* <p id="user_code" className="text_head_sub">Example : US001</p> */}
-                                            {/* </Col> */}
-                                    
-                                            <Col>
+                                <CardHeader>
+                                    เพิ่มข้อมูลพนักงาน
+                                </CardHeader>
+                                <CardBody>
+                                    <Row style={{ padding: 20 }}>
+                                        <Col lg="8">
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ตำแหน่ง : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
+                                                    <Input type="select" id="user_position" name="user_position" class="form-control" >
+                                                        <option value="">Select</option>
+                                                        <option value="แอดมิน">แอดมิน</option>
+                                                        <option value="แคชเชียร์">แคชเชียร์</option>
+                                                        <option value="พนักงานเสิร์ฟ">พนักงานเสิร์ฟ</option>
+                                                    </Input>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ชื่อ : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
+                                                    <Input type="text" id="user_firstname" name="user_firstname" class="form-control"></Input>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    นามสกุล : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
+                                                    <Input type="text" id="user_lastname" name="user_lastname" class="form-control"  ></Input>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    อีเมล :
+                                                </Col>
+                                                <Col lg="7" md="7" sm="7">
+                                                    <Input type="text" id="user_email" name="user_email" class="form-control"></Input>
+                                                    <p id="user_email" className="text_head_sub">Example : AAAA@gmail.com</p>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    เบอร์โทร : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
+                                                    <Input type="text" id="user_tel" name="user_tel" class="form-control"  ></Input>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ที่อยู่ :
+                                                </Col>
+                                                <Col lg="7" md="7" sm="7">
+                                                    <textarea type="textarea" id="user_address" name="user_address" class="form-control"  ></textarea>
+                                                    <p id="user_address" className="text_head_sub">Example : 271/55 ตรอกวัดท่าตะโก</p>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ชื่อผู้ใช้ : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
+                                                    <Input type="text" id="user_username" name="user_username" class="form-control"></Input>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    รหัสผ่าน : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
+                                                    <Input type="password" id="user_password" name="user_password" class="form-control"  ></Input>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        <Col lg="4">
                                             <FormGroup style={{ textAlign: "center" }}>
                                                 <div class="form-group files">
                                                     <Col style={{ marginBottom: "15px" }}>
@@ -228,76 +289,16 @@ class insertView extends Component {
                                                     <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="user_image" />
                                                 </div>
                                             </FormGroup>
-                                            </Col>
-                                        <Row>
-                                            
-                                            <Col lg="4">
-                                                <Label className="text_head"> ตำแหน่ง <font color='red'><b> * </b></font></Label>
-                                                <Input type="select" id="user_position" name="user_position" class="form-control" >
-                                                        <option value="">Select</option>
-                                                        <option value="แอดมิน">แอดมิน</option>
-                                                        <option value="แคชเชียร์">แคชเชียร์</option>
-                                                        <option value="พนักงานเสิร์ฟ">พนักงานเสิร์ฟ</option>
-                                                </Input>
-                                                {/* <p id="user_position" className="text_head_sub">Example : ชื่อ นามสกุล</p> */}
-                                            </Col>
-                                            <Col lg="4">
-                                                <Label className="text_head"> ชื่อจริง <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="user_firstname" name="user_firstname" class="form-control"></Input>
-                                            </Col>
-                                            <Col lg="4">
-                                                <Label className="text_head"> นามสกุล <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="user_lastname" name="user_lastname" class="form-control"  ></Input>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col lg="6">
-                                                <Label className="text_head"> อีเมล </Label>
-                                                <Input type="text" id="user_email" name="user_email" class="form-control"></Input>
-                                                <p id="user_email" className="text_head_sub">Example : AAAA@gmail.com</p>
-                                            </Col>
-                                            <Col lg="6">
-                                                <Label className="text_head"> เบอร์โทร <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="user_tel" name="user_tel" class="form-control"  ></Input>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                        <Col lg="12">
-                                             <Label className="text_head"> ที่อยู่ </Label>
-                                             <textarea type="text" id="user_address" name="user_address" class="form-control"  ></textarea>
-                                             <p id="user_address" className="text_head_sub">Example : 271/55 ตรอกวัดท่าตะโก</p>
-                                         </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col lg="3">
-                                                <Label className="text_head">รหัสผู้ใช้ <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="user_username" name="user_username" class="form-control"></Input>
-                                                {/* <p id="user_username" className="text_head_sub">Example : AAAA@gmail.com</p> */}
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                        <Col lg="3">
-                                                <Label className="text_head"> รหัสผ่าน <font color='red'><b> * </b></font></Label>
-                                                <Input type="password" id="user_password" name="user_password" class="form-control"  ></Input>
-                                            </Col>
-                                        </Row>
-                                        {/* <Row>
-                                        <Col lg="3">
-                                                <Label className="text_head"> ยืนยันรหัสผ่าน </Label>
-                                                <Input type="password" id="user_password" name="user_password" class="form-control"  ></Input>
                                         </Col>
-                                        </Row> */}
-                                    </Col>
-                                </Row>
-
-                            </CardBody>
-                            <CardFooter>
-                                <Link to="/user/">
-                                    <Button type="buttom" size="lg">ย้อนกลับ</Button>
-                                </Link>
-                                <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
-                                <Button type="submit " size="lg" color="success">บันทึก</Button>
-                            </CardFooter>
+                                    </Row>
+                                </CardBody>
+                                <CardFooter>
+                                    <Link to="/user/">
+                                        <Button type="buttom" size="lg">ย้อนกลับ</Button>
+                                    </Link>
+                                    <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
+                                    <Button type="submit " size="lg" color="success">บันทึก</Button>
+                                </CardFooter>
                             </Form>
                         </Card>
                     </Col>
@@ -309,7 +310,7 @@ class insertView extends Component {
 
 const mapStatetoProps = (state) => {
     return {
-        
+
     }
 }
 

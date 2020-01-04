@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, InputGroup, Form, Input, Table, Card, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
+import { Button, InputGroup, Form, Input, Table, Card, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup, CardFooter } from 'reactstrap';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { NavLink } from 'react-router-dom';
@@ -92,90 +92,68 @@ class HomeView extends Component {
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     ชื่อโปรโมชั่น :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.promotion_header}</label>
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     เงื่อนไข :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.promotion_detail}</label>
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     ประเภท :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.menu_type_code}</label>
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     โค๊ดโปรโมชั่น :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.discount_code}</label>
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     ประเภทส่วนลด :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.promotion_type}</label>
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     จำนวน :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="10" md="10" sm="10">
                                                     {this.state.promotion.promotion_type == "เปอร์เซ็น" ?
                                                         <label>{this.state.promotion.discount_percent}</label>
                                                         : <label>{this.state.promotion.discount_price}</label>
                                                     }
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     วันที่เริ่ม :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.startdate}</label>
-                                                </Col>
-                                                <Col lg="6" md="6" sm="6">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
                                                     วันสิ้นสุด :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
+                                                <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.enddate}</label>
                                                 </Col>
-                                                <Col lg="6" md="6" sm="6">
-                                                </Col>
-                                            </Row>
-                                            <Row className="center" style={{ marginTop: '5%' }}>
-                                                <NavLink exact to={'../../promotion/edit/' + this.state.promotion_code}>
-                                                    <button class="btn btn-warning">แก้ไข</button>
-                                                </NavLink>
-                                                <Button variant="secondary" onClick={this.goBack}>ย้อนกลับ</Button>
                                             </Row>
                                         </Col>
                                         <Col lg="4">
@@ -189,6 +167,12 @@ class HomeView extends Component {
                                         </Col>
                                     </Row>
                                 </CardBody>
+                                <CardFooter>
+                                    <NavLink exact to={'../../promotion/edit/' + this.state.promotion_code}>
+                                        <button class="btn btn-warning btn-lg">แก้ไข</button>
+                                    </NavLink>
+                                    <Button variant="secondary" size="lg" onClick={this.goBack}>ย้อนกลับ</Button>
+                                </CardFooter>
                             </Card>
                         </Col>
                     </Row>

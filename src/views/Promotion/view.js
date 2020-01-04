@@ -132,7 +132,7 @@ class PromotionView extends Component {
                                                 <TableHeaderColumn width={"10%"} dataField='Type' headerAlign="center" dataAlign="center" dataSort>ประเภท</TableHeaderColumn>
                                                 <TableHeaderColumn width={"10%"} dataField='Start' headerAlign="center" dataAlign="center" dataSort>วันที่เริ่ม</TableHeaderColumn>
                                                 <TableHeaderColumn width={"10%"} dataField='End' headerAlign="center" dataAlign="center" dataSort>หมดเขต</TableHeaderColumn>
-                                                <TableHeaderColumn width={"20%"} dataField='Action' headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
+                                                <TableHeaderColumn width={"20%"} dataField='Action' headerAlign="center" dataAlign="left" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
                                             </BootstrapTable>
                                         </div>
                                     </Col>

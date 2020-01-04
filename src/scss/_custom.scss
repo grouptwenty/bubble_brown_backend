@@ -214,7 +214,6 @@ h4 {
   font-size: 15px;
 }
 
-
 .card-body {
   //padding-top:4px;
 }
@@ -694,6 +693,12 @@ h4 {
   max-width: 250px;
   height: auto;
 }
+.react-bs-table table td {
+  overflow: unset !important;
+  white-space: initial !important;
+  text-overflow: ellipsis;
+}
+
 //จอใหญ่
 @media screen and (min-width: 960px) {
   .img {

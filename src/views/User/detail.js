@@ -44,6 +44,7 @@ class editView extends Component {
         this.setState({
             user_code: code,
             user: user.data,
+            user_name: user.data.user_firstname + " " + user.data.user_lastname,
             firstname: user.data.user_firstname,
             user_img_old: user.data.user_image
         })
@@ -71,79 +72,90 @@ class editView extends Component {
                 <Row>
                     <Col>
                         <Card>
-                            <Form id="myForm">
-                                <CardHeader>
-                                    ข้อมูลพนักงาน
+                            <CardHeader>
+                                ข้อมูลพนักงาน
                                 </CardHeader>
-                                <CardBody>
-
-                                    <Row>
-                                        <Col lg="12">
-                                            <br />
-                                            <Row>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> รหัสพนักงาน</Label>
-                                                    <label>{this.state.user_code}</label>
-                                                </Col>
-                                            </Row>
-                                            <Col>
-                                                <FormGroup style={{ textAlign: "center" }}>
-                                                    <div class="form-group files">
-                                                        <Col style={{ marginBottom: "15px" }}>
-                                                            {imagePreview}
-                                                        </Col>
-                                                    </div>
-                                                </FormGroup>
+                            <CardBody>
+                                <Row style={{ padding: 20 }}>
+                                    <Col lg="8">
+                                        <Row className="center" style={{ marginBottom: 10 }}>
+                                            <Col lg="2" md="2" sm="2" className="right" >
+                                                <Label className="text_head"> รหัสพนักงาน</Label>
                                             </Col>
-                                            <Row>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> ตำแหน่ง <font color='red'><b> * </b></font></Label>
-                                                    <label>{this.state.user.user_position}</label>
+                                            <Col lg="4" md="4" sm="4">
+                                                <label>{this.state.user_code}</label>
+                                            </Col>
+                                            <Col lg="6" md="6" sm="6">
+                                            </Col>
+                                        </Row>
+                                        <Row className="center" style={{ marginBottom: 10 }}>
+                                            <Col lg="2" md="2" sm="2" className="right" >
+                                                ตำแหน่ง :
+                                                    </Col>
+                                            <Col lg="4" md="4" sm="4">
+                                                <label>{this.state.user.user_position}</label>
+                                            </Col>
+                                            <Col lg="6" md="6" sm="6">
+                                            </Col>
+                                        </Row>
+                                        <Row className="center" style={{ marginBottom: 10 }}>
+                                            <Col lg="2" md="2" sm="2" className="right" >
+                                                ชื่อ - นามสกุล :
+                                                    </Col>
+                                            <Col lg="4" md="4" sm="4">
+                                                <label>{this.state.user_name}</label>
+                                            </Col>
+                                            <Col lg="6" md="6" sm="6">
+                                            </Col>
+                                        </Row>
+                                        <Row className="center" style={{ marginBottom: 10 }}>
+                                            <Col lg="2" md="2" sm="2" className="right" >
+                                                อีเมล :
+                                                    </Col>
+                                            <Col lg="4" md="4" sm="4">
+                                                <label>{this.state.user.user_email}</label>
+                                            </Col>
+                                            <Col lg="6" md="6" sm="6">
+                                            </Col>
+                                        </Row>
+                                        <Row className="center" style={{ marginBottom: 10 }}>
+                                            <Col lg="2" md="2" sm="2" className="right" >
+                                                เบอร์โทร :
+                                                    </Col>
+                                            <Col lg="4" md="4" sm="4">
+                                                <label>{this.state.user.user_tel}</label>
+                                            </Col>
+                                            <Col lg="6" md="6" sm="6">
+                                            </Col>
+                                        </Row>
+                                        <Row className="center" style={{ marginBottom: 10 }}>
+                                            <Col lg="2" md="2" sm="2" className="right" >
+                                                ที่อยู่ :
+                                                    </Col>
+                                            <Col lg="4" md="4" sm="4">
+                                                <label>{this.state.user.user_address}</label>
+                                            </Col>
+                                            <Col lg="6" md="6" sm="6">
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col lg="4">
+                                        <FormGroup style={{ textAlign: "center" }}>
+                                            <div class="form-group files">
+                                                <Col style={{ marginBottom: "15px" }}>
+                                                    {imagePreview}
                                                 </Col>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> ชื่อจริง <font color='red'><b> * </b></font></Label>
-                                                    <label>{this.state.user.user_firstname}</label>                                                </Col>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> นามสกุล <font color='red'><b> * </b></font></Label>
-                                                    <label>{this.state.user.user_lastname}</label>                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col lg="6">
-                                                    <Label className="text_head"> อีเมล </Label>
-                                                    <label>{this.state.user.user_email}</label>
-                                                </Col>
-                                                <Col lg="6">
-                                                    <Label className="text_head"> เบอร์โทร </Label>
-                                                    <label>{this.state.user.user_tel}</label>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col lg="12">
-                                                    <Label className="text_head"> ที่อยู่ </Label>
-                                                    <label>{this.state.user.user_address}</label>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col lg="3">
-                                                    <Label className="text_head">รหัสผู้ใช้ </Label>
-                                                    <label>{this.state.user.user_username}</label>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col lg="3">
-                                                    <Label className="text_head"> รหัสผ่าน </Label>
-                                                    <Input type="password">{this.state.user.user_password}</Input>                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    </Row>
-                                </CardBody>
-                                <CardFooter>
-                                    <NavLink exact to={'../../user/edit/' + this.state.user_code}>
-                                        <button class="btn btn-warning">แก้ไข</button>
-                                    </NavLink>
-                                    <Button variant="secondary" onClick={this.goBack}>ย้อนกลับ</Button>
-                                </CardFooter>
-                            </Form>
+                                            </div>
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
+                            </CardBody>
+                            <CardFooter>
+                                <NavLink exact to={'../../user/update/' + this.state.user_code}>
+                                    <button class="btn btn-warning btn-lg">แก้ไข</button>
+                                </NavLink>
+                                <Button variant="secondary" size="lg" onClick={this.goBack}>ย้อนกลับ</Button>
+                            </CardFooter>
                         </Card>
                     </Col>
                 </Row>

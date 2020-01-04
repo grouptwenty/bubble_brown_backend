@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, InputGroup, Form, Input, Table, Card, CardHeader,CardFooter, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
+import { Button, InputGroup, Form, Input, Table, Card, CardHeader, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link, } from 'react-router-dom';
 import { fonts } from 'pdfmake/build/pdfmake';
@@ -17,13 +17,13 @@ class insertView extends Component {
         super(props);
         this.state = {
             data: [],
-            refresh: false ,
+            refresh: false,
             imagePreviewUrl: '',
             file: null,
             selectedFile: null,
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onChangeHandler = this.onChangeHandler.bind(this)    
+        this.onChangeHandler = this.onChangeHandler.bind(this)
     }
 
     onChangeHandler = e => {
@@ -72,21 +72,21 @@ class insertView extends Component {
     }
 
     async componentDidMount() {
-      
-    // console.log("max_code",customer_code_max);
-}
 
-    
+        // console.log("max_code",customer_code_max);
+    }
+
+
 
     async handleSubmit(event) {
-        event.preventDefault(); 
+        event.preventDefault();
 
         const form = event.target;
         const data = new FormData(form);
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime()
         var arr = {};
-        
+
         const max_code = await customer_model.getCustomerMaxCode()
         var customer_code = 'CM' + max_code.data.customer_code_max
 
@@ -98,18 +98,18 @@ class insertView extends Component {
         if (this.state.selectedFile != null) {
             arr['customer_image'] = await this.fileUpload(this.state.selectedFile, 'customer', '123');
         }
-        
+
         arr['customer_code'] = customer_code
 
         if (this.check(arr)) {
             var res = await customer_model.insertCustomer(arr);
             //   console.log(res)
-              if (res.data) {
+            if (res.data) {
                 swal({
-                  title: "สำเร็จ!",
-                  text: "เพิ่มข้อมูลลูกค้าสำเร็จ",
-                  icon: "success",
-                  button: "Close",
+                    title: "สำเร็จ!",
+                    text: "เพิ่มข้อมูลลูกค้าสำเร็จ",
+                    icon: "success",
+                    button: "Close",
                 });
                 this.props.history.push('/customer')
             }
@@ -118,7 +118,7 @@ class insertView extends Component {
 
 
     check(form) {
- 
+
         if (form.customer_name == '') {
             swal({
                 text: "กรุณากรอก ชื่อ-นามสกุล",
@@ -147,13 +147,13 @@ class insertView extends Component {
                 button: "close",
             });
             return false
-        // } else if (form.customer_id == '') {
-        //     swal({
-        //         text: "กรุณากรอก ไอดีลูกค้า",
-        //         icon: "warning",
-        //         button: "close",
-        //     });
-        //     return false
+            // } else if (form.customer_id == '') {
+            //     swal({
+            //         text: "กรุณากรอก ไอดีลูกค้า",
+            //         icon: "warning",
+            //         button: "close",
+            //     });
+            //     return false
         } else {
             return true
         }
@@ -180,23 +180,47 @@ class insertView extends Component {
                     <Col>
                         <Card>
                             <Form onSubmit={this.handleSubmit} id="myForm">
-                            <CardHeader>
-                                เพิ่มข้อมูลลูกค้า
-                                
+                                <CardHeader>
+                                    เพิ่มข้อมูลลูกค้า
                             </CardHeader>
-                            <CardBody>
-
-                                <Row>
-                                  
-                                    <Col lg="12">
-                                        <br />
-            
-                                            {/* <Col lg="4">
-                                                <Label className="text_head"> รหัสลูกค้า<font color='red'><b> * </b></font></Label> */}
-                                                {/* <Input type="hidden" id="customer_code" name="customer_code" class="form-control" readOnly ></Input> */}
-                                                {/* <p id="customer_code" className="text_head_sub">Example : CM001</p> */}
-                                            {/* </Col> */}
-                                        <Col>
+                                <CardBody>
+                                    <Row style={{ padding: 20 }}>
+                                        <Col lg="8">
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ชื่อ - นามสกุล : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="6" md="6" sm="6">
+                                                    <Input type="text" id="customer_name" name="customer_name" class="form-control"></Input>                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    ไอดีลูกค้า :
+                                                </Col>
+                                                <Col lg="7" md="7" sm="7">
+                                                    <Input type="text" id="customer_id" name="customer_id" class="form-control"  ></Input>
+                                                    <p id="customer_id" className="text_head_sub">Example : Line, Facebook</p>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    อีเมล : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
+                                                    <Input type="text" id="customer_email" name="customer_email" class="form-control"></Input>
+                                                    <p id="customer_email" className="text_head_sub">Example : AAAA@gmail.com</p>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    เบอร์โทร : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
+                                                    <Input type="text" id="customer_tel" name="customer_tel" class="form-control"  ></Input>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        <Col lg="4">
                                             <FormGroup style={{ textAlign: "center" }}>
                                                 <div class="form-group files">
                                                     <Col style={{ marginBottom: "15px" }}>
@@ -205,42 +229,16 @@ class insertView extends Component {
                                                     <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="customer_image" />
                                                 </div>
                                             </FormGroup>
-                                            </Col>
-                                        <Row>
-                                            <Col lg="6">
-                                                <Label className="text_head"> ชื่อ-นามสกุล <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="customer_name" name="customer_name" class="form-control"></Input>
-                                                {/* <p id="customer_name" className="text_head_sub">Example : ชื่อ นามสกุล</p> */}
-                                            </Col>
-                                            <Col lg="6">
-                                                <Label className="text_head"> ไอดีลูกค้า </Label>
-                                                <Input type="text" id="customer_id" name="customer_id" class="form-control"  ></Input>
-                                                <p id="customer_id" className="text_head_sub">Example : Line, Facebook</p>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col lg="6">
-                                                <Label className="text_head"> อีเมล </Label>
-                                                <Input type="text" id="customer_email" name="customer_email" class="form-control"></Input>
-                                                <p id="customer_email" className="text_head_sub">Example : AAAA@gmail.com</p>
-                                            </Col>
-                                            <Col lg="6">
-                                                <Label className="text_head"> เบอร์โทร <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="customer_tel" name="customer_tel" class="form-control"  ></Input>
-                                                <p id="customer_tel" className="text_head_sub"></p>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-
-                            </CardBody>
-                            <CardFooter>
-                                <Link to="/customer/">
-                                    <Button type="buttom" size="lg">ย้อนกลับ</Button>
-                                </Link>
-                                <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
-                                <Button type="submit " size="lg" color="success">บันทึก</Button>
-                            </CardFooter>
+                                        </Col>
+                                    </Row>
+                                </CardBody>
+                                <CardFooter>
+                                    <Link to="/customer/">
+                                        <Button type="buttom" size="lg">ย้อนกลับ</Button>
+                                    </Link>
+                                    <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
+                                    <Button type="submit " size="lg" color="success">บันทึก</Button>
+                                </CardFooter>
                             </Form>
                         </Card>
                     </Col>
@@ -252,7 +250,7 @@ class insertView extends Component {
 
 const mapStatetoProps = (state) => {
     return {
-        
+
     }
 }
 
