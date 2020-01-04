@@ -30,7 +30,7 @@ class UserView extends Component {
                 var set_data = {
                     user_code: row.userCode,
                 }
-                console.log('row',row)
+                console.log('row', row)
                 console.log('------------', set_data)
                 var res = await user_model.deleteUserByCode(set_data);
                 if (res.query_result) {
@@ -51,6 +51,9 @@ class UserView extends Component {
     cellButton(cell, row, enumObject, rowIndex) {
         return (
             <>
+                <NavLink exact to={'../user/detail/' + row.userCode}>
+                    <button class="btn btn-primary">รายละเอียด</button>
+                </NavLink>
                 <NavLink exact to={'../user/update/' + row.userCode}>
                     <button class="btn btn-warning">แก้ไข</button>
                 </NavLink>

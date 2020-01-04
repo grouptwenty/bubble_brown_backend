@@ -7,6 +7,7 @@ const UserView = React.lazy(() => import('./view'));
 // const UserInsert = React.lazy(() => import('./detail'));
 const UserInsert = React.lazy(() => import('./insert'));
 const UserEdit = React.lazy(() => import('./update'));
+const UserDetail = React.lazy(() => import('./detail'));
 
 class User extends Component {
   async componentDidMount() {
@@ -22,6 +23,7 @@ class User extends Component {
             {/* <Route exact path="/user/datail/:code" render={props => <UserDetail {...props} />} /> */}
             <Route exact path="/user/insert" render={props => <UserInsert {...props} />} />
             <Route exact path="/user/update/:code" render={props => <UserEdit {...props} />} />
+            <Route exact path="/user/detail/:code" render={props => <UserDetail {...props} />} />
           </Switch>
         </React.Suspense>
       </HashRouter>

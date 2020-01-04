@@ -173,9 +173,9 @@ class HomeView extends Component {
                                             </Row>
                                             <Row className="center" style={{ marginTop: '5%' }}>
                                                 <NavLink exact to={'../../promotion/edit/' + this.state.promotion_code}>
-                                                    <button class="btn btn-warning">Edit</button>
+                                                    <button class="btn btn-warning">แก้ไข</button>
                                                 </NavLink>
-                                                <Button variant="secondary" onClick={this.goBack}>Close</Button>
+                                                <Button variant="secondary" onClick={this.goBack}>ย้อนกลับ</Button>
                                             </Row>
                                         </Col>
                                         <Col lg="4">
