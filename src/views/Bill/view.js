@@ -1,20 +1,26 @@
 import React, { Component, useState } from 'react';
-import { Nav, NavItem, TabContent, TabPane, Col, Row, CardHeader, Card, Input, CardText, CardBody, CardTitle, Button, Label, FormGroup, Form, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Nav, NavItem, Table, TabContent, TabPane, Col, Row, CardHeader, Card, Input, CardText, CardBody, CardTitle, Button, Label, FormGroup, Form, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import ClickNHold from 'react-click-n-hold';
 import swal from 'sweetalert';
+import Swal from 'sweetalert2';
+import ReactToPrint from 'react-to-print';
 
 import OrderModel from '../../models/OrderModel'
 import OrderListModel from '../../models/OrderListModel'
 import ZoneModel from '../../models/ZoneModel'
 import TableModel from '../../models/TableModel'
+import StockOutModel from '../../models/StockOutModel'
+import PaymentModel from '../../models/PaymentModel'
 
+const stock_out_model = new StockOutModel
 const order_model = new OrderModel
 const orderlist_model = new OrderListModel
 const zone_model = new ZoneModel
 const table_model = new TableModel
+const payment_model = new PaymentModel
 var QRCode = require('qrcode.react');
 
 class BillView extends Component {
@@ -28,14 +34,17 @@ class BillView extends Component {
             table_list: [],
             tabIndex: 0,
             refresh: false,
-            x: []
+            x: [],
+            recive: 0,
+            charge: 0
 
         };
 
         this.onBillDetail = this.onBillDetail.bind(this);
         this.onTableEdit = this.onTableEdit.bind(this);
-        // this.onTableAdd = this.onTableAdd.bind(this);
+        this.onCheckBill = this.onCheckBill.bind(this);
         this.toggle_Bill = this.toggle_Bill.bind(this);
+        this.toggle_Check_Bill = this.toggle_Check_Bill.bind(this);
         this.toggle_Table_Edit = this.toggle_Table_Edit.bind(this);
         this.toggle_Table_Add = this.toggle_Table_Add.bind(this);
         this.renderBill = this.renderBill.bind(this);
@@ -45,13 +54,15 @@ class BillView extends Component {
         this.renderModalBill = this.renderModalBill.bind(this);
         this.renderModelTableEdit = this.renderModelTableEdit.bind(this);
         this.renderModelTableAdd = this.renderModelTableAdd.bind(this);
+        // this.renderModelCheckBill = this.renderModelCheckBill.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onDelete = this.onDelete.bind(this);
         this.start = this.start.bind(this);
         this.download = this.download.bind(this);
+        this.calculate = this.calculate.bind(this);
+        this.confirm = this.confirm.bind(this);
 
     }
-
 
     async componentDidMount() {
 
@@ -99,6 +110,13 @@ class BillView extends Component {
         }));
     }
 
+    toggle_Check_Bill() {
+        this.setState(prevState => ({
+            modal_check_bill: !prevState.modal_check_bill
+
+        }));
+    }
+
 
     async onBillDetail(order_code) {
         var order_list = await orderlist_model.getOrderListBy(order_code)
@@ -133,13 +151,160 @@ class BillView extends Component {
         this.toggle_Table_Add()
     }
 
+    onCheckBill(check_bill) {
+        console.log("check_bill", check_bill);
+        this.setState({
+            check_bill: check_bill
+        })
+        this.toggle_Check_Bill()
+    }
+
+
+    async confirm(check_bill) {
+
+        // console.log(Number(this.state.recive) - Number(this.state.charge));
+        
+        if (Number(this.state.recive) - Number(check_bill.order_total_price) >= 0) {
+            Swal.fire({
+                title: 'ต้องการชำระเงิน ?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'กลับ'
+            }).then((result) => {
+                if (result.value) {
+
+                    this.Payment(check_bill)
+                }
+            })
+
+        } else {
+            Swal.fire({
+                title: 'กรุณากรอกจำนวนเงินให้ถูกต้อง !',
+                icon: 'wrong',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ปิด',
+            }).then((result) => {
+
+            })
+        }
+
+    }
+
+
+    async Payment(check_bill) {
+
+        console.log("check_bill====>", check_bill);
+
+        var payment = {
+            payment_sum: check_bill.order_total_price,
+            order_code: check_bill.order_code,
+            payment_money_received: this.state.recive,
+            payment_change: this.state.charge
+
+        }
+
+        console.log("payment", payment);
+
+        var updare_order_status = await order_model.Payment(check_bill.order_code)
+        var insertPayment = await payment_model.insertPayment(payment)
+        var printbutton = document.getElementById('print')
+        printbutton.click()
+        this.toggle_Check_Bill()
+        this.componentDidMount()
+
+
+    }
+
 
     start(order_code) {
         this.props.history.push('/order/' + order_code)
     }
 
+    async confirmOrder(bill_order) {
+
+        var order_list_confirm = await orderlist_model.getOrderListBy(bill_order.order_code)
+
+        var order_list = ''
+        for (var key in order_list_confirm.data) {
+
+            order_list += '<tr>' +
+
+                ' <td width="60%" >' + order_list_confirm.data[key].order_list_name + '</td>' +
+                ' <td width="50%">' + order_list_confirm.data[key].order_list_qty + '</td>' +
+                ' </tr>'
+
+            // console.log(order_list_confirm);
+        }
+
+        console.log("order_list", order_list);
+
+        Swal.fire({
+            title: 'ต้องการรับออเดอร์ ?',
+            html: '<br/>' +
+                ' <Table size="lg" width="100%"> ' +
+                ' <tbody>' +
+                order_list +
+                ' </tbody>' +
+                '</Table>' +
+                '<br/>',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ยืนยัน',
+            cancelButtonText: 'กลับ'
+        }).then((result) => {
+            if (result.value) {
+                
+                this.updateConfirmOrder(bill_order.order_code)
+                
+            }
+            // this.componentDidMount()
+        })
+    }
 
 
+    async updateConfirmOrder(order_code) {
+
+
+        var order_list_confirm = await order_model.updateConfirmOrder(order_code)
+
+        var date = Date.now();
+        var order_list = await orderlist_model.getOrderListBy(order_code)
+        console.log("order_list ==>", order_list);
+        console.log("order_list ==>", order_list.order_list_qty);
+
+
+        for (var key in order_list.data) {
+            const stock_out = await order_model.getRecipeByMenu(order_list.data[key].menu_code)
+
+            console.log("stock_out ==>", stock_out);
+            for (var i in stock_out.data) {
+
+                var recipe = {
+                    order_code: order_code,
+                    menu_code: stock_out.data[i].menu_code,
+                    product_code: stock_out.data[i].product_code,
+                    product_qty: stock_out.data[i].qty_cal,
+                    menu_qty: order_list.data[key].order_list_qty,
+                    product_cost: stock_out.data[i].product_cost,
+                    unit: stock_out.data[i].unit_id,
+                    stock_out_date: date,
+
+                }
+                console.log("recipe ==>", recipe);
+
+
+
+                const insertstockout = await stock_out_model.insertStockOutByOrder(recipe)
+                // console.log("insertstockout ==>", insertstockout);
+            }
+        }
+        this.componentDidMount()
+    }
 
     renderBill() {
         var bill = []
@@ -152,11 +317,11 @@ class BillView extends Component {
                     <Card body outline color="success">
                         <Row style={{ borderBottomStyle: 'ridge' }}>
                             <Col sm="6">
-                                <CardTitle style={{ textAlign: 'center', fontSize: '23px' }}>โต๊ะ {this.state.bill_order[i].table_id}</CardTitle>
+                                <CardTitle style={{ textAlign: 'center', fontSize: '23px' }}> {this.state.bill_order[i].table_name}</CardTitle>
                             </Col>
                             <Col sm="6">
                                 <CardTitle style={{ textAlign: 'center', fontSize: '23px' }}>
-                                    <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '20px' }}></i> 2</CardTitle>
+                                    <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '20px' }}></i> {this.state.bill_order[i].table_amount}</CardTitle>
                             </Col>
                         </Row>
 
@@ -167,23 +332,32 @@ class BillView extends Component {
                                 </Col>
                                 <Col sm="6">
                                     <CardTitle style={{ textAlign: 'center', fontSize: '18px' }}>
-                                        <label>{this.state.bill_order[i].amount}</label> <i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }}></i>
+                                        <label>{this.state.bill_order[i].order_total_price}</label> <i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }}></i>
                                     </CardTitle>
                                 </Col>
                             </Row>
                         </CardText>
-                        <Row >
-                            <Col lg="6" >
-                                <div style={{ textAlign: 'end' }}>
-                                    <Button color="secondary">ชำระเงิน</Button>
-                                </div>
-                            </Col>
-                            <Col lg="6">
-                                <div style={{ textAlign: 'start' }}>
-                                    <Button onClick={this.onBillDetail.bind(this, this.state.bill_order[i].order_code)} color="secondary" >ดูบิล</Button>
-                                </div>
-                            </Col>
-                        </Row>
+                        {this.state.bill_order[i].order_status != 0 ?
+                            <Row >
+                                <Col lg="6" >
+                                    <div style={{ textAlign: 'end' }}>
+                                        <Button onClick={this.onCheckBill.bind(this, this.state.bill_order[i])} color="secondary">ชำระเงิน</Button>
+                                    </div>
+                                </Col>
+                                <Col lg="6">
+                                    <div style={{ textAlign: 'start' }}>
+                                        <Button onClick={this.onBillDetail.bind(this, this.state.bill_order[i].order_code)} color="secondary" >ดูบิล</Button>
+                                    </div>
+                                </Col>
+                            </Row>
+                            : <Row >
+                                <Col lg="12" >
+                                    <div style={{ textAlign: 'end' }}>
+                                        <Button onClick={this.confirmOrder.bind(this, this.state.bill_order[i])} color="secondary">ยืนยันออเดอร์</Button>
+                                    </div>
+                                </Col>
+                            </Row>}
+
                     </Card>
                     {/* </NavLink> */}
 
@@ -355,7 +529,7 @@ class BillView extends Component {
             zone_id: zone_id
         }
 
-       var res = await table_model.insertTable(add_table);
+        var res = await table_model.insertTable(add_table);
 
         if (add_table != undefined) {
             swal({
@@ -602,6 +776,58 @@ class BillView extends Component {
     }
 
 
+    async calculatePayment(number) {
+        console.log("number", number);
+
+        await this.setState({
+            recive: parseInt(this.state.recive + number)
+        })
+        this.calculate()
+    }
+
+    async calculatePaymentSet(number) {
+        console.log("number", number);
+
+        await this.setState({
+            recive: parseInt(number)
+        })
+        this.calculate()
+    }
+
+    async  calculatePaymentDelete() {
+        var array = String(this.state.recive.toString().replace(/,/g, ''));
+        let strArr = [...array];
+
+        if (strArr.length > 1) {
+            strArr.splice(strArr.length - 1, 1);
+            strArr = strArr.toString().replace(/,/g, '')
+            console.log("strArr", strArr);
+        } else {
+            strArr = 0
+            strArr = strArr.toString().replace(/,/g, '')
+        }
+
+        await this.setState({
+            recive: Number(strArr.toString().replace(/,/g, ''))
+        });
+        this.calculate()
+    }
+
+    calculate() {
+        var sum = 0
+        sum = Number(this.state.recive) - Number(this.state.check_bill.order_total_price)
+        this.setState({
+            charge: Number(sum.toString().replace(/,/g, ''))
+        });
+
+        console.log("this.state.recive", this.state.recive);
+        console.log("this.state.order_total_price", this.state.check_bill.order_total_price);
+
+    }
+
+
+
+
     render() {
 
         return (
@@ -650,11 +876,244 @@ class BillView extends Component {
 
                     </CardBody>
                 </Card>
+                {this.state.check_bill != undefined ? <Modal isOpen={this.state.modal_check_bill} toggle={this.toggle_Check_Bill} size="lg" >
+                    {/* <ModalHeader toggle={this.toggle_Check_Bill}  >
+                        <Row style={{ textAlign: 'center' }}>
+                            <Col lg="12">
+                                <a>ชำระเงิน {this.state.check_bill.zone_name} - {this.state.check_bill.table_name}</a>
+                            </Col>
+                        </Row>
+                    </ModalHeader> */}
+                    <ModalBody >
+                        <Row style={{ marginRight: '5px', marginLeft: '5px' }}>
+                            <Col lg="4"  >
+                                <a style={{ fontSize: '20px' }}><i class="fa fa-times" aria-hidden="true" onClick={this.toggle_Check_Bill} style={{ fontSize: '30px', color: '#909497' }} /></a>
+                            </Col>
+                            <Col lg="4">
+                                <a style={{ textAlign: 'center', fontSize: '20px' }}>ชำระเงิน [ {this.state.check_bill.zone_name} - {this.state.check_bill.table_name} ]</a>
+                            </Col>
+                            <Col lg="4" style={{ textAlign: 'end' }}>
+                                <ReactToPrint
+                                    trigger={() => <a id='print' ><i class="fa fa-print" aria-hidden="true" style={{ fontSize: '30px', color: '#909497', }} /></a>}
+                                    content={() => this.componentRef}
+
+                                />
+                                <div style={{ display: 'none' }}>
+                                    <ComponentToPrint ref={el => (this.componentRef = el)} pageStyle={"@page { size: A5 portrait;}"} recive={this.state.recive} charge={this.state.charge} print_order={this.state.check_bill} />
+                                </div>
+                            </Col>
+                        </Row>
+                        <hr />
+                        <br />
+                        <Row>
+                            <Col lg="8">
+                                <Card body style={{ backgroundColor: '#F2F3F4', borderColor: '#E5E7E9' }}>
+                                    <Row>
+
+                                        <Col lg="6">
+                                            <h4 > ได้รับแล้ว</h4>
+                                        </Col>
+
+                                        <Col lg="6" style={{ textAlign: 'end' }}>
+                                            <h4 >ยอดชำระ</h4>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col lg="6">
+                                            <h3 style={{ fontSize: '18px' }}><i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }} /> {Number(this.state.recive).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</h3>
+                                        </Col>
+
+                                        <Col lg="6" style={{ textAlign: 'end' }}>
+                                            <h3 style={{ fontSize: '18px' }}><i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }} /> {Number(this.state.check_bill.order_total_price).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")} </h3>
+                                        </Col>
+                                    </Row>
+                                </Card>
+                            </Col>
+                            <Col lg="4" >
+                                <Card body style={{ backgroundColor: '#F2F3F4', borderColor: '#E5E7E9' }}>
+                                    <Row>
+
+                                        <Col lg="12" style={{ textAlign: 'end' }}>
+                                            <h4 >เงินทอน</h4>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+
+                                        <Col lg="12" style={{ textAlign: 'end' }}>
+                                            <h3 style={{ fontSize: '18px' }}><i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }} /> {Number(this.state.charge).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</h3>
+                                        </Col>
+                                    </Row>
+                                </Card>
+
+                            </Col>
+                        </Row>
+                        <Row style={{ textAlign: 'center' }}>
+                            <Col lg="12" >
+                                <Card body style={{ borderColor: '#E5E7E9' }}>
+                                    <Row>
+                                        <Col lg="4" onClick={this.calculatePaymentSet.bind(this, '100')}>
+                                            <h4 style={{ fontSize: '20px', borderRight: 'groove', color: '#32EA63', borderRightColor: '#F8F9F9' }}><i class="fa fa-btc" aria-hidden="true" style={{ color: '#32EA63', fontSize: '18px' }} /> 100</h4>
+                                        </Col>
+                                        <Col lg="4" onClick={this.calculatePaymentSet.bind(this, '500')}>
+                                            <h4 style={{ fontSize: '20px', borderRight: 'groove', color: '#32EA63', borderRightColor: '#F8F9F9' }}><i class="fa fa-btc" aria-hidden="true" style={{ color: '#32EA63', fontSize: '18px' }} /> 500</h4>
+                                        </Col>
+                                        <Col lg="4" onClick={this.calculatePaymentSet.bind(this, '1000')}>
+                                            <h4 style={{ fontSize: '20px', color: '#32EA63' }}><i class="fa fa-btc" aria-hidden="true" style={{ color: '#32EA63', fontSize: '18px' }} /> 1000</h4>
+                                        </Col>
+                                    </Row>
+                                </Card>
+
+                            </Col>
+
+
+
+                        </Row>
+                        <Row style={{ marginLeft: '5px', marginRight: ' 5px', paddingTop: '5px', paddingBottom: '5px', textAlign: 'center' }}>
+                            <br />
+                            <br />
+                            <Table bordered style={{ borderColor: '#E5E7E9' }}>
+
+                                <tbody >
+
+                                    <tr style={{ fontSize: '23px', color: '#909497' }}>
+                                        <td onClick={this.calculatePayment.bind(this, '7')}>7</td>
+                                        <td onClick={this.calculatePayment.bind(this, '8')}>8</td>
+                                        <td onClick={this.calculatePayment.bind(this, '9')}>9</td>
+                                        <td rowSpan='2' onClick={this.calculatePaymentDelete.bind(this)}><i class="fa fa-window-close-o" aria-hidden="true" style={{ fontSize: '30px', marginTop: '30px', color: '#909497' }} /></td>
+                                    </tr>
+                                    <tr style={{ fontSize: '23px', color: '#909497' }}>
+                                        <td onClick={this.calculatePayment.bind(this, '4')}>4</td>
+                                        <td onClick={this.calculatePayment.bind(this, '5')}>5</td>
+                                        <td onClick={this.calculatePayment.bind(this, '6')}>6</td>
+
+                                    </tr>
+                                    <tr style={{ fontSize: '23px', color: '#909497' }}>
+                                        <td onClick={this.calculatePayment.bind(this, '1')}>1</td>
+                                        <td onClick={this.calculatePayment.bind(this, '2')}>2</td>
+                                        <td onClick={this.calculatePayment.bind(this, '3')}>3</td>
+                                        <td rowSpan='2'></td>
+                                    </tr>
+                                    <tr style={{ fontSize: '23px', color: '#909497' }}>
+                                        <td onClick={this.calculatePayment.bind(this, '0')}>0</td>
+                                        <td onClick={this.calculatePayment.bind(this, '00')}></td>
+                                        <td onClick={this.calculatePayment.bind(this, '.')}></td>
+
+                                    </tr>
+
+
+                                </tbody>
+                            </Table>
+                        </Row>
+                        <br />
+
+                        <Row style={{ textAlign: 'center' }}>
+                            <Col lg="12">
+                                <Button outline color="success" size="lg" block style={{ borderWidth: '2px' }} onClick={this.confirm.bind(this, this.state.check_bill)} >ยืนยันการชำระเงิน</Button>
+                            </Col>
+                        </Row>
+
+                        <br />
+                    </ModalBody>
+
+                </Modal> : ''}
+
+
                 {this.renderModalBill()}
                 {this.renderModelTableEdit()}
                 {this.renderModelTableAdd()}
+                {/* {this.renderModelCheckBill()} */}
             </div >
         )
+    }
+}
+
+
+
+class ComponentToPrint extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+
+
+        };
+
+        this.rederFormPrint = this.rederFormPrint.bind(this);
+
+
+    }
+    async componentDidMount() {
+        var code = this.props.print_order.order_code
+
+        var print_order_list = await orderlist_model.getOrderListBy(code)
+
+
+
+        this.setState({
+            print_order_list: print_order_list.data
+        })
+
+    }
+    rederFormPrint() {
+        if (this.state.print_order_list != undefined) {
+            var print = []
+            for (var key in this.state.print_order_list) {
+                print.push(
+                    <tr >
+                        <th style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}><label >{this.state.print_order_list[key].order_list_name}</label></th>
+                        <td ><a style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>{this.state.print_order_list[key].order_list_price_qty}</a></td>
+
+                    </tr>
+
+                )
+
+            }
+            return print;
+        }
+
+    }
+
+
+    render() {
+
+
+        return (
+            <div style={{ margin: '20px' }}>
+                <Row style={{ textAlign: 'center' }}>
+                    <Col lg="12">
+                        <label style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>Bubble Brown Cafe</label>
+                    </Col>
+                </Row>
+
+                <table style={{ width: '100%' }}>
+
+                    <tbody>
+                        <tr>
+                            <th style={{ fontSize: '26pt', fontFamily: 'Kanit-Thin' }}>รายการสินค้า</th>
+                        </tr>
+
+                        {this.rederFormPrint()}
+
+                        <tr>
+                            <th style={{ fontSize: '26pt', fontFamily: 'Kanit-Light' }}>ยอดรวม</th>
+                            <td style={{ fontSize: '26pt', fontFamily: 'Kanit-Light' }}>{Number(this.props.print_order.order_total_price).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+
+                        </tr>
+                        <tr>
+                            <th style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>เงินสด</th>
+                            <td style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>{Number(this.props.recive).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+
+                        </tr>
+                        <tr>
+                            <th style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>ทอน</th>
+                            <td style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>{Number(this.props.charge).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        );
     }
 }
 export default (BillView);

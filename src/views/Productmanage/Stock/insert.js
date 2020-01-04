@@ -172,7 +172,6 @@ class ProductTable extends React.Component {
             });
         }
         if (insert) {
-
             for (let i = 0; i < product_code.length; i++) {
                 var stock_qty_cal = this.calculatQty(stock_qty[i].value, unit_id[i].value)
                 // console.log("stock_qty_cal", stock_qty_cal);
@@ -187,23 +186,24 @@ class ProductTable extends React.Component {
                     stock_qty_cal: stock_qty_cal
 
                 }
+                // console.log("stock_list", stock_list);
 
                 const src = await stock_model.insertStock(stock_list)
                 const price_qty = await stock_model.getStockByPriceQty(stock_list)
-                console.log("price_qty", price_qty);
+                // console.log("price_qty", price_qty);
 
                 const product_qty = await product_model.updateProductCost(price_qty.data)
 
 
-                if (stock_list != undefined) {
-                    swal({
-                        title: "จัดการสูตรเรียบร้อย",
-                        icon: "success",
-                        button: "Close",
-                    });
-                    this.props.history.push('/product-manage/stock-in/')
+            }
+            if (stock_list != undefined) {
+                swal({
+                    title: "จัดการสูตรเรียบร้อย",
+                    icon: "success",
+                    button: "Close",
+                });
+                this.props.history.push('/product-manage/stock-in/')
 
-                }
             }
         }
     }
@@ -280,7 +280,7 @@ class ProductRow extends React.Component {
 
     async componentDidMount() {
         var unit_list = await unit_model.getUnitBy()
-        console.log("unit_list", unit_list);
+        // console.log("unit_list", unit_list);
 
 
         this.setState({
@@ -297,7 +297,7 @@ class ProductRow extends React.Component {
         this.setState({
             data: data
         })
-        console.log("data454564654", data);
+        // console.log("data454564654", data);
 
     }
     render() {
@@ -333,7 +333,8 @@ class ProductRow extends React.Component {
                     type: "stock_price",
                     value: this.state.data.stock_price,
                     id: this.state.data.stock_price,
-                    readonly: false
+                    readonly: false,
+                    textAlign: 'end'
                 }} />
 
                 <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
@@ -341,6 +342,7 @@ class ProductRow extends React.Component {
                     value: this.state.data.stock_qty,
                     id: this.state.data.stock_qty,
                     readonly: false,
+                    textAlign: 'end'
                 }} />
 
                 <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
@@ -392,11 +394,11 @@ class EditableCell extends React.Component {
             for (var key in this.props.cellData.data) {
                 if (this.props.cellData.data[key].unit_id == this.props.cellData.value) {
                     unit.push(
-                        <option selected='true' Value={this.props.cellData.data[key].unit_id} name={this.props.cellData.type} id={this.props.cellData.data[key].unit_id}>{this.props.cellData.data[key].unit_name}</option>
+                        <option selected='true' Value={this.props.cellData.data[key].unit_id} >{this.props.cellData.data[key].unit_name}</option>
                     )
                 } else {
                     unit.push(
-                        <option Value={this.props.cellData.data[key].unit_id} name={this.props.cellData.type} id={this.props.cellData.data[key].unit_id}>{this.props.cellData.data[key].unit_name}</option>
+                        <option Value={this.props.cellData.data[key].unit_id} >{this.props.cellData.data[key].unit_name}</option>
                     )
                 }
 
@@ -411,11 +413,11 @@ class EditableCell extends React.Component {
             <td>
 
                 {this.props.cellData.types == 'select' ?
-                    <Input type='select' name={this.props.cellData.type} id={this.props.cellData.data} Value={this.props.cellData.value} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} >
+                    <Input type='select' name={this.props.cellData.type}  onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} >
                         <option Value="">Select</option>
                         {this.renderUnit()}
                     </Input>
-                    : <Input type='text' name={this.props.cellData.type} id={this.props.cellData.id} Value={this.props.cellData.value} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} />
+                    : <Input type='text' name={this.props.cellData.type} style={{ textAlign: this.props.cellData.textAlign }} id={this.props.cellData.id} Value={this.props.cellData.value} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} />
                 }
 
             </td>
@@ -449,7 +451,7 @@ class ModelProduct extends React.Component {
         this.toggle()
     }
     toggle() {
-        console.log("kkk");
+        // console.log("kkk");
 
         this.setState({
             modal: !this.state.modal

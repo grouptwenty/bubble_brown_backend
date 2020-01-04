@@ -57,10 +57,10 @@ export default class MenuComponent {
                 url: '/product-manage/',
                 icon: 'icon-pencil',
                 children: [
-                    // {
-                    //     name: 'สินค้า',
-                    //     // url: '/product-manage/product',
-                    // },
+                    {
+                        name: 'สินค้า',
+                        url: '/product-manage/product',
+                    },
                     {
                         name: 'จัดการสูตร',
                         url: '/product-manage/recipe',
@@ -90,6 +90,12 @@ export default class MenuComponent {
             {
                 name: 'จองโต๊ะ',
                 url: '/booking/',
+                icon: 'icon-pencil',
+            },
+
+            {
+                name: 'รายงาน',
+                url: '/dashboard/',
                 icon: 'icon-pencil',
             },
             // {

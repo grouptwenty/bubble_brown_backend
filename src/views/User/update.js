@@ -87,7 +87,7 @@ class editView extends Component {
         console.log(code);
 
         const user_data = await user_model.getUserByCode(code);
-        console.log("user_data.user_image",user_data.data.user_image);
+        // console.log("user_data.user_image",user_data.data.user_image);
         this.setState({
             user_img_old: user_data.data.user_image
         })

@@ -85,13 +85,15 @@
     "react-table": "6.5.3",
     "react-tabs": "^3.0.0",
     "react-test-renderer": "^16.8.5",
+    "react-to-print": "^2.5.0",
     "react-toastify": "^5.2.1",
     "react-touch": "^0.4.4",
     "reactstrap": "^7.1.0",
     "redux": "3.7.2",
     "simple-line-icons": "^2.4.1",
     "socket.io-client": "^2.2.0",
-    "sweetalert": "^2.1.2"
+    "sweetalert": "^2.1.2",
+    "sweetalert2": "^9.5.3"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -6,6 +6,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import PromotionModel from '../../models/PromotionModel';
 import swal from 'sweetalert';
 import GOBALS from '../../GOBALS'
+import ImgDefault from '../../assets/img/img_default.png'
 var promotion_model = new PromotionModel;
 class PromotionView extends Component {
     constructor(props) {
@@ -65,7 +66,8 @@ class PromotionView extends Component {
         // var url = "http://localhost:3006/" + row.Picture;
         return (
             <>
-                <img src={GOBALS.URL_IMG + "promotion/" + row.Picture} className="img"></img>
+
+                <img src={ row.Picture != "" && row.Picture != null ? GOBALS.URL_IMG + "promotion/" + row.Picture : ImgDefault} className="img"></img>
             </>
         )
     }
@@ -96,6 +98,8 @@ class PromotionView extends Component {
 
     }
     render() {
+
+        
         const { data } = this.state;
         return (
             <div className="animated fadeIn">

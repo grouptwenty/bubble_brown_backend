@@ -62,6 +62,17 @@ class CustomerView extends Component {
         )
     }
 
+    showPicture(cell, row, enumObject, rowIndex) {
+        console.log(">>>>>>>>>>>>>>>>>>>>", row.Picture);
+
+        // var url = "http://localhost:3006/" + row.Picture;
+        return (
+            <>
+                <img src={GOBALS.URL_IMG + "customer/" + row.Img} className="Img"></img>
+            </>
+        )
+    }
+
     async componentDidMount() {
         const customer_list = await customer_model.getCustomerBy()
         console.log("customer_list", customer_list);
@@ -78,7 +89,7 @@ class CustomerView extends Component {
                 Id: customer_list.data[key].customer_id,
                 Email: customer_list.data[key].customer_email,
                 Tel: customer_list.data[key].customer_tel,
-                // Img: customer_list.data[key].customer_image
+                Img: customer_list.data[key].customer_image
             }
             data_customer_list.rows.push(set_row);
             i++;
@@ -115,6 +126,7 @@ class CustomerView extends Component {
                                             >
                                                 {/* <TableHeaderColumn width={"15%"} dataField='Code' headerAlign="center" dataAlign="center" >Code</TableHeaderColumn> */}
                                                 {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>Picture</TableHeaderColumn> */}
+                                                <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='customerCode' headerAlign="center" dataAlign="center" dataSort isKey={true}>รหัสลูกค้า</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อ-นามสกุล</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Id' headerAlign="center" dataAlign="center" dataSort>ไอดี</TableHeaderColumn>

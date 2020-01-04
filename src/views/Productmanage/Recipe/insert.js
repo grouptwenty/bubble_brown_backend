@@ -363,7 +363,8 @@ class ProductRow extends React.Component {
                         value: this.props.recipe.product_qty,
                         id: this.props.recipe.product_qty,
                         readonly: false,
-                        types: 'text'
+                        types: 'text',
+                        textAlign: 'end'
                     }} />
 
 
@@ -372,7 +373,8 @@ class ProductRow extends React.Component {
                         value: this.state.data.product_qty,
                         id: this.state.data.product_qty,
                         readonly: false,
-                        types: 'text'
+                        types: 'text',
+                        textAlign: 'end'
                     }} />}
 
 
@@ -451,7 +453,7 @@ class EditableCell extends React.Component {
                         <option Value="">Select</option>
                         {this.renderUnit()}
                     </Input>
-                    : <Input type='text' name={this.props.cellData.type}  Value={this.props.cellData.value} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} />
+                    : <Input type='text' name={this.props.cellData.type} style={{ textAlign: this.props.cellData.textAlign }}  Value={this.props.cellData.value} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} />
                 }
 
             </td>

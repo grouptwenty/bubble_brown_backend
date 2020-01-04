@@ -233,16 +233,44 @@ class editView extends Component {
                                         <Col lg="12">
                                             <br />
                                             <Row>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> รหัสเมนู<font color='red'><b> * </b></font></Label>
-                                                    <Input type="text" id="menu_code" name="menu_code" class="form-control" readOnly ></Input>
-                                                    <p id="menu_code" className="text_head_sub">Example : MN01001</p>
-                                                </Col>
-                                                <br />
+                                                <Col lg="6">
+                                                    <Row>
+                                                        <Col lg="12">
+                                                            <FormGroup >
+                                                                <Label className="text_head"> รหัสเมนู<font color='red'><b> * </b></font></Label>
+                                                                <Input type="text" id="menu_code" name="menu_code" class="form-control" readOnly ></Input>
+                                                                <p id="menu_code" className="text_head_sub">Example : MN01001</p>
+                                                            </FormGroup>
+                                                        </Col>
+                                                        <Col lg="12">
+                                                            <FormGroup >
+                                                                <Label className="text_head"> ชื่อเมนู <font color='red'><b> * </b></font></Label>
+                                                                <Input type="text" id="menu_name" name="menu_name" class="form-control" ></Input>
+                                                                {/* <p id="menu_name" className="text_head_sub">Example : ลาเต้</p> */}
+                                                            </FormGroup>
+                                                        </Col>
+                                                        <Col lg="12">
+                                                            <FormGroup >
+                                                                <Label className="text_head"> ราคา </Label>
+                                                                <Input type="text" id="menu_price" name="menu_price" class="form-control"></Input>
+                                                                {/* <p id="menu_price" className="text_head_sub">Example : AAAA@gmail.com</p> */}
+                                                            </FormGroup>
+                                                        </Col>
+                                                        <Col lg="12">
+                                                            <FormGroup >
+                                                                <Label className="text_head"> ประเภท <font color='red'><b> * </b></font></Label>
+                                                                <Input type="select" id="menu_type_code" name="menu_type_code" class="form-control" >
+                                                                    <option value="">Select</option>
+                                                                    {this.renderMenu()}
+                                                                </Input>
+                                                                {/* <p id="menu_id" className="text_head_sub">Example : Line, Facebook</p> */}
+                                                            </FormGroup>
+                                                        </Col>
 
-                                            </Row>
-                                            <br />
-                                            <Col lg="4">
+                                                    </Row>
+
+                                                </Col>
+                                                <Col lg="6">
                                                     <FormGroup style={{ textAlign: "center" }}>
                                                         <div class="form-group files">
                                                             <Col style={{ marginBottom: "15px" }}>
@@ -252,26 +280,11 @@ class editView extends Component {
                                                         </div>
                                                     </FormGroup>
                                                 </Col>
-                                            <Row>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> ประเภท <font color='red'><b> * </b></font></Label>
-                                                    <Input type="select" id="menu_type_code" name="menu_type_code" class="form-control" >
-                                                        <option value="">Select</option>
-                                                        {this.renderMenu()}
-                                                    </Input>
-                                                    {/* <p id="menu_id" className="text_head_sub">Example : Line, Facebook</p> */}
-                                                </Col>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> ชื่อเมนู <font color='red'><b> * </b></font></Label>
-                                                    <Input type="text" id="menu_name" name="menu_name" class="form-control" ></Input>
-                                                    {/* <p id="menu_name" className="text_head_sub">Example : ลาเต้</p> */}
-                                                </Col>
-                                                <Col lg="4">
-                                                    <Label className="text_head"> ราคา </Label>
-                                                    <Input type="text" id="menu_price" name="menu_price" class="form-control"></Input>
-                                                    {/* <p id="menu_price" className="text_head_sub">Example : AAAA@gmail.com</p> */}
-                                                </Col>
+                                                <br />
+
                                             </Row>
+                                            <br />
+
                                         </Col>
 
                                     </Row>
