@@ -47,12 +47,6 @@ export default class MenuComponent {
             },
 
             {
-                name: 'โต๊ะอาหาร / โซน',
-                url: '/table/',
-                icon: 'icon-list',
-            },
-
-            {
                 name: 'จัดการข้อมูลสินค้า',
                 url: '/product-manage/',
                 icon: 'icon-pencil',
@@ -69,6 +63,29 @@ export default class MenuComponent {
                         name: 'สต๊อกเข้า',
                         url: '/product-manage/stock-in',
                     },
+                    // {
+                    //     name: 'สต๊อกออก',
+                    //     // url: '/product-manage/stock-out',
+                    // },
+                ],
+            },
+            {
+                name: 'จัดการแท็บ',
+                url: '/tap-manage/',
+                icon: 'icon-pencil',
+                children: [
+                    {
+                        name: 'แท็บประเภทเมนู',
+                        url: '/tap-manage/menu_type',
+                    },
+                    {
+                        name: 'แท็บโซน',
+                        url: '/tap-manage/zone',
+                    },
+                    // {
+                    //     name: 'สต๊อกเข้า',
+                    //     url: '/product-manage/stock-in',
+                    // },
                     // {
                     //     name: 'สต๊อกออก',
                     //     // url: '/product-manage/stock-out',
