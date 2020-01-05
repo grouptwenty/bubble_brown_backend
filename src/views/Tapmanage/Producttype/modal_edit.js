@@ -4,10 +4,10 @@ import 'react-day-picker/lib/style.css';
 import { Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
-import ZoneModel from '../../../models/ZoneModel';
-var zone_model = new ZoneModel;
+import ProductTypeModel from '../../../models/ProductTypeModel';
+var product_type_model = new ProductTypeModel;
 
-class EditZoneModal extends Component {
+class EditProductTypeModal extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -17,16 +17,16 @@ class EditZoneModal extends Component {
     }
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.SaveZone = this.SaveZone.bind(this);
+    this.SaveProductType = this.SaveProductType.bind(this);
   }
   async componentDidMount() {
-    const zone = await zone_model.getZoneByCol({ 'zone_id': this.props.zone_id });
-    console.log("xxss>>>", zone)
+    const product_type = await product_type_model.getProductTypeByCol({ 'product_type_id': this.props.product_type_id });
+    console.log("xxss>>>", product_type)
 
     this.setState({
       show_update_model: this.props.show_update_model,
-      zone_name: zone.data[0].zone_name,
-      zone_id: zone.data[0].zone_id
+      product_type_name: product_type.data[0].product_type_name,
+      product_type_id: product_type.data[0].product_type_id
     })
   }
   handleClose() {
@@ -36,8 +36,8 @@ class EditZoneModal extends Component {
   handleShow() {
     this.setState({ show: true });
   }
-  async SaveZone(event) {
-    if (this.state.zone_validate == 'INVALID') {
+  async SaveProductType(event) {
+    if (this.state.product_type_validate == 'INVALID') {
       swal("This name already exists.", {
         icon: "error",
       });
@@ -48,19 +48,19 @@ class EditZoneModal extends Component {
       // const data = new FormData(form);
       var arr = {};
 
-      arr['zone_name'] = form.elements['zone_name'].value;
-      arr['zone_id'] = this.state.zone_id;
+      arr['product_type_name'] = form.elements['product_type_name'].value;
+      arr['product_type_id'] = this.state.product_type_id;
       var data_set = {
-        zone_name: arr['zone_name'],
+        product_type_name: arr['product_type_name'],
       };
-      var data_where = { zone_id: arr['zone_id'] };
+      var data_where = { product_type_id: arr['product_type_id'] };
       // console.log("xxx",data)
       console.log("xxx", arr)
-      var res = await zone_model.updateZone(data_set, data_where);
+      var res = await product_type_model.updateProductType(data_set, data_where);
       if (res.query_result) {
         swal({
           title: "Good job!",
-          text: "Insert Zone  Ok",
+          text: "Insert ProductType  Ok",
           icon: "success",
           button: "Close",
         });
@@ -68,28 +68,28 @@ class EditZoneModal extends Component {
       } else {
         swal({
           title: "Error !",
-          text: "Insert Zone Error ",
+          text: "Insert ProductType Error ",
           icon: "error",
           button: "Close",
         });
       }
     }
   }
-  onZoneChange(event) {
-    const zone_name = event.target.value;
-    zone_model.getZoneByCol({ 'zone_name': zone_name }).then((responseJson) => {
-      console.log('Zonennn', responseJson);
+  onProductTypeChange(event) {
+    const product_type_name = event.target.value;
+    product_type_model.getProductTypeByCol({ 'product_type_name': product_type_name }).then((responseJson) => {
+      console.log('ProductTypennn', responseJson);
       if (responseJson.data.length == 0) {
         this.setState({
-          zone_validate: "VALID",
+          product_type_validate: "VALID",
         })
-        console.log("VALID : ", zone_name);
+        console.log("VALID : ", product_type_name);
       } else {
         this.setState({
-          zone_validate: "INVALID",
-          zone_validate_text: "This name already exists.",
+          product_type_validate: "INVALID",
+          product_type_validate_text: "This name already exists.",
         })
-        console.log("INVALID : ", zone_name);
+        console.log("INVALID : ", product_type_name);
       }
       this.render();
     });
@@ -102,19 +102,19 @@ class EditZoneModal extends Component {
           style={{ marginTop: "8%", marginBottom: "8%" }}
           show={this.state.show_update_model}
         >
-          <Form onSubmit={this.SaveZone} id="myForm">
+          <Form onSubmit={this.SaveProductType} id="myForm">
             <Modal.Header closeButton>
-              <Modal.Title>Edit Zone</Modal.Title>
+              <Modal.Title>Edit ProductType</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Col xs="12" sm="12">
                 <FormGroup row className="my-0">
                   <Col xs="12" sm="12">
                     <FormGroup>
-                      <Label for="zone_name">Zone :</Label>
-                      <Input valid={this.state.zone_validate == "VALID"} invalid={this.state.zone_validate == "INVALID"} name="zone_name" id="zone_name" defaultValue={this.state.zone_name} onChange={(e) => { this.onZoneChange(e) }} placeholder="Professor" required />
+                      <Label for="product_type_name">ProductType :</Label>
+                      <Input valid={this.state.product_type_validate == "VALID"} invalid={this.state.product_type_validate == "INVALID"} name="product_type_name" id="product_type_name" defaultValue={this.state.product_type_name} onChange={(e) => { this.onProductTypeChange(e) }} placeholder="Professor" required />
                       <FormFeedback valid >You can use this name.</FormFeedback>
-                      <FormFeedback invalid >{this.state.zone_validate_text}</FormFeedback>
+                      <FormFeedback invalid >{this.state.product_type_validate_text}</FormFeedback>
                       <FormText>Example: Professor</FormText>
                     </FormGroup>
                   </Col>
@@ -129,13 +129,18 @@ class EditZoneModal extends Component {
           </Button>
             </Modal.Footer>
           </Form>
+
         </Modal>
+
+        {/* <Button type="button" size="sm" color="link" style={{ color: '#337ab7' }} onClick={this.handleShow}>
+            <i class='fa fa-pencil-square-o' ></i>
+        </Button> */}
       </>
     )
   }
 }
 
-export default (EditZoneModal);
+export default (EditProductTypeModal);
 
 
 

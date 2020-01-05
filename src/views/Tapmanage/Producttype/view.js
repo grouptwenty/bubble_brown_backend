@@ -3,27 +3,12 @@ import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHe
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import ZoneModel from '../../../models/ZoneModel';
+import ProductTypeModel from '../../../models/ProductTypeModel';
 import ModalInsert from './modal_insert'
 import ModalEdit from './modal_edit'
 import swal from 'sweetalert';
-var zone_model = new ZoneModel;
-const options = {
-    page: 1,  // which page you want to show as default
-    sizePerPageList: [ {
-      text: '5', value: 5
-    }, {
-      text: '10', value: 10
-    } ], // you can change the dropdown list for size per page
-    sizePerPage: 5,  // which size per page you want to locate as default
-    pageStartIndex: 0, // where to start counting the pages
-    paginationSize: 3,  // the pagination bar size.
-    prePage: 'Prev', // Previous page button text
-    nextPage: 'Next', // Next page button text
-    firstPage: 'First', // First page button text
-    lastPage: 'Last', // Last page button text
-  };
-class ZoneView extends Component {
+var product_type_model = new ProductTypeModel;
+class ProductTypeView extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,13 +17,13 @@ class ZoneView extends Component {
             show_update_model: false,
         };
     }
-    onClickZoneUpdate(cell, row, rowIndex) {
+    onClickProductUpdate(cell, row, rowIndex) {
         console.log('cell', cell);
         console.log('row', row);
         console.log('rowIndex', rowIndex);
         this.setState({
             show_update_model: true,
-            zone_id: row.zone_id,
+            product_type_id: row.product_type_id,
         })
     }
     onClickDelete(cell, row, rowIndex) {
@@ -52,10 +37,10 @@ class ZoneView extends Component {
         }).then(async (willDelete) => {
             if (willDelete) {
                 var set_data = {
-                    zone_id: row.zone_id,
+                    product_type_id: row.product_type_id,
                     // member_code: this.props.member.member_code
                 }
-                var res = await zone_model.deleteZoneByCode(set_data);
+                var res = await product_type_model.deleteProductTypeByCode(set_data);
                 if (res.query_result) {
                     swal("Poof! Your imaginary file has been deleted!", {
                         icon: "success",
@@ -74,42 +59,44 @@ class ZoneView extends Component {
     cellButton(cell, row, enumObject, rowIndex) {
         return (
             <>
-                <button class="btn btn-warning" onClick={() => this.onClickZoneUpdate(cell, row, rowIndex)}>Edit</button >
+                <button class="btn btn-warning" onClick={() => this.onClickProductUpdate(cell, row, rowIndex)}>Edit</button >
                 <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>Delete</button>
             </>
         )
     }
     async componentDidMount() {
-        const zone_list = await zone_model.getZoneBy();
-        const data_zone_list = {
+        const product_type_list = await product_type_model.getProductTypeBy();
+        const data_product_type_list = {
             rows: []
         }
         var i = 1;
         // for(var x=0;x<10;x++)
-        for (var key in zone_list.data) {
+        for (var key in product_type_list.data) {
             var set_row = {
                 no: i,
-                name: zone_list.data[key].zone_name,
-                zone_id: zone_list.data[key].zone_id,
+                name: product_type_list.data[key].product_type_name,
+                product_type_id: product_type_list.data[key].product_type_id,
             }
-            data_zone_list.rows.push(set_row);
+            data_product_type_list.rows.push(set_row);
             i++;
         }
         this.setState({
-            data: data_zone_list
+            data: data_product_type_list
         });
 
-        // console.log("69+++", data_zone_list);
+        // console.log("69+++", data_product_type_list);
     }
     render() {
         const { data } = this.state;
         return (
             <div className="animated fadeIn">
+                <h2>ProductType</h2>
+                <hr />
                 <Row>
                     <Col lg='12'>
                         <Card>
                             <CardHeader>
-                                ZONE
+                                ProductType List
                                 <ModalInsert refresh={() => this.componentDidMount()} />
                             </CardHeader>
                             <CardBody>
@@ -118,7 +105,6 @@ class ZoneView extends Component {
                                         <div>
                                             <BootstrapTable
                                                 ref='table'
-                                                options={ options }
                                                 data={data.rows}
                                                 striped hover pagination
                                                 search={true}>
@@ -136,7 +122,7 @@ class ZoneView extends Component {
                         <ModalEdit
                             refresh={() => { this.setState({ show_update_model: false, refresh: !this.setState.refresh }); this.componentDidMount(); }}
                             show_update_model={this.state.show_update_model}
-                            zone_id={this.state.zone_id}
+                            product_type_id={this.state.product_type_id}
                         /> : <></>
                     }
                 </Row>
@@ -149,5 +135,5 @@ class ZoneView extends Component {
 //         member: state.member,
 //     }
 // }
-// export default connect(mapStatetoProps)(PositionView);
-export default (ZoneView);
+// export default connect(mapStatetoProps)(ProductTypeView);
+export default (ProductTypeView);

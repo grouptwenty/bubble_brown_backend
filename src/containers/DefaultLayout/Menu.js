@@ -79,6 +79,10 @@ export default class MenuComponent {
                         url: '/tap-manage/menu_type',
                     },
                     {
+                        name: 'แท็บประเภทสินค้า',
+                        url: '/tap-manage/product_type',
+                    },
+                    {
                         name: 'แท็บโซน',
                         url: '/tap-manage/zone',
                     },

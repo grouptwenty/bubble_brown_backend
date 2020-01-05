@@ -98,7 +98,7 @@ class EditMenuTypeModal extends Component {
     return (
       <>
         <Modal
-          size="xl"
+          size="sm"
           style={{ marginTop: "8%", marginBottom: "8%" }}
           show={this.state.show_update_model}
         >
@@ -123,8 +123,8 @@ class EditMenuTypeModal extends Component {
 
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" size="sm" color="primary">Save</Button>
-              <Button variant="secondary" size="sm" onClick={this.handleClose}>
+              <Button type="submit" size="md" color="primary">Save</Button>
+              <Button variant="secondary" size="md" onClick={this.handleClose}>
                 Close
           </Button>
             </Modal.Footer>

@@ -7,6 +7,7 @@ import axios, { post } from 'axios';
 import { Modal } from 'react-bootstrap';
 import swal from 'sweetalert';
 import PromotionModel from '../../models/PromotionModel';
+import MenuTypeModel from '../../models/MenuTypeModel'
 import ImgDefault from '../../assets/img/img_default.png'
 import UploadModel from '../../models/UploadModel';
 import GOBALS from '../../GOBALS';
@@ -15,12 +16,8 @@ import { formatDate, parseDate, } from 'react-day-picker/moment';
 import moment from 'moment'
 import 'react-day-picker/lib/style.css';
 var promotion_model = new PromotionModel();
+const menu_type_model = new MenuTypeModel
 var upload_model = new UploadModel();
-const type = [
-    { value: 'MNT01', label: 'เครื่องดื่ม' },
-    { value: 'MNT02', label: 'อาหาร' },
-    { value: 'MNT03', label: 'เบเกอร์รี่' },
-];
 const promotion_type = [
     { value: 'เปอร์เซ็น', label: 'เปอร์เซ็น' },
     { value: 'ส่วนลด', label: 'ส่วนลด' },
@@ -44,6 +41,7 @@ class HomeView extends Component {
         this.goBack = this.goBack.bind(this);
         this.handleDayChangestart = this.handleDayChangestart.bind(this);
         this.handleDayChangeend = this.handleDayChangeend.bind(this);
+        this.renderMenuType = this.renderMenuType.bind(this);
     }
 
     goBack() {
@@ -83,6 +81,13 @@ class HomeView extends Component {
             }
             reader.readAsDataURL(file)
         }
+    }
+
+    async componentDidMount() {
+        const menu_type = await menu_type_model.getMenuTypeBy();
+        this.setState({
+            menu_type: menu_type.data
+        })
     }
 
     async fileUpload(file, page, _code) {
@@ -169,9 +174,19 @@ class HomeView extends Component {
             });
         }
     }
-    async componentDidMount() {
 
+    renderMenuType() {
+
+        let menutype = []
+        for (let i = 0; i < this.state.menu_type.length; i++) {
+            menutype.push(
+                <option value={this.state.menu_type[i].menu_type_id}>{this.state.menu_type[i].menu_type_name}</option>
+            )
+
+        }
+        return menutype;
     }
+
     render() {
 
         let { imagePreviewUrl } = this.state;
@@ -217,7 +232,10 @@ class HomeView extends Component {
                                                     ประเภท :
                                                     </Col>
                                                 <Col lg="5" md="5" sm="5">
-                                                    <Select options={type} name={"menu_type_id"} required />
+                                                    <Input type="select" id="menu_type_id" name="menu_type_id" class="form-control" >
+                                                        <option value="">Select</option>
+                                                        {this.renderMenuType()}
+                                                    </Input>
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>

@@ -96,7 +96,8 @@ class insertView extends Component {
         // menu_type_code = menu_type_code.replace('MNT', "")
         var menu_code = 'MN0' + menu_type_id + max_code.data.menu_code_max
 
-        // console.log(menu_code);
+        console.log(max_code);
+        console.log(menu_code);
 
 
         for (let name of data.keys()) {

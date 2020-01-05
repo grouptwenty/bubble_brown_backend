@@ -84,20 +84,20 @@ class InsertZoneModal extends Component {
     return (
       <>
         <Modal
-          size="xl"
+          size="sm"
           style={{ marginTop: "8%", marginBottom: "8%" }}
           show={this.state.show}
         >
           <Form onSubmit={this.SaveZone} id="myForm">
             <Modal.Header closeButton>
-              <Modal.Title>Add Zone</Modal.Title>
+              <Modal.Title>เพิ่มโซน</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Col xs="12" sm="12">
                 <FormGroup row className="my-0">
                   <Col xs="12" sm="12">
                     <FormGroup>
-                      <Label for="zone_name">Zone :</Label>
+                      <Label for="zone_name">โซน :</Label>
                       <Input valid={this.state.zone_validate == "VALID"} invalid={this.state.zone_validate == "INVALID"} name="zone_name" id="zone_name" onChange={(e) => { this.onZoneChange(e) }} placeholder="Professor" required />
                       <FormFeedback valid >You can use this name.</FormFeedback>
                       <FormFeedback invalid >{this.state.zone_validate_text}</FormFeedback>
@@ -108,14 +108,14 @@ class InsertZoneModal extends Component {
               </Col>
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" className="btn-success" color="primary">Save</Button>
+              <Button type="submit" className="btn-success btn-md" color="primary">บันทึก</Button>
               <Button variant="secondary" onClick={this.handleClose}>
-                Close
+              ยกเลิก
           </Button>
             </Modal.Footer>
           </Form>
         </Modal>
-        <button class="btn float-right btn-success" onClick={this.handleShow}><i class="fa fa-plus"></i> Add</button>
+        <button class="btn float-right btn-success btn-md" onClick={this.handleShow}><i class="fa fa-plus"></i> เพิ่ม</button>
       </>
     )
   }
