@@ -91,10 +91,10 @@ class insertView extends Component {
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime()
         var arr = {};
-        var menu_type_code = document.getElementById("menu_type_code").value
-        const max_code = await menu_model.getMenuMaxCode(menu_type_code)
-        menu_type_code = menu_type_code.replace('MNT', "")
-        var menu_code = 'MN' + menu_type_code + max_code.data.menu_code_max
+        var menu_type_id = document.getElementById("menu_type_id").value
+        const max_code = await menu_model.getMenuMaxCode(menu_type_id)
+        // menu_type_code = menu_type_code.replace('MNT', "")
+        var menu_code = 'MN0' + menu_type_id + max_code.data.menu_code_max
 
         // console.log(menu_code);
 
@@ -126,7 +126,7 @@ class insertView extends Component {
 
     check(form) {
 
-        if (form.menu_type_code == '') {
+        if (form.menu_type_id == '') {
             swal({
                 text: "กรุณาเลือก ประเภท",
                 icon: "warning",
@@ -165,7 +165,7 @@ class insertView extends Component {
         let menutype = []
         for (let i = 0; i < this.state.menu_type.length; i++) {
             menutype.push(
-                <option value={this.state.menu_type[i].menu_type_code}>{this.state.menu_type[i].menu_type_name}</option>
+                <option value={this.state.menu_type[i].menu_type_id}>{this.state.menu_type[i].menu_type_name}</option>
             )
 
         }
@@ -216,7 +216,7 @@ class insertView extends Component {
                                                 <Col lg="12">
                                                     <FormGroup >
                                                         <Label className="text_head"> ประเภท <font color='red'><b> * </b></font></Label>
-                                                        <Input type="select" id="menu_type_code" name="menu_type_code" class="form-control" >
+                                                        <Input type="select" id="menu_type_id" name="menu_type_id" class="form-control" >
                                                             <option value="">Select</option>
                                                             {this.renderMenu()}
                                                         </Input>

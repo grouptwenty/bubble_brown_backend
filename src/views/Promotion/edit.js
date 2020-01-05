@@ -139,7 +139,7 @@ class HomeView extends Component {
                 'updateby': '1',
                 'promotion_header': form.elements['promotion_header'].value,
                 'promotion_detail': form.elements['promotion_detail'].value,
-                'menu_type_code': form.elements['menu_type_code'].value,
+                'menu_type_id': form.elements['menu_type_id'].value,
                 'discount_code': form.elements['discount_code'].value,
                 'promotion_type': form.elements['promotion_type'].value,
                 'discount_percent': form.elements['number'].value,
@@ -168,7 +168,7 @@ class HomeView extends Component {
                 'updateby': '1',
                 'promotion_header': form.elements['promotion_header'].value,
                 'promotion_detail': form.elements['promotion_detail'].value,
-                'menu_type_code': form.elements['menu_type_code'].value,
+                'menu_type_id': form.elements['menu_type_id'].value,
                 'discount_code': form.elements['discount_code'].value,
                 'promotion_type': form.elements['promotion_type'].value,
                 'discount_percent': "",
@@ -265,8 +265,8 @@ class HomeView extends Component {
                                                     ประเภท :
                                                     </Col>
                                                 <Col lg="5" md="5" sm="5">
-                                                    {this.state.promotion.menu_type_code ?
-                                                        <Select options={type} value={{ value: this.state.promotion.menu_type_code, label: this.state.promotion.menu_type_code }} name={"menu_type_code"} />
+                                                    {this.state.promotion.menu_type_id ?
+                                                        <Select options={type} value={{ value: this.state.promotion.menu_type_id, label: this.state.promotion.menu_type_id }} name={"menu_type_id"} />
                                                         : null}
                                                 </Col>
                                                 <Col lg="5" md="5" sm="5">

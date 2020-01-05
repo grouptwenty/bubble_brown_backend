@@ -107,7 +107,7 @@ class editView extends Component {
         // console.log(data.menu_code)
         document.getElementById('menu_code').value = data.menu_code
         // document.getElementById('menu_id').value = data.menu_id
-        document.getElementById('menu_type_code').value = data.menu_type_code
+        document.getElementById('menu_type_id').value = data.menu_type_id
         document.getElementById('menu_name').value = data.menu_name
         // document.getElementById('menu_image').value = data.menu_image
         document.getElementById('menu_price').value = data.menu_price
@@ -160,7 +160,7 @@ class editView extends Component {
 
     check(form) {
 
-        if (form.menu_type_code == '') {
+        if (form.menu_type_id == '') {
             swal({
                 text: "กรุณาเลือก ประเภท",
                 icon: "warning",
@@ -198,7 +198,7 @@ class editView extends Component {
         let menutype = []
         for (let i = 0; i < this.state.menu_type.length; i++) {
             menutype.push(
-                <option value={this.state.menu_type[i].menu_type_code}>{this.state.menu_type[i].menu_type_name}</option>
+                <option value={this.state.menu_type[i].menu_type_id}>{this.state.menu_type[i].menu_type_name}</option>
             )
 
         }
@@ -259,7 +259,7 @@ class editView extends Component {
                                                         <Col lg="12">
                                                             <FormGroup >
                                                                 <Label className="text_head"> ประเภท <font color='red'><b> * </b></font></Label>
-                                                                <Input type="select" id="menu_type_code" name="menu_type_code" class="form-control" >
+                                                                <Input type="select" id="menu_type_id" name="menu_type_id" class="form-control" >
                                                                     <option value="">Select</option>
                                                                     {this.renderMenu()}
                                                                 </Input>

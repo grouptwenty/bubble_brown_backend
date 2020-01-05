@@ -122,7 +122,7 @@ class HomeView extends Component {
                 'addby': '1',
                 'promotion_header': form.elements['promotion_header'].value,
                 'promotion_detail': form.elements['promotion_detail'].value,
-                'menu_type_code': form.elements['menu_type_code'].value,
+                'menu_type_id': form.elements['menu_type_id'].value,
                 'discount_code': form.elements['discount_code'].value,
                 'promotion_type': form.elements['promotion_type'].value,
                 'discount_percent': form.elements['number'].value,
@@ -136,7 +136,7 @@ class HomeView extends Component {
                 'addby': '1',
                 'promotion_header': form.elements['promotion_header'].value,
                 'promotion_detail': form.elements['promotion_detail'].value,
-                'menu_type_code': form.elements['menu_type_code'].value,
+                'menu_type_id': form.elements['menu_type_id'].value,
                 'discount_code': form.elements['discount_code'].value,
                 'promotion_type': form.elements['promotion_type'].value,
                 'discount_price': form.elements['number'].value,
@@ -217,7 +217,7 @@ class HomeView extends Component {
                                                     ประเภท :
                                                     </Col>
                                                 <Col lg="5" md="5" sm="5">
-                                                    <Select options={type} name={"menu_type_code"} required />
+                                                    <Select options={type} name={"menu_type_id"} required />
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>

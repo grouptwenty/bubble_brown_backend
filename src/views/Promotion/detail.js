@@ -109,7 +109,7 @@ class HomeView extends Component {
                                                     ประเภท :
                                                     </Col>
                                                 <Col lg="10" md="10" sm="10">
-                                                    <label>{this.state.promotion.menu_type_code}</label>
+                                                    <label>{this.state.promotion.menu_type_id}</label>
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>

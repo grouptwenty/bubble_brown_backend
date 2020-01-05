@@ -23,7 +23,7 @@ class MenutypeView extends Component {
         console.log('rowIndex', rowIndex);
         this.setState({
             show_update_model: true,
-            menu_type_code: row.menu_type_code,
+            menu_type_id: row.menu_type_id,
         })
     }
     onClickDelete(cell, row, rowIndex) {
@@ -37,7 +37,7 @@ class MenutypeView extends Component {
         }).then(async (willDelete) => {
             if (willDelete) {
                 var set_data = {
-                    menu_type_code: row.menu_type_code,
+                    menu_type_id: row.menu_type_id,
                     // member_code: this.props.member.member_code
                 }
                 var res = await menu_type_model.deletePosition(set_data);
@@ -75,7 +75,7 @@ class MenutypeView extends Component {
             var set_row = {
                 no: i,
                 name: position_list.data[key].position_name,
-                menu_type_code: position_list.data[key].menu_type_code,
+                menu_type_id: position_list.data[key].menu_type_id,
             }
             data_position_list.rows.push(set_row);
             i++;
@@ -122,7 +122,7 @@ class MenutypeView extends Component {
                         <ModalEdit
                             refresh={() => { this.setState({ show_update_model: false, refresh: !this.setState.refresh }); this.componentDidMount(); }}
                             show_update_model={this.state.show_update_model}
-                            menu_type_code={this.state.menu_type_code}
+                            menu_type_id={this.state.menu_type_id}
                         /> : <></>
                     }
                 </Row>
