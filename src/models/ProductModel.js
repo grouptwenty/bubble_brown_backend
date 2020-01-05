@@ -55,7 +55,7 @@ export default class ProductModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ product_type_code: data })
+            body: JSON.stringify({ product_type_id: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 

@@ -60,7 +60,7 @@ console.log(product.data);
         document.getElementById('product_code').value = data.product_code
         document.getElementById('product_name').value = data.product_name
         document.getElementById('unit_id').value = data.unit_id
-        document.getElementById('product_type_code').value = data.product_type_code
+        document.getElementById('product_type__id').value = data.product_type__id
         document.getElementById('product_minimum').value = data.product_minimum
 
     }
@@ -75,12 +75,12 @@ console.log(product.data);
         for (let name of data.keys()) {
             arr[name] = form.elements[name.toString()].value;
         }
-        // var product_type_code = document.getElementById("product_type_code").value
-        // // console.log("product_type_code",product_type_code);
-        // const max_code = await product_model.getProductMaxCode(product_type_code)
+        // var product_type__id = document.getElementById("product_type__id").value
+        // // console.log("product_type__id",product_type__id);
+        // const max_code = await product_model.getProductMaxCode(product_type__id)
         // // console.log("max_code",max_code);
-        // product_type_code = product_type_code.replace('PTY0',"")
-        // var product_code = 'PT' + product_type_code + max_code.data.product_code_max
+        // product_type__id = product_type__id.replace('PTY0',"")
+        // var product_code = 'PT' + product_type__id + max_code.data.product_code_max
         // // console.log("product_code",product_code);
         
         // arr['product_code'] = product_code
@@ -143,7 +143,7 @@ console.log(product.data);
         let type = []
         for (let i = 0; i < this.state.product_type.length; i++) {
             type.push(
-                <option value={this.state.product_type[i].product_type_code}>{this.state.product_type[i].product_type_name}</option>
+                <option value={this.state.product_type[i].product_type__id}>{this.state.product_type[i].product_type_name}</option>
             )
 
         }
@@ -194,7 +194,7 @@ console.log(product.data);
                                         <Row>
                                             <Col lg="6">
                                                 <Label className="text_head"> ประเภทสินค้า <font color='red'><b> * </b></font></Label>
-                                                <Input type="select" id="product_type_code" name="product_type_code" class="form-control" >
+                                                <Input type="select" id="product_type__id" name="product_type__id" class="form-control" >
                                                     <option value="">Select</option>
                                                     {this.renderType()}
                                                 </Input>
