@@ -12,10 +12,12 @@ const Customer = React.lazy(() => import('./views/Customer'))
 const User = React.lazy(() => import('./views/User'))
 const Menu = React.lazy(() => import('./views/Menu'))
 const Booking = React.lazy(() => import('./views/Booking'));
-const Report = React.lazy(() => import('./views/Report'));
+const ReportSale = React.lazy(() => import('./views/Report/ReportSale'));
+const ReportBestSale = React.lazy(() => import('./views/Report/ReportBestSale'));
 const Menutype = React.lazy(() => import('./views/Tapmanage/Menutype'));
 const Producttype = React.lazy(() => import('./views/Tapmanage/Producttype'));
 const Zone = React.lazy(() => import('./views/Tapmanage/Zone'));
+
 
 
 
@@ -36,7 +38,7 @@ const routes = [
     { path: '/user/', name: 'User', component: User },
     { path: '/menu/', name: 'Menu', component: Menu },
     { path: '/booking/', name: 'Booking', component: Booking },
-    { path: '/dashboard/', name: 'Report', component: Report },
-
+    { path: '/report/report_sale/', name: 'ReportSale', component: ReportSale },
+    { path: '/report/report_best_sale/', name: 'ReportBestSale', component: ReportBestSale },
 ]
 export default routes;

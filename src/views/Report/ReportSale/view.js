@@ -77,12 +77,12 @@ class ReportSaleView extends Component {
         this.handleDayChange = this.handleDayChange.bind(this);
         this.handleMonthChange = this.handleMonthChange.bind(this);
         this.handleYearChange = this.handleYearChange.bind(this);
-        // this.handleYearMonthChange = this.handleYearMonthChange.bind(this);
+        this.handleYearMonthChange = this.handleYearMonthChange.bind(this);
     }
 
-    // handleYearMonthChange(month) {
-    //     this.setState({ month });
-    // }
+    handleYearMonthChange(month) {
+        this.setState({ month });
+    }
 
     async handleDayChange(date) {
 

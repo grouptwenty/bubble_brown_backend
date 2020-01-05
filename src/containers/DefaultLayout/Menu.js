@@ -116,9 +116,27 @@ export default class MenuComponent {
 
             {
                 name: 'รายงาน',
-                url: '/dashboard/',
+                url: '/report/',
                 icon: 'icon-pencil',
-            },
+                children: [
+                    {
+                        name: 'รายงานยอดขาย',
+                        url: '/report/report_sale',
+                    },
+                    {
+                        name: 'รายงานสินค้าขายดี',
+                        url: '/report/report_best_sale/',
+                    },
+                    // {
+                    //     name: 'สต๊อกเข้า',
+                    //     url: '/product-manage/stock-in',
+                    // },
+                    // {
+                    //     name: 'สต๊อกออก',
+                    //     // url: '/product-manage/stock-out',
+                    // },
+                ],
+            }
             // {
 
             // {
