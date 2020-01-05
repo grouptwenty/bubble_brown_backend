@@ -7,7 +7,7 @@ import swal from 'sweetalert';
 import MenuTypeModel from '../../../models/MenuTypeModel';
 var menu_type_model = new MenuTypeModel;
 
-class EditPositionModal extends Component {
+class EditMenuTypeModal extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -17,22 +17,16 @@ class EditPositionModal extends Component {
     }
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.SavePosition = this.SavePosition.bind(this);
-    this.handleMultiChange = this.handleMultiChange.bind(this);
+    this.SaveMenuType = this.SaveMenuType.bind(this);
   }
   async componentDidMount() {
-    const position = await menu_type_model.getPositionByCol({ 'position_code': this.props.position_code });
-    // console.log('work_special_holiday', work_special_holiday);
-    console.log("xxss>>>", position)
+    const menu_type = await menu_type_model.getMenuTypeByCol({ 'menu_type_id': this.props.menu_type_id });
+    console.log("xxss>>>", menu_type)
 
     this.setState({
       show_update_model: this.props.show_update_model,
-      position_name: position.data[0].position_name,
-      position_code: position.data[0].position_code
-      // work_special_holiday_id: this.props.work_special_holiday_id,
-      // work_special_holiday: work_special_holiday[0],
-      // work_special_holiday_day_start: work_special_holiday[0].work_special_holiday_day_start,
-      // work_special_holiday_day_end: work_special_holiday[0].work_special_holiday_day_end
+      menu_type_name: menu_type.data[0].menu_type_name,
+      menu_type_id: menu_type.data[0].menu_type_id
     })
   }
   handleClose() {
@@ -42,8 +36,8 @@ class EditPositionModal extends Component {
   handleShow() {
     this.setState({ show: true });
   }
-  async SavePosition(event) {
-    if (this.state.position_validate == 'INVALID') {
+  async SaveMenuType(event) {
+    if (this.state.menu_type_validate == 'INVALID') {
       swal("This name already exists.", {
         icon: "error",
       });
@@ -54,19 +48,19 @@ class EditPositionModal extends Component {
       // const data = new FormData(form);
       var arr = {};
 
-      arr['position_name'] = form.elements['position_name'].value;
-      arr['position_code'] = this.state.position_code;
+      arr['menu_type_name'] = form.elements['menu_type_name'].value;
+      arr['menu_type_id'] = this.state.menu_type_id;
       var data_set = {
-        position_name: arr['position_name'],
+        menu_type_name: arr['menu_type_name'],
       };
-      var data_where = { position_code: arr['position_code'] };
+      var data_where = { menu_type_id: arr['menu_type_id'] };
       // console.log("xxx",data)
       console.log("xxx", arr)
-      var res = await menu_type_model.updatePosition(data_set, data_where);
+      var res = await menu_type_model.updateMenuType(data_set, data_where);
       if (res.query_result) {
         swal({
           title: "Good job!",
-          text: "Insert Position  Ok",
+          text: "Insert MenuType  Ok",
           icon: "success",
           button: "Close",
         });
@@ -74,28 +68,28 @@ class EditPositionModal extends Component {
       } else {
         swal({
           title: "Error !",
-          text: "Insert Position Error ",
+          text: "Insert MenuType Error ",
           icon: "error",
           button: "Close",
         });
       }
     }
   }
-  onPositionChange(event) {
-    const position_name = event.target.value;
-    menu_type_model.getPositionByCol({ 'position_name': position_name }).then((responseJson) => {
-      console.log('Positionnnn', responseJson);
+  onMenuTypeChange(event) {
+    const menu_type_name = event.target.value;
+    menu_type_model.getMenuTypeByCol({ 'menu_type_name': menu_type_name }).then((responseJson) => {
+      console.log('MenuTypennn', responseJson);
       if (responseJson.data.length == 0) {
         this.setState({
-          position_validate: "VALID",
+          menu_type_validate: "VALID",
         })
-        console.log("VALID : ", position_name);
+        console.log("VALID : ", menu_type_name);
       } else {
         this.setState({
-          position_validate: "INVALID",
-          position_validate_text: "This name already exists.",
+          menu_type_validate: "INVALID",
+          menu_type_validate_text: "This name already exists.",
         })
-        console.log("INVALID : ", position_name);
+        console.log("INVALID : ", menu_type_name);
       }
       this.render();
     });
@@ -108,19 +102,19 @@ class EditPositionModal extends Component {
           style={{ marginTop: "8%", marginBottom: "8%" }}
           show={this.state.show_update_model}
         >
-          <Form onSubmit={this.SavePosition} id="myForm">
+          <Form onSubmit={this.SaveMenuType} id="myForm">
             <Modal.Header closeButton>
-              <Modal.Title>Edit Position</Modal.Title>
+              <Modal.Title>Edit MenuType</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Col xs="12" sm="12">
                 <FormGroup row className="my-0">
                   <Col xs="12" sm="12">
                     <FormGroup>
-                      <Label for="position_name">Position :</Label>
-                      <Input valid={this.state.position_validate == "VALID"} invalid={this.state.position_validate == "INVALID"} name="position_name" id="position_name" defaultValue={this.state.position_name} onChange={(e) => { this.onPositionChange(e) }} placeholder="Professor" required />
+                      <Label for="menu_type_name">MenuType :</Label>
+                      <Input valid={this.state.menu_type_validate == "VALID"} invalid={this.state.menu_type_validate == "INVALID"} name="menu_type_name" id="menu_type_name" defaultValue={this.state.menu_type_name} onChange={(e) => { this.onMenuTypeChange(e) }} placeholder="Professor" required />
                       <FormFeedback valid >You can use this name.</FormFeedback>
-                      <FormFeedback invalid >{this.state.position_validate_text}</FormFeedback>
+                      <FormFeedback invalid >{this.state.menu_type_validate_text}</FormFeedback>
                       <FormText>Example: Professor</FormText>
                     </FormGroup>
                   </Col>
@@ -144,28 +138,9 @@ class EditPositionModal extends Component {
       </>
     )
   }
-
-  handleDayChangeStart(date) {
-    this.setState({
-      work_special_holiday_day_start: date
-    });
-  }
-  handleDayChangeEnd(date) {
-    this.setState({
-      work_special_holiday_day_end: date
-    });
-  }
-
-  handleMultiChange(option) {
-    this.setState(state => {
-      return {
-        multiValue: option
-      };
-    });
-  }
 }
 
-export default (EditPositionModal);
+export default (EditMenuTypeModal);
 
 
 

@@ -40,7 +40,7 @@ class MenutypeView extends Component {
                     menu_type_id: row.menu_type_id,
                     // member_code: this.props.member.member_code
                 }
-                var res = await menu_type_model.deletePosition(set_data);
+                var res = await menu_type_model.deleteMenuTypeByCode(set_data);
                 if (res.query_result) {
                     swal("Poof! Your imaginary file has been deleted!", {
                         icon: "success",
@@ -65,38 +65,38 @@ class MenutypeView extends Component {
         )
     }
     async componentDidMount() {
-        const position_list = await menu_type_model.getPositionBy();
-        const data_position_list = {
+        const menu_type_list = await menu_type_model.getMenuTypeBy();
+        const data_menu_type_list = {
             rows: []
         }
         var i = 1;
         // for(var x=0;x<10;x++)
-        for (var key in position_list.data) {
+        for (var key in menu_type_list.data) {
             var set_row = {
                 no: i,
-                name: position_list.data[key].position_name,
-                menu_type_id: position_list.data[key].menu_type_id,
+                name: menu_type_list.data[key].menu_type_name,
+                menu_type_id: menu_type_list.data[key].menu_type_id,
             }
-            data_position_list.rows.push(set_row);
+            data_menu_type_list.rows.push(set_row);
             i++;
         }
         this.setState({
-            data: data_position_list
+            data: data_menu_type_list
         });
 
-        // console.log("69+++", data_position_list);
+        // console.log("69+++", data_menu_type_list);
     }
     render() {
         const { data } = this.state;
         return (
             <div className="animated fadeIn">
-                <h2>Position</h2>
+                <h2>MenuType</h2>
                 <hr />
                 <Row>
                     <Col lg='12'>
                         <Card>
                             <CardHeader>
-                                Position List
+                                MenuType List
                                 <ModalInsert refresh={() => this.componentDidMount()} />
                             </CardHeader>
                             <CardBody>

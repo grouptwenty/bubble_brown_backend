@@ -18,7 +18,6 @@ class InsertZoneModal extends Component {
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.SaveZone = this.SaveZone.bind(this);
-    this.handleMultiChange = this.handleMultiChange.bind(this);
   }
   async componentDidMount() {
 
@@ -119,25 +118,6 @@ class InsertZoneModal extends Component {
         <button class="btn float-right btn-success" onClick={this.handleShow}><i class="fa fa-plus"></i> Add</button>
       </>
     )
-  }
-
-  // handleDayChangeStart(date) {
-  //   this.setState({
-  //     work_special_holiday_day_start: date
-  //   });
-  // }
-  // handleDayChangeEnd(date) {
-  //   this.setState({
-  //     work_special_holiday_day_end: date
-  //   });
-  // }
-
-  handleMultiChange(option) {
-    this.setState(state => {
-      return {
-        multiValue: option
-      };
-    });
   }
 }
 // const mapStatetoProps = (state) => {
