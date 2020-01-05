@@ -1,3 +1,4 @@
+
 import React, { Component, useState } from 'react';
 import { Nav, NavItem, Table, TabContent, TabPane, Col, Row, CardHeader, Card, Input, CardText, CardBody, CardTitle, Button, Label, FormGroup, Form, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link, NavLink } from 'react-router-dom';
@@ -120,10 +121,12 @@ class BillView extends Component {
 
     async onBillDetail(order_code) {
         var order_list = await orderlist_model.getOrderListBy(order_code)
+        var order_Bycode = await order_model.getOrderByCode(order_code)
 
         this.setState({
             order_list: order_list.data,
-            order_code_list: order_code
+            order_code_list: order_code,
+            order_Bycode: order_Bycode.data,
         })
 
         this.toggle_Bill()
@@ -163,8 +166,8 @@ class BillView extends Component {
     async confirm(check_bill) {
 
         // console.log(Number(this.state.recive) - Number(this.state.charge));
-        
-        if (Number(this.state.recive) - Number(check_bill.order_total_price) >= 0) {
+
+        if (Number(this.state.recive) - Number(check_bill.amount) >= 0) {
             Swal.fire({
                 title: 'ต้องการชำระเงิน ?',
                 icon: 'question',
@@ -200,7 +203,7 @@ class BillView extends Component {
         console.log("check_bill====>", check_bill);
 
         var payment = {
-            payment_sum: check_bill.order_total_price,
+            payment_sum: check_bill.amount,
             order_code: check_bill.order_code,
             payment_money_received: this.state.recive,
             payment_change: this.state.charge
@@ -258,9 +261,9 @@ class BillView extends Component {
             cancelButtonText: 'กลับ'
         }).then((result) => {
             if (result.value) {
-                
+
                 this.updateConfirmOrder(bill_order.order_code)
-                
+
             }
             // this.componentDidMount()
         })
@@ -332,7 +335,7 @@ class BillView extends Component {
                                 </Col>
                                 <Col sm="6">
                                     <CardTitle style={{ textAlign: 'center', fontSize: '18px' }}>
-                                        <label>{this.state.bill_order[i].order_total_price}</label> <i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }}></i>
+                                        <label>{this.state.bill_order[i].amount}</label> <i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }}></i>
                                     </CardTitle>
                                 </Col>
                             </Row>
@@ -502,6 +505,33 @@ class BillView extends Component {
                         </Row>
                         <br />
                         {this.renderOrderList()}
+                        <br />
+                        <Row>
+                            <Col lg="2">
+                                <Label  className="text_head"> ส่วนลด :  </Label>
+                            </Col>
+                            <Col lg="6" >
+                                <Label  className="text_head"> {this.state.order_Bycode.promotion_header} </Label>
+                            </Col>
+                            <Col lg="4"style={{ textAlign: 'center' }} >
+                                <Label className="text_head"> {this.state.order_Bycode.discount_percent} {this.state.order_Bycode.discount_price} </Label>
+
+                            </Col>
+
+                        </Row>
+                        <Row>
+                            <Col lg="2">
+                                <Label  className="text_head"> รวม </Label>
+                            </Col>
+                            <Col lg="6">
+                               
+                            </Col>
+                            <Col lg="4" style={{ textAlign: 'center' }}>
+                                <Label className="text_head"> {this.state.order_Bycode.amount} </Label>
+
+                            </Col>
+
+                        </Row>
                     </ModalBody>
                     <ModalFooter>
                         <Button color="secondary" onClick={this.toggle_Bill} style={{ width: 100, height: 40 }}>กลับ</Button>
@@ -524,7 +554,6 @@ class BillView extends Component {
         var add_table = {
             table_code: table_code,
             table_name: table_name,
-            table_amount: table_amount,
             table_amount: table_amount,
             zone_id: zone_id
         }
@@ -815,13 +844,13 @@ class BillView extends Component {
 
     calculate() {
         var sum = 0
-        sum = Number(this.state.recive) - Number(this.state.check_bill.order_total_price)
+        sum = Number(this.state.recive) - Number(this.state.check_bill.amount)
         this.setState({
             charge: Number(sum.toString().replace(/,/g, ''))
         });
 
         console.log("this.state.recive", this.state.recive);
-        console.log("this.state.order_total_price", this.state.check_bill.order_total_price);
+        console.log("this.state.amount", this.state.check_bill.amount);
 
     }
 
@@ -924,7 +953,7 @@ class BillView extends Component {
                                         </Col>
 
                                         <Col lg="6" style={{ textAlign: 'end' }}>
-                                            <h3 style={{ fontSize: '18px' }}><i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }} /> {Number(this.state.check_bill.order_total_price).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")} </h3>
+                                            <h3 style={{ fontSize: '18px' }}><i class="fa fa-btc" aria-hidden="true" style={{ color: '#515A5A', fontSize: '18px' }} /> {Number(this.state.check_bill.amount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")} </h3>
                                         </Col>
                                     </Row>
                                 </Card>
@@ -1097,7 +1126,7 @@ class ComponentToPrint extends React.Component {
 
                         <tr>
                             <th style={{ fontSize: '26pt', fontFamily: 'Kanit-Light' }}>ยอดรวม</th>
-                            <td style={{ fontSize: '26pt', fontFamily: 'Kanit-Light' }}>{Number(this.props.print_order.order_total_price).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                            <td style={{ fontSize: '26pt', fontFamily: 'Kanit-Light' }}>{Number(this.props.print_order.amount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
 
                         </tr>
                         <tr>
