@@ -21,6 +21,7 @@ var upload_model = new UploadModel();
 const promotion_type = [
     { value: 'เปอร์เซ็น', label: 'เปอร์เซ็น' },
     { value: 'ส่วนลด', label: 'ส่วนลด' },
+    { value: 'แถม', label: 'แถม' },
 ];
 var today = new Date();
 class HomeView extends Component {
@@ -131,6 +132,8 @@ class HomeView extends Component {
                 'discount_code': form.elements['discount_code'].value,
                 'promotion_type': form.elements['promotion_type'].value,
                 'discount_percent': form.elements['number'].value,
+                'discount_giveaway': "",
+                'discount_giveaway_buy': "",
                 'discount_price': "",
                 'startdate': this.state.startdate,
                 'enddate': this.state.enddate
@@ -144,7 +147,25 @@ class HomeView extends Component {
                 'menu_type_id': form.elements['menu_type_id'].value,
                 'discount_code': form.elements['discount_code'].value,
                 'promotion_type': form.elements['promotion_type'].value,
+                'discount_giveaway': "",
+                'discount_giveaway_buy': "",
                 'discount_price': form.elements['number'].value,
+                'discount_percent': "",
+                'startdate': this.state.startdate,
+                'enddate': this.state.enddate
+            }
+        }
+        if (type == "แถม") {
+            arr = {
+                'addby': '1',
+                'promotion_header': form.elements['promotion_header'].value,
+                'promotion_detail': form.elements['promotion_detail'].value,
+                'menu_type_id': form.elements['menu_type_id'].value,
+                'discount_code': form.elements['discount_code'].value,
+                'promotion_type': form.elements['promotion_type'].value,
+                'discount_giveaway': form.elements['discount_giveaway'].value,
+                'discount_giveaway_buy': form.elements['discount_giveaway_buy'].value,
+                'discount_price': "",
                 'discount_percent': "",
                 'startdate': this.state.startdate,
                 'enddate': this.state.enddate
@@ -176,15 +197,17 @@ class HomeView extends Component {
     }
 
     renderMenuType() {
+        if (this.state.menu_type != undefined) {
+            let menutype = []
 
-        let menutype = []
-        for (let i = 0; i < this.state.menu_type.length; i++) {
-            menutype.push(
-                <option value={this.state.menu_type[i].menu_type_id}>{this.state.menu_type[i].menu_type_name}</option>
-            )
+            for (let i = 0; i < this.state.menu_type.length; i++) {
+                menutype.push(
+                    <option value={this.state.menu_type[i].menu_type_id}>{this.state.menu_type[i].menu_type_name}</option>
+                )
 
+            }
+            return menutype;
         }
-        return menutype;
     }
 
     render() {
@@ -259,7 +282,23 @@ class HomeView extends Component {
                                                     จำนวน :
                                                     </Col>
                                                 <Col lg="4" md="4" sm="4">
-                                                    <Input placeholder="number" type="text" id={"number"} name={"number"} required />
+                                                    <Input placeholder="number" type="text" id={"number"} name={"number"} />
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    จำนวนที่ซื้อ :
+                                                    </Col>
+                                                <Col lg="4" md="4" sm="4">
+                                                    <Input placeholder="discount_giveaway_buy" type="text" id={"discount_giveaway_buy"} name={"discount_giveaway_buy"} />
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    จำนวนที่แถม :
+                                                    </Col>
+                                                <Col lg="4" md="4" sm="4">
+                                                    <Input placeholder="discount_giveaway" type="text" id={"discount_giveaway"} name={"discount_giveaway"} />
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>

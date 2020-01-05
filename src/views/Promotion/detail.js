@@ -141,6 +141,22 @@ class HomeView extends Component {
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
+                                                    จำนวนที่ซื้อ :
+                                                    </Col>
+                                                <Col lg="10" md="10" sm="10">
+                                                    <label>{this.state.promotion.discount_giveaway_buy}</label>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    จำนวนที่แถม :
+                                                    </Col>
+                                                <Col lg="10" md="10" sm="10">
+                                                    <label>{this.state.promotion.discount_giveaway}</label>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
                                                     วันที่เริ่ม :
                                                     </Col>
                                                 <Col lg="10" md="10" sm="10">
