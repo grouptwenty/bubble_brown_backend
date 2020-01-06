@@ -136,14 +136,13 @@ export default class MenuComponent {
                     //     // url: '/product-manage/stock-out',
                     // },
                 ],
-            }
-            // {
+            },
 
-            // {
-            //     name: 'รายการเครื่องซักผ้าแจ้งเสีย',
-            //     url: '/repair/',
-            //     icon: 'icon-wrench',
-            // },
+            {
+                name: 'แก้ไขข้อมูลส่วนตัว',
+                url: '/about/',
+                icon: 'icon-pencil',
+            },
 
             // {
             //     name: 'ข่าวสาร',

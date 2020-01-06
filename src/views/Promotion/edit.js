@@ -9,20 +9,18 @@ import axios, { post } from 'axios';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import swal from 'sweetalert';
 import PromotionModel from '../../models/PromotionModel';
+import MenuTypeModel from '../../models/MenuTypeModel'
 import ImgDefault from '../../assets/img/img_default.png'
 import UploadModel from '../../models/UploadModel';
 import GOBALS from '../../GOBALS';
 import 'react-day-picker/lib/style.css';
 var promotion_model = new PromotionModel();
+const menu_type_model = new MenuTypeModel
 var upload_model = new UploadModel();
-const type = [
-    { value: 'MNT01', label: 'เครื่องดื่ม' },
-    { value: 'MNT02', label: 'อาหาร' },
-    { value: 'MNT03', label: 'เบเกอร์รี่' },
-];
 const promotion_type = [
     { value: 'เปอร์เซ็น', label: 'เปอร์เซ็น' },
     { value: 'ส่วนลด', label: 'ส่วนลด' },
+    { value: 'แถม', label: 'แถม' },
 ];
 var today = new Date();
 class HomeView extends Component {
@@ -43,6 +41,7 @@ class HomeView extends Component {
         this.goBack = this.goBack.bind(this);
         this.handleDayChangestart = this.handleDayChangestart.bind(this);
         this.handleDayChangeend = this.handleDayChangeend.bind(this);
+        this.renderMenuType = this.renderMenuType.bind(this);
     }
     goBack() {
         this.props.history.goBack();
@@ -122,6 +121,11 @@ class HomeView extends Component {
             promotion_img_old: promotion.data[0].promotion_image,
         });
         console.log("setState", this.state.promotion.promotion);
+
+        const menu_type = await menu_type_model.getMenuTypeBy();
+        this.setState({
+            menu_type: menu_type.data
+        })
     }
 
     async SavePromotion(event) {
@@ -218,6 +222,20 @@ class HomeView extends Component {
             });
         }
     }
+
+    renderMenuType() {
+        if (this.state.menu_type != undefined) {
+            let menutype = []
+
+            for (let i = 0; i < this.state.menu_type.length; i++) {
+                menutype.push(
+                    <option value={this.state.menu_type[i].menu_type_id}>{this.state.menu_type[i].menu_type_name}</option>
+                )
+            }
+            return menutype;
+        }
+    }
+
     render() {
         let { imagePreviewUrl } = this.state;
         let imagePreview = null;
@@ -265,11 +283,10 @@ class HomeView extends Component {
                                                     ประเภท :
                                                     </Col>
                                                 <Col lg="5" md="5" sm="5">
-                                                    {this.state.promotion.menu_type_id ?
-                                                        <Select options={type} value={{ value: this.state.promotion.menu_type_id, label: this.state.promotion.menu_type_id }} name={"menu_type_id"} />
-                                                        : null}
-                                                </Col>
-                                                <Col lg="5" md="5" sm="5">
+                                                    <Input type="select" id="menu_type_id" name="menu_type_id" class="form-control" >
+                                                        <option value="">Select</option>
+                                                        {this.renderMenuType()}
+                                                    </Input>
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
@@ -288,8 +305,6 @@ class HomeView extends Component {
                                                     {this.state.promotion.promotion_type ?
                                                         <Select options={promotion_type} value={{ value: this.state.promotion.promotion_type, label: this.state.promotion.promotion_type }} name={"promotion_type"} />
                                                         : null}
-                                                </Col>
-                                                <Col lg="5" md="5" sm="5">
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>

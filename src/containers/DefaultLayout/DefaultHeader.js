@@ -19,6 +19,8 @@ class DefaultHeader extends Component {
 
   }
 
+  
+
   render() {
 
     // eslint-disable-next-line
@@ -28,26 +30,46 @@ class DefaultHeader extends Component {
       <React.Fragment>
         {/* <AppSidebarToggler className="d-lg-none" display="md" mobile /> */}
         <NavLink to="/dashboard"  >
-{/* 
+          {/* 
         <AppNavbarBrand
           full={{ src: logo, width: 65, height: 65, alt: 'CoreUI Logo' }}
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
         /> */}
         </NavLink>
         <AppSidebarToggler className="d-md-down-none" display="lg" />
-        <img src="/logo_bubblebrown.png" height={80} width={80}/>
+        <img src="/logo_bubblebrown.png" height={80} width={80} />
 
-       
+        <Nav className="ml-auto" navbar>
+          {/* < AppHeaderDropdown direction="down">
+            <DropdownMenu right style={{ right: 'auto' }}>
+              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 01</strong></DropdownItem>
+              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 02</strong></DropdownItem>
+              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 03</strong></DropdownItem>
+              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 04</strong></DropdownItem>
+              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 05</strong></DropdownItem>
+              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 06</strong></DropdownItem>
+              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 07</strong></DropdownItem>
+              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 08</strong></DropdownItem>
+              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 09</strong></DropdownItem>
+              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 10</strong></DropdownItem>
+              <DropdownItem header tag="div" className="text-center"><strong>See All</strong></DropdownItem>
 
-          <Nav className="ml-auto" navbar>
-           
+            </DropdownMenu> */}
           <AppHeaderDropdown direction="down">
-          
+            <DropdownToggle nav>
+              <NavLink to="#" className="nav-link"> สาขา <i className="fa fa-user"></i> </NavLink>
+            </DropdownToggle>
+            <DropdownMenu right style={{ right: 'auto' }}>
+              <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
+              <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
+              <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i> Logout</DropdownItem>
+            </DropdownMenu>
           </AppHeaderDropdown>
-          </Nav>
-       
-        <AppAsideToggler className="d-lg-none" mobile />
-      </React.Fragment>
+
+          {/* </AppHeaderDropdown> */}
+        </Nav>
+
+      </React.Fragment >
     );
   }
 }
