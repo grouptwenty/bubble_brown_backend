@@ -26,19 +26,20 @@ class ReportBestSaleView extends Component {
             data_day: [],
             seg: 1,
             change_date: today,
-            // change_month: today,
-            // change_year: today,
-            // month: fromMonth,
+            change_start_month: today,
+            change_end_month: today,
+            change_start_year: today,
+            change_end_year: today,
             refresh: false
         };
         this.setSeg = this.setSeg.bind(this);
         this.handleDayChange = this.handleDayChange.bind(this);
-        // this.handleMonthChange = this.handleMonthChange.bind(this);
-        // this.handleYearChange = this.handleYearChange.bind(this);
-        // this.handleYearMonthChange = this.handleYearMonthChange.bind(this);
-    }
+        this.handleStartMonthChange = this.handleStartMonthChange.bind(this);
+        this.handleEndMonthChange = this.handleEndMonthChange.bind(this);        
+        this.handleStartYearChange = this.handleStartYearChange.bind(this);
+        this.handleEndYearChange = this.handleEndYearChange.bind(this);    }
 
-
+    //DAY
     async handleDayChange(date) {
 
         this.setState({
@@ -47,7 +48,7 @@ class ReportBestSaleView extends Component {
 
         const report_best_sale_day = await report_model.getReportBestSalesByDay({ "payment_date": date });
         console.log("report_best_sale_day", report_best_sale_day);
-        
+
 
         this.setState({
             report_best_sale_day: report_best_sale_day.data
@@ -74,73 +75,147 @@ class ReportBestSaleView extends Component {
 
     }
 
-    // async handleMonthChange(month) {
+    //MONTH
+    async handleStartMonthChange(start_month) {
 
-    //     this.setState({
-    //         change_month: month
-    //     });
+        this.setState({
+            change_start_month: start_month
+        });
 
-    //     const report_sale_month = await report_model.getReportSalesByMonth({ "payment_date": month });
-    //     this.setState({
-    //         report_sale_month: report_sale_month.data
-    //     })
+        var date = { start_month: start_month, end_month: this.state.change_end_month }
+        const report_best_sale_start_month = await report_model.getReportBestSalesByMonth(date);
 
-    //     const data_report_sale_month = {
-    //         rows: []
-    //     }
-    //     var i = 1;
-    //     // for(var x=0;x<10;x++)
-    //     for (var key in this.state.report_sale_month) {
-    //         var set_row = {
-    //             Date: this.state.report_sale_month[key].month,
-    //             Time: this.state.report_sale_month[key].payment_time,
-    //             Total: this.state.report_sale_month[key].total_payment,
-    //         }
-    //         data_report_sale_month.rows.push(set_row);
-    //         i++;
-    //     }
-    //     this.setState({
-    //         data_month: data_report_sale_month
-    //     })
+        this.setState({
+            report_best_sale_month: report_best_sale_start_month.data
+        })
 
-    // }
+        const data_report_best_sale_month = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_best_sale_month) {
+            var set_row = {
+                Date: this.state.report_best_sale_month[key].month,
+                Total: this.state.report_best_sale_month[key].total_order,
+                Name: this.state.report_best_sale_month[key].order_list_name,
+            }
+            data_report_best_sale_month.rows.push(set_row);
+            i++;
+        }
+        this.setState({
+            data_month: data_report_best_sale_month
+        })
 
-    // async handleYearChange(year) {
+    }
 
-    //     this.setState({
-    //         change_year: year
-    //     });
+    async handleEndMonthChange(end_month) {
 
-    //     const report_sale_year = await report_model.getReportSalesByYear({ "payment_date": year});
-    //     this.setState({
-    //         report_sale_year: report_sale_year.data
-    //     })
+        this.setState({
+            change_end_month: end_month
+        });
 
-    //     const data_report_sale_year = {
-    //         rows: []
-    //     }
-    //     var i = 1;
-    //     // for(var x=0;x<10;x++)
-    //     for (var key in this.state.report_sale_year) {
-    //         var set_row = {
-    //             Date: this.state.report_sale_year[key].year,
-    //             Total: this.state.report_sale_year[key].total_payment,
-    //         }
-    //         data_report_sale_year.rows.push(set_row);
-    //         i++;
-    //     }
-    //     this.setState({
-    //         data_year: data_report_sale_year
-    //     })
+        var date = { start_month: this.state.change_start_month, end_month: end_month }
+        const report_best_sale_end_month = await report_model.getReportBestSalesByMonth(date);
 
-    // }
+        this.setState({
+            report_best_sale_month: report_best_sale_end_month.data
+        })
+
+        const data_report_best_sale_month = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_best_sale_month) {
+            var set_row = {
+                Date: this.state.report_best_sale_month[key].month,
+                Total: this.state.report_best_sale_month[key].total_order,
+                Name: this.state.report_best_sale_month[key].order_list_name,
+            }
+            data_report_best_sale_month.rows.push(set_row);
+            i++;
+        }
+        this.setState({
+            data_month: data_report_best_sale_month
+        })
+
+    }
+
+    //YEAR
+    async handleStartYearChange(start_year) {
+
+        this.setState({
+            change_start_year: start_year
+        });
+
+        var date = { start_year: start_year, end_year: this.state.change_end_year }
+        const report_best_sale_start_year = await report_model.getReportBestSalesByYear(date);
+
+        this.setState({
+            report_best_sale_year: report_best_sale_start_year.data
+        })
+
+        const data_report_best_sale_year = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_best_sale_year) {
+            var set_row = {
+                Date: this.state.report_best_sale_year[key].year,
+                Total: this.state.report_best_sale_year[key].total_order,
+                Name: this.state.report_best_sale_year[key].order_list_name,
+            }
+            data_report_best_sale_year.rows.push(set_row);
+            i++;
+        }
+        this.setState({
+            data_year: data_report_best_sale_year
+        })
+
+    }
+
+    async handleEndYearChange(end_year) {
+
+        this.setState({
+            change_end_year: end_year
+        });
+
+        var date = { start_year: this.state.change_start_year, end_year: end_year }
+        const report_best_sale_end_year = await report_model.getReportBestSalesByYear(date);
+
+        this.setState({
+            report_best_sale_year: report_best_sale_end_year.data
+        })
+
+        const data_report_best_sale_year = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_best_sale_year) {
+            var set_row = {
+                Date: this.state.report_best_sale_year[key].year,
+                Total: this.state.report_best_sale_year[key].total_order,
+                Name: this.state.report_best_sale_year[key].order_list_name,
+            }
+            data_report_best_sale_year.rows.push(set_row);
+            i++;
+        }
+        this.setState({
+            data_year: data_report_best_sale_year
+        })
+
+    }
+
 
     async componentDidMount() {
 
         //DAY
         var change_date = new Date();
         const report_best_sale_day = await report_model.getReportBestSalesByDay({ "payment_date": change_date });
-        
+
         // console.log("report_best_sale_day", report_best_sale_day);
         this.setState({
             report_best_sale_day: report_best_sale_day.data
@@ -166,84 +241,75 @@ class ReportBestSaleView extends Component {
         })
 
 
-        // var change_date = new Date();
-        // const report_sale_day = await report_model.getReportSalesByDay({ "payment_date": change_date });
+        //MONTH
+        var change_start_month = new Date();
+        var date = { start_month: this.state.change_start_month, end_month: this.state.change_end_month }
+        const report_best_sale_start_month = await report_model.getReportBestSalesByMonth(date);
 
-        // // console.log("this.state.change_date ", change_date);
-        // this.setState({
-        //     report_sale_day: report_sale_day.data
-        // })
+        this.setState({
+            report_best_sale_month: report_best_sale_start_month.data
+        })
 
-        // var change_month = new Date();
-        // const report_sale_month = await report_model.getReportSalesByMonth({ "payment_date": change_month });
-        // // console.log(report_sale_month);
+        var change_end_month = new Date();
+        const report_best_sale_end_month = await report_model.getReportBestSalesByMonth(date);
 
-        // this.setState({
-        //     report_sale_month: report_sale_month.data
-        // })
-        // // console.log("this.state.report_sale_month ", report_sale_month);
+        this.setState({
+            report_best_sale_month: report_best_sale_end_month.data
+        })
 
-        // var change_year = new Date();
-        // const report_sale_year = await report_model.getReportSalesByYear({ "payment_date": change_year });
-        // console.log("report_sale_year", report_sale_year);
-        // this.setState({
-        //     report_sale_year: report_sale_year.data
-        // })
+        const data_report_best_sale_month = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_best_sale_month) {
+            var set_row = {
+                Date: this.state.report_best_sale_month[key].month,
+                Total: this.state.report_best_sale_month[key].total_order,
+                Name: this.state.report_best_sale_month[key].order_list_name,
+            }
+            data_report_best_sale_month.rows.push(set_row);
+            i++;
+        }
+        this.setState({
+            data_month: data_report_best_sale_month
+        })
 
-        // const data_report_sale_day = {
-        //     rows: []
-        // }
-        // var i = 1;
-        // // for(var x=0;x<10;x++)
-        // for (var key in this.state.report_sale_day) {
-        //     var set_row = {
-        //         Date: this.state.report_sale_day[key].payment_date,
-        //         Time: this.state.report_sale_day[key].payment_time,
-        //         Total: this.state.report_sale_day[key].total_payment,
-        //     }
-        //     data_report_sale_day.rows.push(set_row);
-        //     i++;
-        // }
-        // this.setState({
-        //     data_day: data_report_sale_day
-        // })
-        // console.log(data_report_list);
+        //YEAR
+        var change_start_year = new Date();
+        var date = { start_year: this.state.change_start_year, end_year: this.state.change_end_year }
+        const report_best_sale_start_year = await report_model.getReportBestSalesByYear(date);
 
-        // const data_report_sale_month = {
-        //     rows: []
-        // }
-        // var i = 1;
-        // // for(var x=0;x<10;x++)
-        // for (var key in this.state.report_sale_month) {
-        //     var set_row = {
-        //         Date: this.state.report_sale_month[key].month,
-        //         Time: this.state.report_sale_month[key].payment_time,
-        //         Total: this.state.report_sale_month[key].total_payment,
-        //     }
-        //     data_report_sale_month.rows.push(set_row);
-        //     i++;
-        // }
-        // this.setState({
-        //     data_month: data_report_sale_month
-        // })
-        // // console.log(data_report_list);
+        this.setState({
+            report_best_sale_year: report_best_sale_start_year.data
+        })
 
-        // const data_report_sale_year = {
-        //     rows: []
-        // }
-        // var i = 1;
-        // // for(var x=0;x<10;x++)
-        // for (var key in this.state.report_sale_year) {
-        //     var set_row = {
-        //         Date: this.state.report_sale_year[key].year,
-        //         Total: this.state.report_sale_year[key].total_payment,
-        //     }
-        //     data_report_sale_year.rows.push(set_row);
-        //     i++;
-        // }
-        // this.setState({
-        //     data_year: data_report_sale_year
-        // })
+        var change_end_year = new Date();
+        const report_best_sale_end_year = await report_model.getReportBestSalesByYear(date);
+
+        this.setState({
+            report_best_sale_year: report_best_sale_end_year.data
+        })
+
+        const data_report_best_sale_year = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_best_sale_year) {
+            var set_row = {
+                Date: this.state.report_best_sale_year[key].year,
+                Total: this.state.report_best_sale_year[key].total_order,
+                Name: this.state.report_best_sale_year[key].order_list_name,
+            }
+            data_report_best_sale_year.rows.push(set_row);
+            i++;
+        }
+        this.setState({
+            data_year: data_report_best_sale_year
+        })
+        
+        
     }
 
 
@@ -255,8 +321,8 @@ class ReportBestSaleView extends Component {
 
     render() {
         const { data_day } = this.state
-        // const { data_month } = this.state
-        // const { data_year } = this.state
+        const { data_month } = this.state
+        const { data_year } = this.state
 
         var graph_best_sales_day_list = []
         var graph_best_sales_day_number = {}
@@ -270,29 +336,29 @@ class ReportBestSaleView extends Component {
             }
         }
 
-        // var graph_sales_month_list = []
-        // var graph_sales_month_number = {}
-        // var report_month = {}
-        // if (this.state.report_sale_month !== undefined) {
-        //     for (var key in this.state.report_sale_month) {
-        //         report_month[this.state.report_sale_month[key].month] = this.state.report_sale_month[key].total_payment
-        //         graph_sales_month_list.push(parseFloat(this.state.report_sale_month[key].total_payment))
-        //         graph_sales_month_number = report_month
+        var graph_best_sales_month_list = []
+        var graph_best_sales_month_number = {}
+        var report_month = {}
+        if (this.state.report_best_sale_month !== undefined) {
+            for (var key in this.state.report_best_sale_month) {
+                report_month[this.state.report_best_sale_month[key].order_list_name] = this.state.report_best_sale_month[key].total_order
+                graph_best_sales_month_list.push(parseFloat(this.state.report_best_sale_month[key].total_order))
+                graph_best_sales_month_number = report_month
+            }
+        }
 
+        var graph_best_sales_year_list = []
+        var graph_best_sales_year_number = {}
+        var report_year = {}
+        if (this.state.report_best_sale_year !== undefined) {
+            for (var key in this.state.report_best_sale_year) {
+                report_year[this.state.report_best_sale_year[key].order_list_name] = this.state.report_best_sale_year[key].total_order
+                graph_best_sales_year_list.push(parseFloat(this.state.report_best_sale_year[key].total_order))
+                graph_best_sales_year_number = report_year
+            }
+        }
 
-        //     }
-        // }
-
-        // var graph_sales_year_list = []
-        // var graph_sales_year_number = {}
-        // var report_year = {}
-        // if (this.state.report_sale_year !== undefined) {
-        //     for (var key in this.state.report_sale_year) {
-        //         report_year[this.state.report_sale_year[key].year] = this.state.report_sale_year[key].total_payment
-        //         graph_sales_year_list.push(parseFloat(this.state.report_sale_year[key].total_payment))
-        //         graph_sales_year_number = report_year
-        //     }
-        // }
+        
 
 
         return (
@@ -344,7 +410,7 @@ class ReportBestSaleView extends Component {
 
                                             <Card body>
 
-                                                <CardTitle><h3>รายงานเมนูขายดีรายวัน</h3></CardTitle>
+                                                <CardTitle><h3>รายงานเมนูขายดีประจำวัน</h3></CardTitle>
                                                 <FormGroup>
                                                     <Label className="text_head"> เลือกวันที่<font color='red'><b> * </b></font></Label>
                                                     <DayPickerInput
@@ -384,18 +450,37 @@ class ReportBestSaleView extends Component {
                                         {this.state.seg === 2 &&
 
                                             <Card body>
-                                                <CardTitle><h3>รายงานยอดขายรายเดือน</h3></CardTitle>
-                                                {/* <FormGroup>
-                                                    <Label className="text_head"> เลือกเดือน<font color='red'><b> * </b></font></Label>
-                                                    <DayPickerInput
-                                                        format="YYYY-MM-DD"
-                                                        formatDate={formatDate}
-                                                        onDayChange={this.handleMonthChange.bind(this)}
-                                                        value={this.state.change_month}
-                                                    // inputProps = {{readOnly}}
-                                                    />
-                                                </FormGroup>
-                                                <ColumnChart data={graph_sales_month_number} />
+                                                <CardTitle><h3>รายงานเมนูขายดีประจำเดือน</h3></CardTitle>
+                                                <Row>
+                                                    <Col lg='6'>
+                                                        <FormGroup>
+                                                            <Label className="text_head"> เริ่ม<font color='red'><b> * </b></font></Label>
+                                                            <DayPickerInput
+                                                                format="DD/MM/YYYY"
+                                                                formatDate={formatDate}
+                                                                onDayChange={this.handleStartMonthChange.bind(this)}
+                                                                value={this.state.change_start_month}
+                                                            // inputProps = {{readOnly}}
+                                                            />
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col lg='6'>
+                                                        <FormGroup>
+                                                            <Label className="text_head"> สิ้นสุด<font color='red'><b> * </b></font></Label>
+                                                            <DayPickerInput
+                                                                format="DD/MM/YYYY"
+                                                                formatDate={formatDate}
+                                                                onDayChange={this.handleEndMonthChange.bind(this)}
+                                                                value={this.state.change_end_month}
+                                                            // inputProps = {{readOnly}}
+                                                            />
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+                                                <br></br>
+                                                <PieChart data={graph_best_sales_month_number} />
+                                                <br></br>
+                                                <br></br>
                                                 <Row>
                                                     <Col lg='12'>
                                                         <div>
@@ -406,32 +491,51 @@ class ReportBestSaleView extends Component {
                                                                 search={true}
                                                             // className="table-overflow"
                                                             >
-                                                                <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>วันที่</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Time' headerAlign="center" dataAlign="center" dataSort isKey={true}>เวลา</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ราคารวม</TableHeaderColumn>
+                                                                {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
+                                                                {/* <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>วันที่</TableHeaderColumn> */}
+                                                                <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อเมนู</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort isKey={true}>จำนวน</TableHeaderColumn>
                                                             </BootstrapTable>
                                                         </div>
                                                     </Col>
-                                                </Row> */}
+                                                </Row>
                                             </Card>
                                         }
 
                                         {this.state.seg === 3 &&
 
                                             <Card body>
-                                                <CardTitle><h3>รายงานยอดขายรายปี</h3></CardTitle>
-                                                {/* <FormGroup>
-                                                    <Label className="text_head"> เลือกปี<font color='red'><b> * </b></font></Label>
-                                                    <DayPickerInput
-                                                        format="YYYY-MM-DD"
-                                                        formatDate={formatDate}
-                                                        onDayChange={this.handleYearChange.bind(this)}
-                                                        value={this.state.change_year}
-                                                    // inputProps = {{readOnly}}
-                                                    />
-
-                                                </FormGroup>
-                                                <BarChart data={graph_sales_year_number} />
+                                                <CardTitle><h3>รายงานเมนูขายดีประจำปี</h3></CardTitle>
+                                                <Row>
+                                                    <Col lg='6'>
+                                                        <FormGroup>
+                                                            <Label className="text_head"> เริ่ม<font color='red'><b> * </b></font></Label>
+                                                            <DayPickerInput
+                                                                format="DD/MM/YYYY"
+                                                                formatDate={formatDate}
+                                                                onDayChange={this.handleStartYearChange.bind(this)}
+                                                                value={this.state.change_start_year}
+                                                            // inputProps = {{readOnly}}
+                                                            />
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col lg='6'>
+                                                        <FormGroup>
+                                                            <Label className="text_head"> สิ้นสุด<font color='red'><b> * </b></font></Label>
+                                                            <DayPickerInput
+                                                                format="DD/MM/YYYY"
+                                                                formatDate={formatDate}
+                                                                onDayChange={this.handleEndYearChange.bind(this)}
+                                                                value={this.state.change_end_year}
+                                                            // inputProps = {{readOnly}}
+                                                            />
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+                                                <br></br>
+                                                <PieChart data={graph_best_sales_year_number} />
+                                                <br></br>
+                                                <br></br>
                                                 <Row>
                                                     <Col lg='12'>
                                                         <div>
@@ -442,12 +546,14 @@ class ReportBestSaleView extends Component {
                                                                 search={true}
                                                             // className="table-overflow"
                                                             >
-                                                                <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort isKey={true}>เดือน</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ราคารวม</TableHeaderColumn>
+                                                                {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
+                                                                <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>เดือน</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อเมนู</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort isKey={true}>จำนวน</TableHeaderColumn>
                                                             </BootstrapTable>
                                                         </div>
                                                     </Col>
-                                                </Row> */}
+                                                </Row>
                                             </Card>
                                         }
                                     </Col>
