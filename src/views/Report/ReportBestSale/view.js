@@ -32,46 +32,47 @@ class ReportBestSaleView extends Component {
             refresh: false
         };
         this.setSeg = this.setSeg.bind(this);
-        // this.handleDayChange = this.handleDayChange.bind(this);
+        this.handleDayChange = this.handleDayChange.bind(this);
         // this.handleMonthChange = this.handleMonthChange.bind(this);
         // this.handleYearChange = this.handleYearChange.bind(this);
         // this.handleYearMonthChange = this.handleYearMonthChange.bind(this);
     }
 
 
-    // async handleDayChange(date) {
+    async handleDayChange(date) {
 
-    //     this.setState({
-    //         change_date: date
-    //     });
+        this.setState({
+            change_date: date
+        });
 
-    //     const report_best_sale_day = await report_model.getReportBestSalesByDay();
-    //     console.log("report_best_sale_day", report_best_sale_day);
+        const report_best_sale_day = await report_model.getReportBestSalesByDay({ "payment_date": date });
+        console.log("report_best_sale_day", report_best_sale_day);
         
 
-    //     this.setState({
-    //         report_sale_day: report_sale_day.data
-    //     })
+        this.setState({
+            report_best_sale_day: report_best_sale_day.data
+        })
 
-    //     const data_report_sale_day = {
-    //         rows: []
-    //     }
-    //     var i = 1;
-    //     // for(var x=0;x<10;x++)
-    //     for (var key in this.state.report_sale_day) {
-    //         var set_row = {
-    //             Date: this.state.report_sale_day[key].payment_date,
-    //             Time: this.state.report_sale_day[key].payment_time,
-    //             Total: this.state.report_sale_day[key].total_payment,
-    //         }
-    //         data_report_sale_day.rows.push(set_row);
-    //         i++;
-    //     }
-    //     this.setState({
-    //         data_day: data_report_sale_day
-    //     })
+        const data_report_best_sale_day = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_best_sale_day) {
+            var set_row = {
+                Date: this.state.report_best_sale_day[key].payment_date,
+                Time: this.state.report_best_sale_day[key].payment_time,
+                Total: this.state.report_best_sale_day[key].total_order,
+                Name: this.state.report_best_sale_day[key].order_list_name,
+            }
+            data_report_best_sale_day.rows.push(set_row);
+            i++;
+        }
+        this.setState({
+            data_day: data_report_best_sale_day
+        })
 
-    // }
+    }
 
     // async handleMonthChange(month) {
 
@@ -136,12 +137,34 @@ class ReportBestSaleView extends Component {
 
     async componentDidMount() {
 
-        // var change_date = new Date();
-        const report_best_sale_day = await report_model.getReportBestSalesByDay();
-        console.log("report_best_sale_day", report_best_sale_day);
+        //DAY
+        var change_date = new Date();
+        const report_best_sale_day = await report_model.getReportBestSalesByDay({ "payment_date": change_date });
+        
+        // console.log("report_best_sale_day", report_best_sale_day);
         this.setState({
             report_best_sale_day: report_best_sale_day.data
         })
+
+        const data_report_best_sale_day = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_best_sale_day) {
+            var set_row = {
+                Date: this.state.report_best_sale_day[key].payment_date,
+                Time: this.state.report_best_sale_day[key].payment_time,
+                Total: this.state.report_best_sale_day[key].total_order,
+                Name: this.state.report_best_sale_day[key].order_list_name,
+            }
+            data_report_best_sale_day.rows.push(set_row);
+            i++;
+        }
+        this.setState({
+            data_day: data_report_best_sale_day
+        })
+
 
         // var change_date = new Date();
         // const report_sale_day = await report_model.getReportSalesByDay({ "payment_date": change_date });
@@ -321,19 +344,22 @@ class ReportBestSaleView extends Component {
 
                                             <Card body>
 
-                                                <CardTitle><h3>รายงานสินค้าขายดีรายวัน</h3></CardTitle>
-                                                {/* <FormGroup>
+                                                <CardTitle><h3>รายงานเมนูขายดีรายวัน</h3></CardTitle>
+                                                <FormGroup>
                                                     <Label className="text_head"> เลือกวันที่<font color='red'><b> * </b></font></Label>
                                                     <DayPickerInput
-                                                        format="YYYY-MM-DD"
+                                                        format="DD/MM/YYYY"
                                                         formatDate={formatDate}
                                                         onDayChange={this.handleDayChange.bind(this)}
                                                         value={this.state.change_date}
                                                     // inputProps = {{readOnly}}
                                                     />
-                                                </FormGroup> */}
+                                                </FormGroup>
+                                                <br></br>
                                                 <PieChart data={graph_best_sales_day_number} />
-                                                {/* <Row>
+                                                <br></br>
+                                                <br></br>
+                                                <Row>
                                                     <Col lg='12'>
                                                         <div>
                                                             <BootstrapTable
@@ -344,12 +370,12 @@ class ReportBestSaleView extends Component {
                                                             // className="table-overflow"
                                                             >
                                                                 <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>วันที่</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Time' headerAlign="center" dataAlign="center" dataSort isKey={true}>เวลา</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ราคารวม</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อเมนู</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort isKey={true}>จำนวน</TableHeaderColumn>
                                                             </BootstrapTable>
                                                         </div>
                                                     </Col>
-                                                </Row> */}
+                                                </Row>
 
                                             </Card>
 
