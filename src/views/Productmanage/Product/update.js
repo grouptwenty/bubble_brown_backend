@@ -4,11 +4,9 @@ import { connect } from 'react-redux';
 import { NavLink, Link, } from 'react-router-dom';
 import { fonts } from 'pdfmake/build/pdfmake';
 import swal from 'sweetalert';
-
 import { formatDate, parseDate, } from 'react-day-picker/moment';
 import 'react-day-picker/lib/style.css';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-
 import ProductTypeModel from '../../../models/ProductTypeModel'
 import ProductModel from '../../../models/ProductModel'
 import UnitModel from '../../../models/UnitModel'

@@ -162,9 +162,9 @@ class detailView extends Component {
 
                     <tr>
                         <td>{this.state.stock_order[i].stock_date}</td>
-                        <td>{this.state.stock_order[i].stock_time}</td>
                         <td>{this.state.stock_order[i].product_code}</td>
                         <td>{this.state.stock_order[i].product_name}</td>
+                        <td>{this.state.stock_order[i].stock_price}</td>
                         <td style={{ textAlign: 'end' }}>{this.state.stock_order[i].stock_qty}</td>
                         <td style={{ textAlign: 'end' }}>{this.state.stock_order[i].unit_name}</td>
                         <td style={{ textAlign: 'center' }}>
@@ -198,9 +198,9 @@ class detailView extends Component {
                                     <thead>
                                         <tr>
                                             <th >วันนำเข้า</th>
-                                            <th>เวลานำเข้า</th>
                                             <th>รหัสวัตถุดิบ</th>
                                             <th>วัตถุดิบ</th>
+                                            <th>ราคาซื้อ</th>
                                             <th style={{ textAlign: 'end' }}>จำนวน</th>
                                             <th style={{ textAlign: 'end' }}>หน่วย</th>
                                             <th style={{ textAlign: 'center' }}></th>
