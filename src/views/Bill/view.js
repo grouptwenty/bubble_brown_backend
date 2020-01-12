@@ -15,7 +15,7 @@ import ZoneModel from '../../models/ZoneModel'
 import TableModel from '../../models/TableModel'
 import StockOutModel from '../../models/StockOutModel'
 import PaymentModel from '../../models/PaymentModel'
-
+import moment from 'moment'
 const stock_out_model = new StockOutModel
 const order_model = new OrderModel
 const orderlist_model = new OrderListModel
@@ -199,14 +199,18 @@ class BillView extends Component {
 
 
     async Payment(check_bill) {
+ 
 
         console.log("check_bill====>", check_bill);
-
+        var payment_date = new Date()
+        var payment_time = moment(new Date()).format('HH:mm:ss'); //todays date
         var payment = {
             payment_sum: check_bill.amount,
             order_code: check_bill.order_code,
             payment_money_received: this.state.recive,
-            payment_change: this.state.charge
+            payment_change: this.state.charge,
+            payment_date: payment_date,
+            payment_time: payment_time
 
         }
 
@@ -508,12 +512,12 @@ class BillView extends Component {
                         <br />
                         <Row>
                             <Col lg="2">
-                                <Label  className="text_head"> ส่วนลด :  </Label>
+                                <Label className="text_head"> ส่วนลด :  </Label>
                             </Col>
                             <Col lg="6" >
-                                <Label  className="text_head"> {this.state.order_Bycode.promotion_header} </Label>
+                                <Label className="text_head"> {this.state.order_Bycode.promotion_header} </Label>
                             </Col>
-                            <Col lg="4"style={{ textAlign: 'center' }} >
+                            <Col lg="4" style={{ textAlign: 'center' }} >
                                 <Label className="text_head"> {this.state.order_Bycode.discount_percent} {this.state.order_Bycode.discount_price} </Label>
 
                             </Col>
@@ -521,10 +525,10 @@ class BillView extends Component {
                         </Row>
                         <Row>
                             <Col lg="2">
-                                <Label  className="text_head"> รวม </Label>
+                                <Label className="text_head"> รวม </Label>
                             </Col>
                             <Col lg="6">
-                               
+
                             </Col>
                             <Col lg="4" style={{ textAlign: 'center' }}>
                                 <Label className="text_head"> {this.state.order_Bycode.amount} </Label>
