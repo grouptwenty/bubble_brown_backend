@@ -6,10 +6,13 @@ import { fonts } from 'pdfmake/build/pdfmake';
 import swal from 'sweetalert';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import UserModel from '../../models/UserModel'
+import AboutModel from '../../models/AboutModel'
 import ImgDefault from '../../assets/img/img_default.png'
 import UploadModel from '../../models/UploadModel';
+var md5 = require("md5");
 
 const user_model = new UserModel
+const about_model = new AboutModel
 var upload_model = new UploadModel();
 
 class insertView extends Component {
@@ -72,11 +75,26 @@ class insertView extends Component {
     }
 
     async componentDidMount() {
-
+        const brance = await about_model.getAboutBy();
+        this.setState({
+            brance: brance.data
+        })
         // console.log("max_code",user_code_max);
     }
 
+    renderBrance() {
+        if (this.state.brance != undefined) {
+            let brance_type = []
 
+            for (let i = 0; i < this.state.brance.length; i++) {
+                brance_type.push(
+                    <option value={this.state.brance[i].about_code}>{this.state.brance[i].about_name_th}</option>
+                )
+
+            }
+            return brance_type;
+        }
+    }
 
     async handleSubmit(event) {
         event.preventDefault();
@@ -100,12 +118,13 @@ class insertView extends Component {
         }
 
         arr['user_code'] = user_code
+        arr['user_password'] = md5(arr['user_password'])
 
         if (this.check(arr)) {
 
             var res = await user_model.insertUserBy(arr);
 
-            //   console.log(res);
+              console.log(res);
             if (res.data) {
                 swal({
                     title: "สำเร็จ!",
@@ -124,6 +143,13 @@ class insertView extends Component {
         if (form.user_position == '') {
             swal({
                 text: "กรุณากรอก ตำแหน่ง",
+                icon: "warning",
+                button: "close",
+            });
+            return false
+        } else if (form.about_code == '') {
+            swal({
+                text: "กรุณาเลือก สาขา",
                 icon: "warning",
                 button: "close",
             });
@@ -218,6 +244,17 @@ class insertView extends Component {
                                                         <option value="แอดมิน">แอดมิน</option>
                                                         <option value="แคชเชียร์">แคชเชียร์</option>
                                                         <option value="พนักงานเสิร์ฟ">พนักงานเสิร์ฟ</option>
+                                                    </Input>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    สาขา : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
+                                                <Input type="select" id="about_code" name="about_code" class="form-control" >
+                                                        <option value="">Select</option>
+                                                        {this.renderBrance()}
                                                     </Input>
                                                 </Col>
                                             </Row>

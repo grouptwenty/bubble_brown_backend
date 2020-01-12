@@ -67,11 +67,13 @@ class PromotionView extends Component {
         return (
             <>
 
-                <img src={ row.Picture != "" && row.Picture != null ? GOBALS.URL_IMG + "promotion/" + row.Picture : ImgDefault} className="img"></img>
+                <img src={row.Picture != "" && row.Picture != null ? GOBALS.URL_IMG + "promotion/" + row.Picture : ImgDefault} className="img"></img>
             </>
         )
     }
     async componentDidMount() {
+        console.log("userrrrrrrrrrrrrr", this.props.user);
+
         const promotion_list = await promotion_model.getPromotionBy();
         const data_promotion_list = {
             rows: []
@@ -99,12 +101,10 @@ class PromotionView extends Component {
     }
     render() {
 
-        
+
         const { data } = this.state;
         return (
             <div className="animated fadeIn">
-                {/* <h2>Promotion</h2>
-                <hr /> */}
                 <Row>
                     <Col lg='12'>
                         <Card>
@@ -145,5 +145,10 @@ class PromotionView extends Component {
         )
     }
 }
-
-export default (PromotionView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(PromotionView);
+// export default (PromotionView);

@@ -31,28 +31,28 @@ class App extends Component {
 
   }
   render() {
-    console.log("user", this.props.user.admin_code);
+    console.log("user", this.props.user.user_code);
 
-    // if (this.props.user.admin_code == undefined) {
+    if (this.props.user.user_code == undefined) {
 
-    //   return (
-    //     < HashRouter >
+      return (
+        < HashRouter >
 
-    //       <React.Suspense fallback={loading()}>
-    //         <link href="https://fonts.googleapis.com/css?family=Kanit" rel="stylesheet" />
-    //         <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet" />
-    //         <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-    //         <Switch>
-    //           <Route exact path="/login" name="Login Page" render={props => <Login {...props} />} />
-    //           <Route exact path="/response-omise" name="Response Omise" render={props => <ResponseOmise {...props} />} />
-    //           <Route exact path="/" name="Login Page" render={props => <Login {...props} />} />
-    //           <Route exact path="/verify/:email" name="Forgot Password" render={props => <VerifyView {...props} />} />
-    //           <Redirect from="/" to="/login" />
-    //         </Switch>
-    //       </React.Suspense>
-    //     </HashRouter >
-    //   )
-    // } else {
+          <React.Suspense fallback={loading()}>
+            <link href="https://fonts.googleapis.com/css?family=Kanit" rel="stylesheet" />
+            <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet" />
+            <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+            <Switch>
+              <Route exact path="/login" name="Login Page" render={props => <Login {...props} />} />
+              <Route exact path="/response-omise" name="Response Omise" render={props => <ResponseOmise {...props} />} />
+              <Route exact path="/" name="Login Page" render={props => <Login {...props} />} />
+              <Route exact path="/verify/:email" name="Forgot Password" render={props => <VerifyView {...props} />} />
+              <Redirect from="/" to="/login" />
+            </Switch>
+          </React.Suspense>
+        </HashRouter >
+      )
+    } else {
       return (
         <HashRouter>
           <React.Suspense fallback={loading()}>
@@ -66,7 +66,7 @@ class App extends Component {
         </HashRouter>
       )
     }
-  // }
+  }
 }
 const mapStatetoProps = (state) => {
   return {

@@ -32,8 +32,8 @@ class RecipeView extends Component {
             var stock_out = await stock_model.getSumStockOutBy(stock.data[key])
             var sum_stock_in = 0
             var sum_stock_out = 0
-            var minimum_stock = this.calculatQty(stock.data[key].product_minimum,stock.data[key].unit_id)
-            
+            var minimum_stock = this.calculatQty(stock.data[key].product_minimum, stock.data[key].unit_id)
+
             for (var i in stock_in.data) {
                 sum_stock_in += this.calculatQty(stock_in.data[i].stock_in, stock_in.data[i].unit)
 
@@ -52,6 +52,36 @@ class RecipeView extends Component {
             stock: stock.data,
         })
 
+    }
+
+    async getProductByKey() {
+        var keyword = document.getElementById("keyword").value
+        var stock = await stock_model.getProductByKey({ keyword: keyword })
+
+        for (var key in stock.data) {
+            var stock_in = await stock_model.getSumStockInBy(stock.data[key])
+            var stock_out = await stock_model.getSumStockOutBy(stock.data[key])
+            var sum_stock_in = 0
+            var sum_stock_out = 0
+            var minimum_stock = this.calculatQty(stock.data[key].product_minimum, stock.data[key].unit_id)
+
+            for (var i in stock_in.data) {
+                sum_stock_in += this.calculatQty(stock_in.data[i].stock_in, stock_in.data[i].unit)
+
+            }
+            for (var i in stock_out.data) {
+                sum_stock_out += this.calculatQty(stock_out.data[i].stock_out, stock_out.data[i].unit)
+            }
+            stock.data[key].sum_stock_in = sum_stock_in
+            stock.data[key].sum_stock_out = sum_stock_out
+            stock.data[key].minimum_stock = minimum_stock
+
+        }
+        // console.log("stock.data", stock.data);
+
+        this.setState({
+            stock: stock.data,
+        })
     }
 
     calculatQty(qty, unit_id) {
@@ -93,7 +123,7 @@ class RecipeView extends Component {
         if (this.state.stock != undefined) {
             let stock_list = []
             console.log(this.state.stock);
-            
+
             for (let i = 0; i < this.state.stock.length; i++) {
 
                 var stock_out_show = this.calculatQtyShow(this.state.stock[i].sum_stock_in, this.state.stock[i].unit_id)
@@ -101,7 +131,7 @@ class RecipeView extends Component {
 
                 stock_list.push(
 
-                    <tr style={{backgroundColor:this.state.stock[i].minimum_stock >= (this.state.stock[i].sum_stock_in - this.state.stock[i].sum_stock_out) ? 'yellow' :'transparent'}}>
+                    <tr style={{ backgroundColor: this.state.stock[i].minimum_stock >= (this.state.stock[i].sum_stock_in - this.state.stock[i].sum_stock_out) ? 'yellow' : 'transparent' }}>
 
                         <td ><h6 >{this.state.stock[i].product_name}</h6></td>
                         <td ><h6 className="textcenter3">{this.state.stock[i].product_code}</h6></td>
@@ -145,6 +175,13 @@ class RecipeView extends Component {
                                 </NavLink>
                             </CardHeader>
                             <CardBody>
+                                <Row style={{ marginBottom: 5 }}>
+                                    <Col lg="8">
+                                    </Col>
+                                    <Col lg="4">
+                                        <input className="form-control" type="text" placeholder="Search" id="keyword" onChange={this.getProductByKey.bind(this)}></input>
+                                    </Col>
+                                </Row>
                                 <table className="table table-bordered">
                                     <thead style={{ textAlign: 'center' }}>
                                         <tr>

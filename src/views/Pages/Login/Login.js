@@ -18,10 +18,10 @@ class Login extends Component {
     }
   }
   async componentDidMount() {
-    // console.log(this.props.user.member_code)
-    // if (this.props.member.member_code!=undefined) {
-    //   this.props.history.push('/admin/home')
-    // }
+    console.log(this.props.user.user_code)
+    if (this.props.user.user_code != undefined) {
+      this.props.history.push('/admin/home')
+    }
   }
 
   async handleSubmit(event) {
@@ -35,19 +35,20 @@ class Login extends Component {
     console.log('user_password', user_password);
 
 
-    arr['member_email'] = user_username;
-    arr['member_password'] = md5(user_password);;
+    arr['user_username'] = user_username;
+    arr['user_password'] = md5(user_password);;
+    console.log("arr :", arr);
 
     const information = await adminModel.checkAdminModelLogin(arr);
 
     console.log("information", information);
 
     if (information.data) {
-      var member = {}
+      var user = {}
 
-      member = information;
-      this.props.setUser(member.data);
-      console.log("information", member);
+      user = information;
+      this.props.setUser(user.data);
+      console.log("information", user);
 
       this.props.history.push('/dashboard')
     } else {
@@ -113,7 +114,7 @@ class Login extends Component {
 }
 const mapStatetoProps = (state) => {
   return {
-    member: state.member
+    user: state.user
   }
 }
 const mapDispatchtoProps = (dispatch) => {

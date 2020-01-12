@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHeader, Col, Row, CardImg, CardBody, CardTitle } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import swal from 'sweetalert';
 
 import MenuModel from '../../../models/MenuModel'
@@ -15,72 +16,70 @@ class RecipeView extends Component {
             data: [],
             refresh: false
         };
-        this.renderMenu = this.renderMenu.bind(this);
     }
 
 
     async componentDidMount() {
-        var menu_list = await menu_model.getMenuBy()
-        // console.log(menu_list);
-
-        this.setState({
-            menu_list: menu_list.data
-        })
-
-    }
-
-    renderMenu() {
-        if (this.state.menu_list != undefined) {
-            var tbody_menu_list = []
-
-            for (let i = 0; i < this.state.menu_list.length; i++) {
-
-                tbody_menu_list.push(
-                    <tr>
-                        <td width={5}><h6 className="textcenter3">{i + 1}</h6></td>
-                        <td width={150}><h6 className="textcenter3">{this.state.menu_list[i].menu_name}</h6></td>
-
-                        <td width={5}>
-                            <h6 className="textcenter3">
-                                <NavLink exact to={`/product-manage/recipe/insert/` + this.state.menu_list[i].menu_code} style={{ width: '100%' }}>
-                                <i class="fa fa-pencil-square-o" aria-hidden="true" style={{ color: 'blue', marginRight: 30 }}></i>
-                            </NavLink>
-                            </h6>
-                        </td>
-                    </tr>
-                )
-
-            }
-            return tbody_menu_list;
+        const menu_list = await menu_model.getMenuBy();
+        const data_menu_list = {
+            rows: []
         }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in menu_list.data) {
+            var set_row = {
+                no: i,
+                menu_code: menu_list.data[key].menu_code,
+                menu_name: menu_list.data[key].menu_name,
+            }
+            data_menu_list.rows.push(set_row);
+            i++;
+        }
+        this.setState({
+            data: data_menu_list
+        });
     }
+
+    cellButton(cell, row, enumObject, rowIndex) {
+        return (
+            <>
+                <NavLink exact to={'/product-manage/recipe/insert/' + row.menu_code}>
+                    <button class="btn btn-warning">จัดการ</button>
+                </NavLink>
+            </>
+        )
+    }
+
     render() {
-
-
+        const { data } = this.state;
 
         return (
             <div className="animated fadeIn">
-                <Row style={{ padding: '30px' }}>
-                    <Col>
+                <Row>
+                    <Col lg='12'>
                         <Card>
-                            <CardHeader style={{ textAlign: 'center' }}>
+                            <CardHeader>
                                 จัดการสูตร
                             </CardHeader>
                             <CardBody>
-                                <Table responsive bordered>
-                                    <Table hover>
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>เมนู</th>
-                                                <th>จัดการสูตร</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {this.renderMenu()}
-                                        </tbody>
-                                    </Table>
-                                </Table>
+                                <Row>
+                                    <Col lg='12'>
+                                        <div>
+                                            <BootstrapTable
+                                                ref='table'
+                                                data={data.rows}
+                                                striped hover pagination
+                                                search={true}
+                                            // className="table-overflow"
+
+                                            >
+                                                <TableHeaderColumn width={"10%"} dataField='no' headerAlign="center" dataAlign="center" dataSort isKey={true}>No</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='menu_name' headerAlign="center" dataAlign="center" dataSort>เมนู</TableHeaderColumn>
+                                                <TableHeaderColumn width={"15%"} dataField='Action' headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
+                                            </BootstrapTable>
+                                        </div>
+                                    </Col>
+                                </Row>
                             </CardBody>
                         </Card>
                     </Col>

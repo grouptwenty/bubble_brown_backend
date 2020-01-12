@@ -64,7 +64,7 @@ export default class AboutModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -76,7 +76,7 @@ export default class AboutModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({about_code:data})
+            body: JSON.stringify({ about_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -86,7 +86,7 @@ export default class AboutModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -98,7 +98,7 @@ export default class AboutModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({about_code:data})
+            body: JSON.stringify({ about_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -108,7 +108,7 @@ export default class AboutModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -130,7 +130,29 @@ export default class AboutModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
+                };
+            });
+    }
+
+    async updateAboutMainBranceByCode(data) {
+        return fetch(GOBALS.URL + '/about/updateAboutMainBranceByCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
                 };
             });
     }
@@ -164,7 +186,7 @@ export default class AboutModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({about_code:data})
+            body: JSON.stringify({ about_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -174,7 +196,7 @@ export default class AboutModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -186,7 +208,7 @@ export default class AboutModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({email:data})
+            body: JSON.stringify({ email: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -196,7 +218,7 @@ export default class AboutModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -246,5 +268,5 @@ export default class AboutModel {
                 //console.error(error);
             });
     }
-    
+
 }

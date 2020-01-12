@@ -95,6 +95,7 @@
     "react-touch": "^0.4.4",
     "reactstrap": "^7.1.0",
     "redux": "3.7.2",
+    "reverse-md5": "0.0.4",
     "simple-line-icons": "^2.4.1",
     "socket.io-client": "^2.2.0",
     "sweetalert": "^2.1.2",

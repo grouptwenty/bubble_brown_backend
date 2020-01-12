@@ -66,7 +66,7 @@ class OrderView extends Component {
         console.log(code);
 
 
-        var menutype_list = await menutype_model.getMenuTypeBy()
+        var menutype_list = await menutype_model.getMenuTypeBy(this.props.user)
         this.setState({
             menutype_list: menutype_list.data,
         })
@@ -90,7 +90,7 @@ class OrderView extends Component {
             order_Bycode: order_Bycode.data
         })
         // console.log("254875",this.state.order_Bycode.promotion_header);
-        
+
 
         if (code != undefined) {
 
@@ -427,7 +427,7 @@ class OrderView extends Component {
         }
     }
 
-    rendershowOldPromotion(){
+    rendershowOldPromotion() {
         if (this.state.promotion_use_list != undefined) {
             // console.log("promotion_list", promotion_list);
             var show_promotion = []
@@ -885,4 +885,9 @@ class OrderView extends Component {
         )
     }
 }
-export default (OrderView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(OrderView);

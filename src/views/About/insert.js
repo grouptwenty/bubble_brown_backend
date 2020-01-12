@@ -325,7 +325,8 @@ class insertView extends Component {
                                                     </Col>
                                                     <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="about_img" />
                                                 </div>
-                                            </FormGroup>                                        </Col>
+                                            </FormGroup>
+                                        </Col>
                                         <Col lg="8">
                                             <br />
 

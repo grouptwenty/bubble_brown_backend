@@ -1,8 +1,8 @@
-
 import React, { Component } from 'react';
 import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHeader, Col, Row, CardImg, CardBody, CardTitle } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import swal from 'sweetalert';
 
 import ProductModel from '../../../models/ProductModel'
@@ -15,118 +15,109 @@ class ProductView extends Component {
             data: [],
             refresh: false
         };
-        this.renderProduct = this.renderProduct.bind(this);
-          this.onDelete = this.onDelete.bind(this);
     }
 
 
     async componentDidMount() {
-        var product = await product_model.getProductBy()
-        // console.log(menu_list);
 
-        this.setState({
-            product: product.data
-        })
-
-    }
-
-
-        async onDelete(code) {
-        // console.log("code", code);
-        swal({
-            text: "คุณต้องการลบข้อมูลสินค้า ? ",
-            icon: "warning",
-            buttons: true,
-            dengerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    const res = product_model.deleteByCode(code)
-                        .then((req) => {
-                            if (req.data == true) {
-                                this.componentDidMount();
-                                swal("success Deleted! ", {
-                                    icon: "success",
-
-                                });
-                            
-                            } else {
-                                swal("success Deleted! ", {
-                                    icon: "error",
-
-                                });
-                            }
-
-                        })
-
-                }
-
-            });
-
-    }
-
-
-    renderProduct() {
-        if (this.state.product != undefined) {
-            var product_list = []
-
-            for (let i = 0; i < this.state.product.length; i++) {
-
-                product_list.push(
-                    <tr>
-                        <td width={5}><h6 className="textcenter3"></h6></td>
-                        <td width={150}><h6 className="textcenter3">{this.state.product[i].product_code}</h6></td>
-                        <td width={150}><h6 className="textcenter3">{this.state.product[i].product_name}</h6></td>
-
-                        <td width={5}>
-                            <h6 className="textcenter3">
-                                <NavLink exact to={`/product-manage/product/update/` + this.state.product[i].product_code} style={{ width: '100%' }}>
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true" style={{ color: 'blue', marginRight: 30 }}></i>
-                                </NavLink>
-
-                                <Link to={`#`} onClick={this.onDelete.bind(null, this.state.product[i].product_code)}>
-                                    <i class="fa fa-times" aria-hidden="true" style={{ color: 'red' }}></i>
-                                </Link>
-                            </h6>
-                        </td>
-                    </tr>
-                )
+        const product_list = await product_model.getProductBy();
+        const data_product_list = {
+            rows: []
+        }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in product_list.data) {
+            var set_row = {
+                no: i,
+                product_code: product_list.data[key].product_code,
+                product_name: product_list.data[key].product_name,
 
             }
-            return product_list;
+            data_product_list.rows.push(set_row);
+            i++;
         }
+        this.setState({
+            data: data_product_list
+        });
+
     }
+
+    cellButton(cell, row, enumObject, rowIndex) {
+        return (
+            <>
+                <NavLink exact to={'/product-manage/product/update/' + row.product_code}>
+                    <button class="btn btn-warning">แก้ไข</button>
+                </NavLink>
+                <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>ยกเลิก</button>
+            </>
+        )
+    }
+
+    onClickDelete(cell, row, rowIndex) {
+        console.log('cell', cell);
+        swal({
+            title: "คุณต้องการลบข้อมูลสินค้า ?",
+            text: "เมื่อลบแล้วคุณจะไม่สามารถกู้คืนข้อมูลนี้ได้!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then(async (willDelete) => {
+            if (willDelete) {
+                var set_data = {
+                    product_code: row.product_code,
+                }
+                console.log('------------', set_data)
+                var res = await product_model.deleteByCode(set_data);
+                if (res.query_result) {
+                    swal("ลบข้อมูลสำเร็จ!", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("ลบข้อมูลไม่สำเร็จ!", {
+                        icon: "error",
+                    });
+                }
+                this.componentDidMount();
+            }
+        });
+        console.log('row', row);
+        console.log('rowIndex', rowIndex);
+    }
+
     render() {
-
-
+        const { data } = this.state;
 
         return (
             <div className="animated fadeIn">
-                <Row style={{ padding: '30px' }}>
-                    <Col>
+                <Row>
+                    <Col lg='12'>
                         <Card>
-                            <CardHeader style={{ textAlign: 'center' }}>
+                            <CardHeader>
                                 จัดการสินค้า
                                 <NavLink exact to={'/product-manage/product/insert/'} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> เพิ่ม</button>
                                 </NavLink>
                             </CardHeader>
                             <CardBody>
-                                <Table responsive bordered>
-                                    <Table hover>
-                                        <thead>
-                                            <tr style={{ textAlign: 'center' }}>
-                                                <th>#</th>
-                                                <th>รหัสสินค้า</th>
-                                                <th>สินค้า</th>
-                                                <th>#</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {this.renderProduct()}
-                                        </tbody>
-                                    </Table>
-                                </Table>
+                                <Row>
+                                    <Col lg='12'>
+                                        <div>
+                                            <BootstrapTable
+                                                ref='table'
+                                                data={data.rows}
+                                                striped hover pagination
+                                                search={true}
+                                            // className="table-overflow"
+
+                                            >
+                                                <TableHeaderColumn dataField='no' headerAlign="center" dataAlign="center" dataSort isKey={true}>No</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='product_code' headerAlign="center" dataAlign="center" dataSort>รหัสสินค้า</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='product_name' headerAlign="center" dataAlign="center" dataSort>สินค้า</TableHeaderColumn>
+                                                <TableHeaderColumn width={"20%"} dataField='Action' headerAlign="center" dataAlign="left" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
+                                            </BootstrapTable>
+                                        </div>
+                                    </Col>
+                                </Row>
                             </CardBody>
                         </Card>
                     </Col>

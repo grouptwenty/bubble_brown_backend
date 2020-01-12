@@ -35,7 +35,7 @@ class MenuView extends Component {
                 var set_data = {
                     menu_code: row.menuCode,
                 }
-                console.log('row',row)
+                console.log('row', row)
                 console.log('------------', set_data)
                 var res = await menu_model.deleteMenuByCode(set_data);
                 if (res.query_result) {
@@ -71,7 +71,7 @@ class MenuView extends Component {
         // var url = "http://localhost:3006/" + row.Picture;
         return (
             <>
-     <img src={ row.Img != "" && row.Img != null ? GOBALS.URL_IMG + "menu/" + row.Img : ImgDefault} className="img"></img>
+                <img src={row.Img != "" && row.Img != null ? GOBALS.URL_IMG + "menu/" + row.Img : ImgDefault} className="img"></img>
 
             </>
         )
@@ -100,7 +100,7 @@ class MenuView extends Component {
         this.setState({
             data: data_menu_list
         })
-        
+
     }
 
     render() {
@@ -125,9 +125,9 @@ class MenuView extends Component {
                                                 data={data.rows}
                                                 striped hover pagination
                                                 search={true}
-                                                // className="table-overflow"
+                                            // className="table-overflow"
                                             >
-                                                <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='menuCode' headerAlign="center" dataAlign="center" dataSort isKey={true}>รหัสเมนู</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Type' headerAlign="center" dataAlign="center" dataSort>ประเภท</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อเมนู</TableHeaderColumn>
@@ -146,4 +146,9 @@ class MenuView extends Component {
         )
     }
 }
-export default (MenuView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(MenuView);

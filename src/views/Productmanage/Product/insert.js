@@ -80,11 +80,11 @@ class insertView extends Component {
             arr[name] = form.elements[name.toString()].value;
         }
 
-        var product_type__id = document.getElementById("product_type__id").value
+        var product_type_id = document.getElementById("product_type_id").value
         // console.log("product_type__id",product_type__id);
-        const max_code = await product_model.getProductMaxCode(product_type__id)
+        const max_code = await product_model.getProductMaxCode(product_type_id)
         // console.log("max_code",max_code);
-        var product_code = 'PT' + product_type__id + max_code.data.product_code_max
+        var product_code = 'PT' + product_type_id + max_code.data.product_code_max
         // console.log("product_code",product_code);
 
         arr['product_code'] = product_code
@@ -148,7 +148,7 @@ class insertView extends Component {
         let type = []
         for (let i = 0; i < this.state.product_type.length; i++) {
             type.push(
-                <option value={this.state.product_type[i].product_type__id}>{this.state.product_type[i].product_type_name}</option>
+                <option value={this.state.product_type[i].product_type_id}>{this.state.product_type[i].product_type_name}</option>
             )
 
         }
@@ -201,7 +201,7 @@ class insertView extends Component {
                                             <Row>
                                                 <Col lg="6">
                                                     <Label className="text_head"> ประเภทสินค้า <font color='red'><b> * </b></font></Label>
-                                                    <Input type="select" id="product_type__id" name="product_type__id" class="form-control" >
+                                                    <Input type="select" id="product_type_id" name="product_type_id" class="form-control" >
                                                         <option value="">Select</option>
                                                         {this.renderType()}
                                                     </Input>

@@ -10,6 +10,8 @@ import ImgDefault from '../../assets/img/img_default.png'
 import UploadModel from '../../models/UploadModel';
 import GOBALS from '../../GOBALS';
 import 'react-day-picker/lib/style.css';
+var md5 = require("md5");
+// var ReverseMd5 = require('reverse-md5');
 
 var user_model = new UserModel
 var upload_model = new UploadModel();
@@ -100,6 +102,15 @@ class editView extends Component {
     }
 
     async setval(data) {
+        // var rev = ReverseMd5({
+        //     lettersUpper: true,
+        //     lettersLower: true,
+        //     numbers: true,
+        //     special: false,
+        //     whitespace: true,
+        //     maxLen: 12
+        // })
+
         console.log('data', data)
         document.getElementById('user_code').value = data.user_code
         document.getElementById('user_position').value = data.user_position
@@ -110,7 +121,7 @@ class editView extends Component {
         document.getElementById('user_email').value = data.user_email
         document.getElementById('user_address').value = data.user_address
         document.getElementById('user_username').value = data.user_username
-        document.getElementById('user_password').value = data.user_password
+        document.getElementById('user_password').value = (data.user_password)
     }
 
     async handleSubmit(event) {
@@ -124,6 +135,7 @@ class editView extends Component {
         for (let name of data.keys()) {
             arr[name] = form.elements[name.toString()].value;
         }
+        arr['user_password'] = md5(arr['user_password'])
 
         if (this.state.selectedFile != null) {
 
