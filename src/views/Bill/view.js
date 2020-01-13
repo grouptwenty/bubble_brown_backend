@@ -203,8 +203,9 @@ class BillView extends Component {
 
 
         console.log("check_bill====>", check_bill);
-        var payment_date = new Date()
+        var payment_date = moment(new Date()).format('YYYY-MM-DD');
         var payment_time = moment(new Date()).format('HH:mm:ss'); //todays date
+        console.log("payment_date", payment_date);
         var payment = {
             payment_sum: check_bill.amount,
             order_code: check_bill.order_code,

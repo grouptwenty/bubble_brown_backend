@@ -39,6 +39,15 @@ class ReportSaleView extends Component {
         this.handleEndMonthChange = this.handleEndMonthChange.bind(this);
         this.handleStartYearChange = this.handleStartYearChange.bind(this);
         this.handleEndYearChange = this.handleEndYearChange.bind(this);
+        this.renderSaleDay = this.renderSaleDay.bind(this);
+        this.renderCostDay = this.renderCostDay.bind(this);
+        this.renderProfitDay = this.renderProfitDay.bind(this);
+        this.renderSaleMonth = this.renderSaleMonth.bind(this);
+        this.renderCostMonth = this.renderCostMonth.bind(this);
+        this.renderProfitMonth = this.renderProfitMonth.bind(this);
+        this.renderSaleYear = this.renderSaleYear.bind(this);
+        this.renderCostYear = this.renderCostYear.bind(this);
+        this.renderProfitYear = this.renderProfitYear.bind(this);
     }
 
     //DAY
@@ -63,7 +72,8 @@ class ReportSaleView extends Component {
                 Date: this.state.report_sale_day[key].payment_date,
                 Time: this.state.report_sale_day[key].payment_time,
                 Total: this.state.report_sale_day[key].total_payment,
-                Sum: this.state.report_sale_day[key].sum_total
+                Cost: this.state.report_sale_day[key].cost,
+                Profit: this.state.report_sale_day[key].profit,
             }
             data_report_sale_day.rows.push(set_row);
             i++;
@@ -98,6 +108,8 @@ class ReportSaleView extends Component {
                 Date: this.state.report_sale_month[key].month,
                 Time: this.state.report_sale_month[key].payment_time,
                 Total: this.state.report_sale_month[key].total_payment,
+                Cost: this.state.report_sale_month[key].cost,
+                Profit: this.state.report_sale_month[key].profit,
             }
             data_report_sale_month.rows.push(set_row);
             i++;
@@ -129,6 +141,8 @@ class ReportSaleView extends Component {
                 Date: this.state.report_sale_month[key].month,
                 Time: this.state.report_sale_month[key].payment_time,
                 Total: this.state.report_sale_month[key].total_payment,
+                Cost: this.state.report_sale_month[key].cost,
+                Profit: this.state.report_sale_month[key].profit,
             }
             data_report_sale_month.rows.push(set_row);
             i++;
@@ -160,6 +174,8 @@ class ReportSaleView extends Component {
             var set_row = {
                 Date: this.state.report_sale_year[key].year,
                 Total: this.state.report_sale_year[key].total_payment,
+                Cost: this.state.report_sale_year[key].cost,
+                Profit: this.state.report_sale_year[key].profit,
             }
             data_report_sale_year.rows.push(set_row);
             i++;
@@ -191,6 +207,8 @@ class ReportSaleView extends Component {
             var set_row = {
                 Date: this.state.report_sale_year[key].year,
                 Total: this.state.report_sale_year[key].total_payment,
+                Cost: this.state.report_sale_year[key].cost,
+                Profit: this.state.report_sale_year[key].profit,
             }
             data_report_sale_year.rows.push(set_row);
             i++;
@@ -221,6 +239,8 @@ class ReportSaleView extends Component {
                 Date: this.state.report_sale_day[key].payment_date,
                 Time: this.state.report_sale_day[key].payment_time,
                 Total: this.state.report_sale_day[key].total_payment,
+                Cost: this.state.report_sale_day[key].cost,
+                Profit: this.state.report_sale_day[key].profit,
             }
             data_report_sale_day.rows.push(set_row);
             i++;
@@ -257,6 +277,8 @@ class ReportSaleView extends Component {
                 Date: this.state.report_sale_month[key].month,
                 Time: this.state.report_sale_month[key].payment_time,
                 Total: this.state.report_sale_month[key].total_payment,
+                Cost: this.state.report_sale_month[key].cost,
+                Profit: this.state.report_sale_month[key].profit,
             }
             data_report_sale_month.rows.push(set_row);
             i++;
@@ -293,6 +315,8 @@ class ReportSaleView extends Component {
             var set_row = {
                 Date: this.state.report_sale_year[key].year,
                 Total: this.state.report_sale_year[key].total_payment,
+                Cost: this.state.report_sale_year[key].cost,
+                Profit: this.state.report_sale_year[key].profit,
             }
             data_report_sale_year.rows.push(set_row);
             i++;
@@ -308,6 +332,178 @@ class ReportSaleView extends Component {
         this.setState({ seg: number })
     }
 
+    renderSaleDay() {
+        var arr = []
+        if (this.state.report_sale_day != undefined) {
+            var sum = 0
+
+            for (var key in this.state.report_sale_day) {
+                sum += this.state.report_sale_day[key].total_payment
+            }
+            arr.push(
+                <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
+            )
+            return arr
+        } else {
+            arr.push(
+                <Label>0</Label>
+            )
+            return arr
+        }
+    }
+    renderCostDay() {
+        var arr = []
+        if (this.state.report_sale_day != undefined) {
+            var sum = 0
+
+            for (var key in this.state.report_sale_day) {
+                sum += this.state.report_sale_day[key].cost
+            }
+            arr.push(
+                <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
+            )
+            return arr
+        } else {
+            arr.push(
+                <Label>0</Label>
+            )
+            return arr
+        }
+    }
+    renderProfitDay() {
+        var arr = []
+        if (this.state.report_sale_day != undefined) {
+            var sum = 0
+
+            for (var key in this.state.report_sale_day) {
+                sum += this.state.report_sale_day[key].profit
+            }
+            arr.push(
+                <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
+            )
+            return arr
+        } else {
+            arr.push(
+                <Label>0</Label>
+            )
+            return arr
+        }
+    }
+    renderSaleMonth() {
+        var arr = []
+        if (this.state.report_sale_month != undefined) {
+            var sum = 0
+
+            for (var key in this.state.report_sale_month) {
+                sum += this.state.report_sale_month[key].total_payment
+            }
+            arr.push(
+                <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
+            )
+            return arr
+        } else {
+            arr.push(
+                <Label>0</Label>
+            )
+            return arr
+        }
+    }
+    renderCostMonth() {
+        var arr = []
+        if (this.state.report_sale_month != undefined) {
+            var sum = 0
+
+            for (var key in this.state.report_sale_month) {
+                sum += this.state.report_sale_month[key].cost
+            }
+            arr.push(
+                <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
+            )
+            return arr
+        } else {
+            arr.push(
+                <Label>0</Label>
+            )
+            return arr
+        }
+    }
+    renderProfitMonth() {
+        var arr = []
+        if (this.state.report_sale_month != undefined) {
+            var sum = 0
+
+            for (var key in this.state.report_sale_month) {
+                sum += this.state.report_sale_month[key].profit
+            }
+            arr.push(
+                <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
+            )
+            return arr
+        } else {
+            arr.push(
+                <Label>0</Label>
+            )
+            return arr
+        }
+    }
+
+    renderSaleYear() {
+        var arr = []
+        if (this.state.report_sale_year != undefined) {
+            var sum = 0
+
+            for (var key in this.state.report_sale_year) {
+                sum += this.state.report_sale_year[key].total_payment
+            }
+            arr.push(
+                <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
+            )
+            return arr
+        } else {
+            arr.push(
+                <Label>0</Label>
+            )
+            return arr
+        }
+    }
+    renderCostYear() {
+        var arr = []
+        if (this.state.report_sale_year != undefined) {
+            var sum = 0
+
+            for (var key in this.state.report_sale_year) {
+                sum += this.state.report_sale_year[key].cost
+            }
+            arr.push(
+                <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
+            )
+            return arr
+        } else {
+            arr.push(
+                <Label>0</Label>
+            )
+            return arr
+        }
+    }
+    renderProfitYear() {
+        var arr = []
+        if (this.state.report_sale_year != undefined) {
+            var sum = 0
+
+            for (var key in this.state.report_sale_year) {
+                sum += this.state.report_sale_year[key].profit
+            }
+            arr.push(
+                <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
+            )
+            return arr
+        } else {
+            arr.push(
+                <Label>0</Label>
+            )
+            return arr
+        }
+    }
 
     render() {
         const { data_day } = this.state
@@ -418,8 +614,40 @@ class ReportSaleView extends Component {
                                                 <Row>
                                                     <Col lg='12'>
                                                         <div>
-                                                            {/* ยอดขายทั้งหมด :
-                                                            <label>{this.state.report_sale_day.sum_total}</label> */}
+                                                            <Row>
+                                                                <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    <Label>ยอดขายทั้งหมด :</Label>
+                                                                </Col>
+                                                                <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    {this.renderSaleDay()}
+                                                                </Col>
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                
+                                                                <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    <Label>ต้นทุนทั้งหมด :</Label>
+                                                                </Col>
+                                                                <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
+
+                                                                    {this.renderCostDay()}
+                                                                </Col>
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                
+                                                                <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    <Label>กำไรทั้งหมด :</Label>
+                                                                </Col>
+                                                                <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    {this.renderProfitDay()}
+                                                                </Col>
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+                                                                </Col>
+                                                            </Row>
                                                             <BootstrapTable
                                                                 ref='table'
                                                                 data={data_day.rows}
@@ -430,12 +658,13 @@ class ReportSaleView extends Component {
                                                                 {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
                                                                 <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>วันที่</TableHeaderColumn>
                                                                 <TableHeaderColumn dataField='Time' headerAlign="center" dataAlign="center" dataSort isKey={true}>เวลา</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ราคารวม</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ยอดขาย</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Cost' headerAlign="center" dataAlign="center" dataSort>ต้นทุน</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Profit' headerAlign="center" dataAlign="center" dataSort>กำไร</TableHeaderColumn>
                                                             </BootstrapTable>
                                                         </div>
                                                     </Col>
                                                 </Row>
-
                                             </Card>
 
                                         }
@@ -477,6 +706,41 @@ class ReportSaleView extends Component {
                                                 <Row>
                                                     <Col lg='12'>
                                                         <div>
+                                                            <Row>
+                                                                
+                                                                <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    <Label>ยอดขายทั้งหมด :</Label>
+                                                                </Col>
+                                                                <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    {this.renderSaleMonth()}
+                                                                </Col>
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                
+                                                                <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    <Label>ต้นทุนทั้งหมด :</Label>
+                                                                </Col>
+                                                                <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
+
+                                                                    {this.renderCostMonth()}
+                                                                </Col>
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                
+                                                                <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    <Label>กำไรทั้งหมด :</Label>
+                                                                </Col>
+                                                                <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    {this.renderProfitMonth()}
+                                                                </Col>
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+                                                                </Col>
+                                                            </Row>
                                                             <BootstrapTable
                                                                 ref='table'
                                                                 data={data_month.rows}
@@ -486,8 +750,10 @@ class ReportSaleView extends Component {
                                                             >
                                                                 {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
                                                                 <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort isKey={true}>วันที่</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Time' headerAlign="center" dataAlign="center" dataSort>เวลา</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ราคารวม</TableHeaderColumn>
+                                                                {/* <TableHeaderColumn dataField='Time' headerAlign="center" dataAlign="center" dataSort>เวลา</TableHeaderColumn> */}
+                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ยอดขาย</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Cost' headerAlign="center" dataAlign="center" dataSort>ต้นทุน</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Profit' headerAlign="center" dataAlign="center" dataSort>กำไร</TableHeaderColumn>
                                                             </BootstrapTable>
                                                         </div>
                                                     </Col>
@@ -532,6 +798,41 @@ class ReportSaleView extends Component {
                                                 <Row>
                                                     <Col lg='12'>
                                                         <div>
+                                                            <Row>
+                                                                
+                                                                <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    <Label>ยอดขายทั้งหมด :</Label>
+                                                                </Col>
+                                                                <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    {this.renderSaleYear()}
+                                                                </Col>
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                
+                                                                <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    <Label>ต้นทุนทั้งหมด :</Label>
+                                                                </Col>
+                                                                <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
+
+                                                                    {this.renderCostYear()}
+                                                                </Col>
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                
+                                                                <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    <Label>กำไรทั้งหมด :</Label>
+                                                                </Col>
+                                                                <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
+                                                                    {this.renderProfitYear()}
+                                                                </Col>
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+                                                                </Col>
+                                                            </Row>
                                                             <BootstrapTable
                                                                 ref='table'
                                                                 data={data_year.rows}
@@ -541,7 +842,9 @@ class ReportSaleView extends Component {
                                                             >
                                                                 {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
                                                                 <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort isKey={true}>เดือน</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ราคารวม</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ยอดขาย</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Cost' headerAlign="center" dataAlign="center" dataSort>ต้นทุน</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Profit' headerAlign="center" dataAlign="center" dataSort>กำไร</TableHeaderColumn>
                                                             </BootstrapTable>
                                                         </div>
                                                     </Col>
