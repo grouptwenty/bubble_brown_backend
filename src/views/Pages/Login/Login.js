@@ -3,7 +3,7 @@ import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGr
 import { connect } from 'react-redux';
 import AdminModel from '../../../models/AdminModel';
 import swal from 'sweetalert';
-import Background from './back2.jpg';
+import Background from './bg.jpg';
 var md5 = require("md5");
 
 var adminModel = new AdminModel();
@@ -70,8 +70,8 @@ class Login extends Component {
       <Form onSubmit={this.handleSubmit} id="myForm">
         <div className="app flex-row align-items-center background-login" style={{ backgroundImage: `url(${Background})` }}>
           <Container>
-            <div className="b-head">
-              <h1 >IOT WASHING MACHINE</h1>
+            <div className="b-head" >
+              <h1 style={{color:'white'}}>BuBBle Brown Coffee</h1>
             </div>
             <Row className="justify-content-center">
               <Col md="6">
@@ -79,7 +79,7 @@ class Login extends Component {
                   <Card className="p-4 card_login">
                     <CardBody>
 
-                      <p className="text-muted text_login_s">Sign In to your account</p>
+                      <p className="text-muted text_login_s">เข้าสู่ระบบ</p>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
@@ -98,7 +98,7 @@ class Login extends Component {
                       </InputGroup>
                       <Row>
                         <Col xs="6" className="button_login">
-                          <Button color="primary" size="lg" block className="px-4" name="button_login" >Login</Button>
+                          <Button backgroundColor = "#874514" size="lg" block className="px-4" name="button_login" >Login</Button>
                         </Col>
                       </Row>
                     </CardBody>
