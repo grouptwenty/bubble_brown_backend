@@ -13,7 +13,7 @@ import DayPicker from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import moment from 'moment'
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import { BootstrapTable, TableHeaderColumn, TableHeaderRow } from 'react-bootstrap-table';
 
 var report_model = new ReportModel;
 var today = new Date();
@@ -239,6 +239,8 @@ class ReportBestSaleView extends Component {
         this.setState({
             data_day: data_report_best_sale_day
         })
+        console.log("data_report_best_sale_day",data_report_best_sale_day);
+        
 
 
         //MONTH
@@ -410,7 +412,7 @@ class ReportBestSaleView extends Component {
 
                                             <Card body>
 
-                                                <CardTitle><h3>รายงานเมนูขายดีประจำวัน</h3></CardTitle>
+                                                <CardTitle><h3>รายงานเมนูขายดี 5 อันดับประจำวัน</h3></CardTitle>
                                                 <FormGroup>
                                                     <Label className="text_head"> เลือกวันที่<font color='red'><b> * </b></font></Label>
                                                     <DayPickerInput
@@ -436,6 +438,7 @@ class ReportBestSaleView extends Component {
                                                             // className="table-overflow"
                                                             >
                                                                 <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>วันที่</TableHeaderColumn>
+                                                                <TableHeaderColumn dataField='Time' headerAlign="center" dataAlign="center" dataSort>เวลา</TableHeaderColumn>
                                                                 <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อเมนู</TableHeaderColumn>
                                                                 <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort isKey={true}>จำนวน</TableHeaderColumn>
                                                             </BootstrapTable>
@@ -450,7 +453,7 @@ class ReportBestSaleView extends Component {
                                         {this.state.seg === 2 &&
 
                                             <Card body>
-                                                <CardTitle><h3>รายงานเมนูขายดีประจำเดือน</h3></CardTitle>
+                                                <CardTitle><h3>รายงานเมนูขายดี 5 อันดับ ประจำเดือน</h3></CardTitle>
                                                 <Row>
                                                     <Col lg='6'>
                                                         <FormGroup>
@@ -492,7 +495,7 @@ class ReportBestSaleView extends Component {
                                                             // className="table-overflow"
                                                             >
                                                                 {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
-                                                                {/* <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>วันที่</TableHeaderColumn> */}
+                                                                <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>วันที่</TableHeaderColumn>
                                                                 <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อเมนู</TableHeaderColumn>
                                                                 <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort isKey={true}>จำนวน</TableHeaderColumn>
                                                             </BootstrapTable>
@@ -505,7 +508,7 @@ class ReportBestSaleView extends Component {
                                         {this.state.seg === 3 &&
 
                                             <Card body>
-                                                <CardTitle><h3>รายงานเมนูขายดีประจำปี</h3></CardTitle>
+                                                <CardTitle><h3>รายงานเมนูขายดี 5 อันดับ ประจำปี</h3></CardTitle>
                                                 <Row>
                                                     <Col lg='6'>
                                                         <FormGroup>
