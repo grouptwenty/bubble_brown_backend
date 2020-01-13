@@ -6,20 +6,52 @@ import PropTypes from 'prop-types';
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 // import sygnet from '../../assets/img/brand/sygnet.svg'
 import { connect } from 'react-redux';
+import AboutModel from '../../models/AboutModel'
 const propTypes = {
   children: PropTypes.node,
 };
 
 const defaultProps = {};
 
+var about_model = new AboutModel;
 class DefaultHeader extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      branch_list: [],
+    
 
+  };
+    this.renderBranch = this.renderBranch.bind(this);
 
   }
 
-  
+  async componentDidMount() {
+    var branch_list = await about_model.getAboutBy()
+    console.log("branch_list", branch_list);
+
+
+    this.setState({
+      branch_list: branch_list.data
+    })
+
+    console.log("branch_list", this.state.branch_list);
+
+  }
+
+
+  renderBranch() {
+
+    if (this.state.branch_list != undefined) {
+      var branch = []
+      for (var key in this.state.branch_list) {
+        branch.push(
+        <DropdownItem><i className="fa fa-user"></i>{this.state.branch_list[key].about_name_th}</DropdownItem>
+        )
+    }
+    return branch;
+  }
+}
 
   render() {
 
@@ -30,7 +62,7 @@ class DefaultHeader extends Component {
       <React.Fragment >
         {/* <AppSidebarToggler className="d-lg-none" display="md" mobile /> */}
         {/* <NavLink to="/dashboard"  > */}
-          {/* 
+        {/* 
         <AppNavbarBrand
           full={{ src: logo, width: 65, height: 65, alt: 'CoreUI Logo' }}
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
@@ -40,29 +72,14 @@ class DefaultHeader extends Component {
         <img src="/logo_bubblebrown.png" height={80} width={80} />
 
         <Nav className="ml-auto" navbar>
-          {/* < AppHeaderDropdown direction="down">
-            <DropdownMenu right style={{ right: 'auto' }}>
-              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 01</strong></DropdownItem>
-              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 02</strong></DropdownItem>
-              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 03</strong></DropdownItem>
-              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 04</strong></DropdownItem>
-              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 05</strong></DropdownItem>
-              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 06</strong></DropdownItem>
-              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 07</strong></DropdownItem>
-              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 08</strong></DropdownItem>
-              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 09</strong></DropdownItem>
-              <DropdownItem header tag="div" className="text-center"><strong>Notificaation 10</strong></DropdownItem>
-              <DropdownItem header tag="div" className="text-center"><strong>See All</strong></DropdownItem>
 
-            </DropdownMenu> */}
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
-              <NavLink to="#" className="nav-link"> สาขา <i className="fa fa-user"></i> </NavLink>
+              <NavLink to="#" className="nav-link">  <i className="fa fa-user"></i> </NavLink>
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
-              <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
-              <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
-              <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i> Logout</DropdownItem>
+              {this.renderBranch()}
+              <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i> ออกจากระบบ</DropdownItem>
             </DropdownMenu>
           </AppHeaderDropdown>
 
