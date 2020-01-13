@@ -27,15 +27,15 @@ class DefaultHeader extends Component {
     const { children, ...attributes } = this.props;
 
     return (
-      <React.Fragment>
+      <React.Fragment >
         {/* <AppSidebarToggler className="d-lg-none" display="md" mobile /> */}
-        <NavLink to="/dashboard"  >
+        {/* <NavLink to="/dashboard"  > */}
           {/* 
         <AppNavbarBrand
           full={{ src: logo, width: 65, height: 65, alt: 'CoreUI Logo' }}
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
         /> */}
-        </NavLink>
+        {/* </NavLink> */}
         <AppSidebarToggler className="d-md-down-none" display="lg" />
         <img src="/logo_bubblebrown.png" height={80} width={80} />
 
