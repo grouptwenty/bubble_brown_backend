@@ -20,7 +20,7 @@ class RecipeView extends Component {
 
 
     async componentDidMount() {
-        const menu_list = await menu_model.getMenuBy();
+        const menu_list = await menu_model.getMenuBy(this.props.user);
         const data_menu_list = {
             rows: []
         }
@@ -88,4 +88,9 @@ class RecipeView extends Component {
         )
     }
 }
-export default (RecipeView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(RecipeView);

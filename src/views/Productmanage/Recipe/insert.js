@@ -472,7 +472,7 @@ class ModelProduct extends React.Component {
 
     async componentDidMount() {
 
-        var product = await product_model.getProductBy()
+        var product = await product_model.getProductBy(this.props.user)
         console.log(product);
 
         this.setState({
@@ -553,6 +553,9 @@ class ModelProduct extends React.Component {
 
     }
 }
-
-
-export default (insertView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(insertView);

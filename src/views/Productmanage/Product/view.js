@@ -20,7 +20,7 @@ class ProductView extends Component {
 
     async componentDidMount() {
 
-        const product_list = await product_model.getProductBy();
+        const product_list = await product_model.getProductBy(this.props.user);
         const data_product_list = {
             rows: []
         }
@@ -126,4 +126,9 @@ class ProductView extends Component {
         )
     }
 }
-export default (ProductView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(ProductView);

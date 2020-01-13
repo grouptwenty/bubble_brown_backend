@@ -3,6 +3,7 @@ import React, { Component, useState } from 'react';
 import { Nav, NavItem, Table, TabContent, TabPane, Col, Row, CardHeader, Card, Input, CardText, CardBody, CardTitle, Button, Label, FormGroup, Form, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { connect } from 'react-redux';
 import 'react-tabs/style/react-tabs.css';
 import ClickNHold from 'react-click-n-hold';
 import swal from 'sweetalert';
@@ -68,7 +69,7 @@ class BillView extends Component {
     async componentDidMount() {
 
         var bill_order = await order_model.getOrderBy()
-        var zone_menu = await zone_model.getZoneBy()
+        var zone_menu = await zone_model.getZoneBy(this.props.user)
 
 
         this.setState({
@@ -199,7 +200,7 @@ class BillView extends Component {
 
 
     async Payment(check_bill) {
- 
+
 
         console.log("check_bill====>", check_bill);
         var payment_date = new Date()
@@ -1149,4 +1150,9 @@ class ComponentToPrint extends React.Component {
         );
     }
 }
-export default (BillView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(BillView);

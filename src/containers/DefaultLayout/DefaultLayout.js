@@ -40,7 +40,7 @@ class DefaultLayout extends Component {
     var currentLocation = this.props.location.pathname
     var pathMain = currentLocation.split("/")[1];
     console.log("currentLocation", pathMain);
-    var value = menu.renderMenu()
+    var value = menu.renderMenu(this.props.user)
     items['items'] = value
     console.log(" item = >", items);
 

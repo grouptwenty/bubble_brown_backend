@@ -79,7 +79,7 @@ class OrderView extends Component {
 
         this.renderMenuby()
 
-        var promotion_list = await promotion_model.getPromotionBy();
+        var promotion_list = await promotion_model.getPromotionBy(this.props.user);
         this.setState({
             promotion_list: promotion_list.data,
         })
@@ -129,7 +129,12 @@ class OrderView extends Component {
     }
 
     async getMenuByCode(code) {
-        var menu_list = await menu_model.getMenuByCode(code)
+        var arr = {}
+        arr["menu_type_id"] = code
+        arr["about_code"] = this.props.user.about_code
+        arr["about_main_branch"] = this.props.user.about_main_branch
+        arr["about_menu_data"] = this.props.user.about_menu_data
+        var menu_list = await menu_model.getMenuByCode(arr)
         console.log("menulistbycode", menu_list);
         this.setState({
             menu_list: menu_list.data
@@ -344,8 +349,8 @@ class OrderView extends Component {
 
             }
             if (this.state.promotion != undefined) {
-                console.log("this.state.promotion",this.state.promotion);
-                
+                console.log("this.state.promotion", this.state.promotion);
+
                 if (this.state.promotion.discount_percent != "") {
                     var discount_price = (sum * this.state.promotion.discount_percent) / 100
                     sum = sum - discount_price
@@ -426,8 +431,13 @@ class OrderView extends Component {
         if (this.state.menutype_list != undefined) {
 
             for (let i = 0; i < this.state.menutype_list.length; i++) {
+                var arr = this.state.menutype_list[i]
+                arr["about_code"] = this.props.user.about_code
+                arr["about_main_branch"] = this.props.user.about_main_branch
+                arr["about_menu_data"] = this.props.user.about_menu_data
+                console.log("555555555", this.props.user);
 
-                var menu_list = await menu_model.getMenuByCode(this.state.menutype_list[i].menu_type_id)
+                var menu_list = await menu_model.getMenuByCode(arr)
                 this.setState({
                     menu_list: menu_list.data
                 })

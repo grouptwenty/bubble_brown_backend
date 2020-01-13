@@ -74,7 +74,7 @@ class PromotionView extends Component {
     async componentDidMount() {
         console.log("userrrrrrrrrrrrrr", this.props.user);
 
-        const promotion_list = await promotion_model.getPromotionBy();
+        const promotion_list = await promotion_model.getPromotionBy(this.props.user);
         const data_promotion_list = {
             rows: []
         }

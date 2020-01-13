@@ -11,7 +11,7 @@ export default class ProductModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({menu_code: data})
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 

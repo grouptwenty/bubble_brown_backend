@@ -78,8 +78,8 @@ class MenuView extends Component {
     }
 
     async componentDidMount() {
-        var menu_list = await menu_model.getMenuBy()
-        // console.log("menu_list", menu_list);
+        var menu_list = await menu_model.getMenuBy(this.props.user)
+        console.log("this.props.user", this.props.user);
         const data_menu_list = {
             rows: []
         }

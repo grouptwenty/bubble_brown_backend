@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, FormGroup, CardHeader, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Input, Label, Form } from 'reactstrap';
 import { connect } from 'react-redux';
+import Select from 'react-select';
 import { NavLink, Link, } from 'react-router-dom';
 import { fonts } from 'pdfmake/build/pdfmake';
 import swal from 'sweetalert';
@@ -16,6 +17,10 @@ const address_model = new AddressModel
 const about_model = new AboutModel
 const upload_model = new UploadModel()
 var md5 = require("md5");
+const select = [
+    { value: '1', label: 'ใช้งาน' },
+    { value: '0', label: 'ไม่ใช้งาน' },
+];
 
 class editView extends Component {
     constructor(props) {
@@ -299,6 +304,13 @@ class editView extends Component {
                 button: "close",
             });
             return false
+        } else if (form.about_menu_data == '') {
+            swal({
+                text: "กรุณาเลือกการโคลนข้อมูล",
+                icon: "warning",
+                button: "close",
+            });
+            return false
         } else {
             return true
         }
@@ -449,6 +461,14 @@ class editView extends Component {
                                             <Label className="text_head"> ละติจูด<font color='red'><b> * </b></font></Label>
                                             <Input type="text" id="longitude" name="longitude" class="form-control" ></Input>
                                             <p id="longitude" className="text_head_sub">Example : 102.10612169999999</p>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col lg="3" md="3" sm="3" className="right" >
+                                            เมนู / สูตร / วัตถุดิบ :
+                                                    </Col>
+                                        <Col lg="5" md="5" sm="5">
+                                            <Select options={select} name={"about_menu_data"} required />
                                         </Col>
                                     </Row>
                                 </CardBody>

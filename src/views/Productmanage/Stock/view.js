@@ -25,7 +25,7 @@ class RecipeView extends Component {
 
     async componentDidMount() {
 
-        var stock = await stock_model.getProductBy()
+        var stock = await stock_model.getProductBy(this.props.user)
 
         for (var key in stock.data) {
             var stock_in = await stock_model.getSumStockInBy(stock.data[key])
@@ -206,4 +206,9 @@ class RecipeView extends Component {
         )
     }
 }
-export default (RecipeView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(RecipeView);

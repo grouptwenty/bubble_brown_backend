@@ -43,7 +43,7 @@ class insertView extends Component {
         const max_code = await about_model.getAboutrMaxCode()
 
 
-        // console.log("max_code", max_code);
+        console.log("max_code", province);
 
         document.getElementById("about_code").value = 'EP' + max_code.data.about_code_max
 
@@ -147,7 +147,8 @@ class insertView extends Component {
         for (let name of data.keys()) {
             arr[name] = form.elements[name.toString()].value;
         }
-        arr['addby'] = this.props.user.admin_code
+        arr['addby'] = this.props.user.user_code
+        arr['about_main_branch'] = this.props.user.about_main_branch
 
         if (this.check(arr)) {
 
@@ -267,7 +268,7 @@ class insertView extends Component {
             return false
         } else if (form.about_menu_data == '') {
             swal({
-                text: "กรุณากรอก ลองติจูด",
+                text: "กรุณาเลือกการโคลนข้อมูล",
                 icon: "warning",
                 button: "close",
             });
@@ -317,7 +318,6 @@ class insertView extends Component {
 
                                     <Row>
                                         <Col lg="4" >
-                                            {/* <img src="/coinlaundry.jpg" className="imgCircelinsert_cus" /> */}
                                             <FormGroup style={{ textAlign: "center" }}>
                                                 <div class="form-group files">
                                                     <Col style={{ marginBottom: "15px" }}>
@@ -425,7 +425,7 @@ class insertView extends Component {
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col lg="2" md="2" sm="2" className="right" >
+                                        <Col lg="3" md="3" sm="3" className="right" >
                                             เมนู / สูตร / วัตถุดิบ :
                                                     </Col>
                                         <Col lg="5" md="5" sm="5">
