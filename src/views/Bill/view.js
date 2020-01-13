@@ -198,7 +198,6 @@ class BillView extends Component {
 
     }
 
-
     async Payment(check_bill) {
 
 
@@ -206,15 +205,33 @@ class BillView extends Component {
         var payment_date = moment(new Date()).format('YYYY-MM-DD');
         var payment_time = moment(new Date()).format('HH:mm:ss'); //todays date
         console.log("payment_date", payment_date);
-        var payment = {
-            payment_sum: check_bill.amount,
-            order_code: check_bill.order_code,
-            payment_money_received: this.state.recive,
-            payment_change: this.state.charge,
-            payment_date: payment_date,
-            payment_time: payment_time
-
+        if (check_bill.promotion_code != undefined || check_bill.promotion_code != '') {
+            var payment = {
+                payment_sum: check_bill.amount,
+                order_code: check_bill.order_code,
+                payment_money_received: this.state.recive,
+                payment_change: this.state.charge,
+                payment_date: payment_date,
+                payment_time: payment_time,
+                promotion_code: check_bill.promotion_code,
+                customer_code: '',
+                payment_discount: '',
+            }
+        } else {
+            var payment = {
+                payment_sum: check_bill.amount,
+                order_code: check_bill.order_code,
+                payment_money_received: this.state.recive,
+                payment_change: this.state.charge,
+                payment_date: payment_date,
+                payment_time: payment_time,
+                promotion_code: '',
+                customer_code: '',
+                payment_discount: '',
+            }
         }
+
+
 
         console.log("payment", payment);
 
@@ -274,7 +291,6 @@ class BillView extends Component {
             // this.componentDidMount()
         })
     }
-
 
     async updateConfirmOrder(order_code) {
 
