@@ -83,6 +83,9 @@ class OrderView extends Component {
         this.setState({
             promotion_list: promotion_list.data,
         })
+        console.log("promotion_list ---> ", promotion_list);
+
+
 
         var order_Bycode = await order_model.getOrderByCode(this.props.match.params.code)
 
@@ -178,7 +181,8 @@ class OrderView extends Component {
         var name = data.menu_name;
         var price = data.menu_price;
         var code = data.menu_code;
-        this.addItemTocart(name, price, code, 1)
+        var type = data.menu_type_id;
+        this.addItemTocart(name, price, code, 1, type)
     }
 
     addItemButton(data) {
@@ -186,16 +190,19 @@ class OrderView extends Component {
         var name = data.name;
         var price = data.price;
         var code = data.code;
-        this.addItemTocart(name, price, code, 1)
+        var type = data.menu_type_id;
+        this.addItemTocart(name, price, code, 1, type)
     }
     deleteItemButton(data) {
 
         var name = data.name;
         var price = data.price;
         var code = data.code;
-        this.deleteItem(name, price, code, 1)
+        var type = data.menu_type_id;
+        this.deleteItem(name, price, code, 1, type)
     }
-    addItemTocart(name, price, code, count) {
+
+    addItemTocart(name, price, code, count, type) {
         for (var item in cart) {
             if (cart[item].code === code) {
                 cart[item].count++;
@@ -210,7 +217,8 @@ class OrderView extends Component {
             name: name,
             price: price,
             code: code,
-            count: count
+            count: count,
+            type: type
         });
 
         console.log("cart", cart);
@@ -218,7 +226,7 @@ class OrderView extends Component {
             cart: cart
         })
     }
-    deleteItem(name, price, code, count) {
+    deleteItem(name, price, code, count, type) {
         for (var item in cart) {
             if (cart[item].code === code) {
                 cart[item].count--;
@@ -232,6 +240,7 @@ class OrderView extends Component {
             }
         }
     }
+
     rendercart() {
         if (this.state.cart != undefined) {
             var cart_list = []
@@ -255,24 +264,8 @@ class OrderView extends Component {
     rendertotal() {
         if (this.state.cart != undefined) {
             var order_total = []
-            var sum = 0;
-            for (let i = 0; i < this.state.cart.length; i++) {
-                sum += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
-                // console.log("..........", this.state.cart[i].count);
-                // console.log("..1........", this.state.cart[i].price);
-            }
-            if (this.state.promotion_use_list != undefined) {
-                if (this.state.promotion_use_list.discount_percent != "") {
-                    var discount_price = (sum * this.state.promotion_use_list.discount_percent) / 100
-                    sum = sum - discount_price
-                    // console.log("sum_discount_percent", sum);
-                }
-                if (this.state.promotion_use_list.discount_price != "") {
-                    var discount_price = sum - this.state.promotion_use_list.discount_price
-                    sum = discount_price
-                    // console.log("sum_discount_price", sum);
-                }
-            }
+            var sumtotal = this.sumtotal()
+
             if (this.props.match.params.code != undefined) {
                 order_total.push(
                     <Row>
@@ -291,7 +284,7 @@ class OrderView extends Component {
                             <label>ราคารวม</label>
                         </Col>
                         <Col lg="4" style={{ textAlign: 'center', paddingTop: '30px' }}>
-                            <label>{sum}</label>
+                            <label>{sumtotal.sum_price}</label>
                         </Col>
                     </Row>
                 )
@@ -304,6 +297,128 @@ class OrderView extends Component {
             return order_total;
         }
 
+    }
+
+    sumtotal() {
+        if (this.state.cart != undefined) {
+            var sum = 0;
+            var total = 0;
+            var sum1 = 0;
+            var sum2 = 0;
+            var sum3 = 0;
+            var sum1_count = 0;
+            var sum2_count = 0;
+            var sum3_count = 0;
+            var price1 = []
+            var price2 = []
+            var price3 = []
+
+            for (let i = 0; i < this.state.cart.length; i++) {
+                sum += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
+                total += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
+            }
+            for (let i = 0; i < this.state.cart.length; i++) {
+                if (this.state.cart[i].type == 1) {
+                    for (var j = 0; j < this.state.cart[i].count; j++) {
+                        price1.push(this.state.cart[i].price)
+                    }
+
+                    sum1_count += parseFloat(this.state.cart[i].count)
+                    sum1 += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
+
+                }
+                if (this.state.cart[i].type == 2) {
+                    for (var j = 0; j < this.state.cart[i].count; j++) {
+                        price2.push(this.state.cart[i].price)
+                    }
+                    sum2_count += parseFloat(this.state.cart[i].count)
+                    sum2 += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
+                }
+                if (this.state.cart[i].type == 3) {
+                    for (var j = 0; j < this.state.cart[i].count; j++) {
+                        price3.push(this.state.cart[i].price)
+                    }
+                    sum3_count += parseFloat(this.state.cart[i].count)
+                    sum3 += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
+                }
+
+            }
+            if (this.state.promotion != undefined) {
+                console.log("this.state.promotion",this.state.promotion);
+                
+                if (this.state.promotion.discount_percent != "") {
+                    var discount_price = (sum * this.state.promotion.discount_percent) / 100
+                    sum = sum - discount_price
+                    // console.log("sum_discount_percent", sum);
+                }
+                if (this.state.promotion.discount_price != "") {
+                    var discount_price = sum - this.state.promotion.discount_price
+                    sum = discount_price
+                    // console.log("sum_discount_price", sum);
+                }
+                if (this.state.promotion.promotion_type == "แถม") {
+                    if (this.state.promotion.menu_type_id == 1 && this.state.promotion.discount_giveaway_buy <= sum1_count) {
+                        var sum1_discount = sum1;
+                        for (let i = 0; i < this.state.promotion.discount_giveaway; i++) {
+                            var min = Math.min.apply(Math, price1);
+                            sum1_discount = sum1_discount - min
+
+                            for (var key in price1) {
+                                if (price1[key] == min) {
+                                    price1.splice(key, 1);
+                                    break;
+                                }
+                            }
+                            console.log('sum1_discount', sum1_discount);
+
+                        }
+                        total = sum1 + sum2 + sum3
+                        sum = sum1_discount + sum2 + sum3
+
+
+                    }
+                    if (this.state.promotion.menu_type_id == 2 && this.state.promotion.discount_giveaway_buy <= sum2_count) {
+                        var sum2_discount = sum2;
+                        for (let i = 0; i < this.state.promotion.discount_giveaway; i++) {
+                            var min = Math.min.apply(Math, price1);
+                            sum2_discount = sum2_discount - min
+
+                            for (var key in price2) {
+                                if (price2[key] == min) {
+                                    price2.splice(key, 1);
+                                    break;
+                                }
+                            }
+                        }
+                        total = sum1 + sum2 + sum3
+                        sum = sum2_discount + sum1 + sum3
+                    }
+                    if (this.state.promotion.menu_type_id == 3 && this.state.promotion.discount_giveaway_buy <= sum3_count) {
+                        var sum3_discount = sum3
+                        for (let i = 0; i < this.state.promotion.discount_giveaway; i++) {
+                            var min = Math.min.apply(Math, price1);
+                            sum3_discount = sum3_discount - min
+
+                            for (var key in price3) {
+                                if (price3[key] == min) {
+                                    price3.splice(key, 1);
+                                    break;
+                                }
+                            }
+                        }
+
+                        total = sum1 + sum2 + sum3
+                        sum = sum3_discount + sum2 + sum1
+                    }
+                }
+            }
+            var total_sum = {
+                sum_price: sum,
+                total: total
+            }
+            console.log("5555555555", total_sum);
+            return total_sum;
+        }
     }
 
     async renderMenuby() {
@@ -402,7 +517,9 @@ class OrderView extends Component {
 
         this.setState({
             promotion_use_list: promotion_list,
+            promotion: promotion_list,
         })
+
 
         this.rendershowPromotion()
 
@@ -427,24 +544,24 @@ class OrderView extends Component {
         }
     }
 
-    rendershowOldPromotion() {
-        if (this.state.promotion_use_list != undefined) {
-            // console.log("promotion_list", promotion_list);
-            var show_promotion = []
+    // rendershowOldPromotion() {
+    //     if (this.state.promotion_use_list != undefined) {
+    //         // console.log("promotion_list", promotion_list);
+    //         var show_promotion = []
 
 
-            show_promotion.push(
-                <Row>
-                    <Col lg="6">
-                        <label> {this.state.promotion_use_list.promotion_header}</label>
-                    </Col>
-                </Row>
-            )
+    //         show_promotion.push(
+    //             <Row>
+    //                 <Col lg="6">
+    //                     <label> {this.state.promotion_use_list.promotion_header}</label>
+    //                 </Col>
+    //             </Row>
+    //         )
 
 
-            return show_promotion;
-        }
-    }
+    //         return show_promotion;
+    //     }
+    // }
 
     async insertOrder() {
 
@@ -507,7 +624,7 @@ class OrderView extends Component {
                 order_list_name: this.state.cart[key].name,
                 order_list_price_qty: this.state.cart[key].price,
                 order_list_price_sum_qty: this.state.cart[key].count * this.state.cart[key].price,
-                order_list_price_sum: this.sumtotal()
+                order_list_price_sum: total_sum.sum_price
             }
             const arr = await order_list_model.insertOrderList(order_list)
 
@@ -524,7 +641,9 @@ class OrderView extends Component {
                 this.props.history.push('/bill/')
             }
         }
-
+        this.setState({
+            sum_price: total_sum.sum_price
+        })
     }
 
     async updateOrder() {
@@ -562,7 +681,7 @@ class OrderView extends Component {
                 order_list_name: this.state.cart[key].name,
                 order_list_price_qty: this.state.cart[key].price,
                 order_list_price_sum_qty: this.state.cart[key].count * this.state.cart[key].price,
-                order_list_price_sum: this.sumtotal()
+                order_list_price_sum: total_sum.sum_price
             }
             // console.log("===>", order_list);
 
@@ -617,35 +736,7 @@ class OrderView extends Component {
     }
 
 
-    sumtotal() {
-        if (this.state.cart != undefined) {
-            var sum = 0;
-            var total = 0;
-            for (let i = 0; i < this.state.cart.length; i++) {
-                sum += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
-                total += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
-            }
-            if (this.state.promotion_use_list != undefined) {
-                if (this.state.promotion_use_list.discount_percent != "") {
-                    var discount_price = (sum * this.state.promotion_use_list.discount_percent) / 100
-                    sum = sum - discount_price
-                    // console.log("sum_discount_percent", sum);
-                }
-                if (this.state.promotion_use_list.discount_price != "") {
-                    var discount_price = sum - this.state.promotion_use_list.discount_price
-                    sum = discount_price
-                    // console.log("sum_discount_price", sum);
-                }
-            }
-            var total_sum = {
-                sum_price: sum,
-                total: total
-            }
-            // console.log("5555555555", this.state.total);
-            return total_sum;
-        }
 
-    }
 
     async checkCancelOrder() {
 
@@ -756,21 +847,26 @@ class OrderView extends Component {
 
 
         return (
-
-            <Card>
-                <CardBody >
-                    <Row style={{ minWidth: '100%', height: '100%', minHeight: '80vh' }}>
-
-                        <Col lg="6" style={{ overflowY: 'scroll' }}>
-                            <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })} forceRenderTabPanel>
-                                <TabList>
+            <Row style={{ minWidth: '100%', height: '100%', }}>
+                <Col lg="8" style={{ paddingLeft: '20px', paddingRight: '15px' }}>
+                    <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })} forceRenderTabPanel>
+                        <Card style={{ marginTop: '15px', marginBottom: '15px' }}>
+                            <CardBody >
+                                <TabList >
                                     {/* <Row style={{ paddingTop: '2%' }}> */}
                                     {this.renderMenuType()}
                                     {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? '' :
-                                        <Tab><label >โปรโมชัน</label></Tab>
+                                        <Tab ><label >โปรโมชัน</label></Tab>
                                     }
                                     {/* </Row> */}
                                 </TabList>
+                            </CardBody>
+                        </Card>
+                        <Card style={{ backgroundColor: '#fff', borderColor: 'transparent', height: '100%', minHeight: '65vh' }}>
+                            <CardBody className="vc" ref="iScroll" style={{ height: "420px", overflow: "auto", }}>
+
+
+
                                 {this.state.x}
                                 {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? '' :
                                     <TabPanel >
@@ -779,15 +875,18 @@ class OrderView extends Component {
                                         </Row>
                                     </TabPanel>
                                 }
-                            </Tabs>
-                        </Col>
 
 
-
-                        <Col lg="6" style={{ borderStyle: 'solid', borderWidth: 1, overflowY: 'scroll' }}>
+                            </CardBody>
+                        </Card>
+                    </Tabs>
+                </Col>
+                <Col lg="4" style={{ paddingTop: '15px', paddingBottom: '15px', paddingRight: '20px', paddingLeft: '0' }}>
+                    <Card >
+                        <CardBody >
                             {this.props.match.params.code == undefined ?
-                                <Row style={{ padding: '2%' }}>
-                                    <Col lg="4">
+                                <Row >
+                                    <Col lg="6">
                                         <FormGroup>
                                             <Input type="select" id="order_service" name="order_service" class="form-control" >
                                                 <option value="ทานที่ร้าน">ทานที่ร้าน</option>
@@ -795,7 +894,7 @@ class OrderView extends Component {
                                             </Input>
                                         </FormGroup>
                                     </Col>
-                                    <Col lg="4">
+                                    <Col lg="6">
                                         <FormGroup>
                                             <Input type="select" id="table_code" name="table_code" class="form-control">
                                                 <option>เลือกโต๊ะ</option>
@@ -813,25 +912,29 @@ class OrderView extends Component {
                                     </Col> */}
                                 </Row>
                                 : ''}
-                            {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ?
-                                <Row style={{ padding: '2%' }}>
-                                    <Col lg="4">
-                                        <label>{this.state.order_old.order_service}</label>
-                                    </Col>
-                                    <Col lg="6">
-                                        <a>{this.state.order_old.zone_name} - {this.state.order_old.table_name}</a>
-                                    </Col>
-                                    <Col lg="2">
-                                        <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '15px' }} /> <a>{this.state.order_old.table_amount}</a>
-                                    </Col>
+                        </CardBody>
+                    </Card>
+                    {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ?
+                        <Row >
+                            <Col lg="4">
+                                <label>{this.state.order_old.order_service}</label>
+                            </Col>
+                            <Col lg="6">
+                                <a>{this.state.order_old.zone_name} - {this.state.order_old.table_name}</a>
+                            </Col>
+                            <Col lg="2">
+                                <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '15px' }} /> <a>{this.state.order_old.table_amount}</a>
+                            </Col>
 
-                                </Row>
+                        </Row>
 
-                                : ''}
-                            <Row >
-                                <div style={{ paddingTop: '10px', paddingLeft: '10px', paddingBottom: '30px' }}> รายการอาหาร</div>
+                        : ''}
+                    <Card style={{ backgroundColor: '#fff', borderColor: 'transparent', minWidth: '100%', height: '100%', minHeight: '65vh', padding: '0' }}>
+                        <CardBody >
+                            {/* <Row style={{  borderBottomStyle: 'dashed', borderBottomColor: 'dimgrey', borderBottomWidth: '1.5px' }}>
+                                <label>รายการอาหาร</label>
 
-                            </Row>
+                            </Row> */}
 
                             {this.rendercart()}
 
@@ -875,11 +978,12 @@ class OrderView extends Component {
                                 </Row>
 
                                 : ''}
-                        </Col>
-                    </Row>
-                </CardBody>
-            </Card>
 
+
+                        </CardBody>
+                    </Card>
+                </Col>
+            </Row >
 
 
         )
