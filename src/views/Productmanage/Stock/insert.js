@@ -183,7 +183,8 @@ class ProductTable extends React.Component {
                     stock_price: stock_price[i].value,
                     unit_id: unit_id[i].value,
                     stock_date: date,
-                    stock_qty_cal: stock_qty_cal
+                    stock_qty_cal: stock_qty_cal,
+                    about_code: this.props.user.about_code
 
                 }
                 // console.log("stock_list", stock_list);
@@ -413,7 +414,7 @@ class EditableCell extends React.Component {
             <td>
 
                 {this.props.cellData.types == 'select' ?
-                    <Input type='select' name={this.props.cellData.type}  onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} >
+                    <Input type='select' name={this.props.cellData.type} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} >
                         <option Value="">Select</option>
                         {this.renderUnit()}
                     </Input>

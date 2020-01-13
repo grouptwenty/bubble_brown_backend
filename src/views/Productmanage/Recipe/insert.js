@@ -157,11 +157,11 @@ class ProductTable extends React.Component {
         var product_code = document.getElementsByName('product_code')
         var product_qty = document.getElementsByName('product_qty')
         var unit_id = document.getElementsByName('unit_id')
-        console.log("unit_id",unit_id);
+        console.log("unit_id", unit_id);
         var insert = false
         if (product_name.length > 0) {
             for (let i = 0; i < product_name.length; i++) {
-                if (product_name[i].value == '' || product_code[i].value == '' || product_qty[i].value == '' ||  unit_id[i].value == '') {
+                if (product_name[i].value == '' || product_code[i].value == '' || product_qty[i].value == '' || unit_id[i].value == '') {
                     swal({
                         text: "กรุณากรอกข้อมูลให้ครบ",
                         icon: "warning",
@@ -192,7 +192,8 @@ class ProductTable extends React.Component {
                     product_code: product_code[i].value,
                     product_qty: product_qty[i].value,
                     unit_id: unit_id[i].value,
-                    qty_cal: qty_cal
+                    qty_cal: qty_cal,
+                    about_code: this.props.user.about_code
                 }
                 console.log("unit_id", unit_id[i].value);
                 src = await recipe_model.insertRecipe(recipe_list)
@@ -398,7 +399,7 @@ class ProductRow extends React.Component {
                         data: this.state.unit_list
                     }} />}
 
-     
+
 
 
                 <td className="del-cell">
@@ -429,16 +430,16 @@ class EditableCell extends React.Component {
         if (this.props.cellData.data != undefined) {
             var unit = []
             for (var key in this.props.cellData.data) {
-                if(this.props.cellData.data[key].unit_id == this.props.cellData.value){
+                if (this.props.cellData.data[key].unit_id == this.props.cellData.value) {
                     unit.push(
                         <option selected='true' Value={this.props.cellData.data[key].unit_id} >{this.props.cellData.data[key].unit_name}</option>
                     )
-                }else{
+                } else {
                     unit.push(
                         <option Value={this.props.cellData.data[key].unit_id}>{this.props.cellData.data[key].unit_name}</option>
                     )
                 }
-          
+
             }
             return unit;
         }
@@ -449,11 +450,11 @@ class EditableCell extends React.Component {
         return (
             <td>
                 {this.props.cellData.types == 'select' ?
-                    <Input type='select' name={this.props.cellData.type}  onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} >
+                    <Input type='select' name={this.props.cellData.type} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} >
                         <option Value="">Select</option>
                         {this.renderUnit()}
                     </Input>
-                    : <Input type='text' name={this.props.cellData.type} style={{ textAlign: this.props.cellData.textAlign }}  Value={this.props.cellData.value} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} />
+                    : <Input type='text' name={this.props.cellData.type} style={{ textAlign: this.props.cellData.textAlign }} Value={this.props.cellData.value} onChange={this.props.onProductTableUpdate} readOnly={this.props.cellData.readonly} />
                 }
 
             </td>

@@ -134,7 +134,7 @@ class editView extends Component {
             arr['customer_image'] = this.state.customer_img_old
 
         }
-
+        arr['about_code'] = this.props.user.about_code
 
         if (this.check(arr)) {
             var res = await customer_model.updateCustomerByCode(arr);

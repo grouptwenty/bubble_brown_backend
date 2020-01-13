@@ -40,6 +40,7 @@ class InsertZoneModal extends Component {
       const form = event.target;
       var arr = {};
       arr['zone_name'] = form.elements['zone_name'].value;
+      arr['about_code'] = this.props.user.about_code;
       // console.log("xxx",data)
       console.log("xxx", arr)
       var res = await zone_model.insertZone(arr);
@@ -110,7 +111,7 @@ class InsertZoneModal extends Component {
             <Modal.Footer>
               <Button type="submit" className="btn-success btn-md" color="primary">บันทึก</Button>
               <Button variant="secondary" onClick={this.handleClose}>
-              ยกเลิก
+                ยกเลิก
           </Button>
             </Modal.Footer>
           </Form>
@@ -120,13 +121,12 @@ class InsertZoneModal extends Component {
     )
   }
 }
-// const mapStatetoProps = (state) => {
-//   return {
-//     member: state.member,
-//   }
-// }
-// export default connect(mapStatetoProps)(InsertZoneModal);
-export default (InsertZoneModal);
+const mapStatetoProps = (state) => {
+  return {
+    user: state.user,
+  }
+}
+export default connect(mapStatetoProps)(InsertZoneModal);
 
 
 

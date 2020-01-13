@@ -77,7 +77,7 @@ class BookingView extends Component {
         )
     }
     async componentDidMount() {
-        const booking_list = await booking_model.getBookingBy();
+        const booking_list = await booking_model.getBookingBy(this.props.user);
         const data_booking_list = {
             rows: []
         }
@@ -213,5 +213,9 @@ class BookingView extends Component {
         )
     }
 }
-
-export default (BookingView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(BookingView);

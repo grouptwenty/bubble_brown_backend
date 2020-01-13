@@ -374,10 +374,9 @@ class HomeView extends Component {
         )
     }
 }
-// const mapStatetoProps = (state) => {
-//     return {
-//         member: state.member,
-// }
-// }
-// export default connect(mapStatetoProps)(HomeView);
-export default (HomeView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(HomeView);

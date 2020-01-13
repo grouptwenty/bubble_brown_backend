@@ -19,26 +19,49 @@ class DefaultHeader extends Component {
     super(props)
     this.state = {
       branch_list: [],
-    
-
-  };
+    };
     this.renderBranch = this.renderBranch.bind(this);
+    this.renderAboutName = this.renderAboutName.bind(this);
 
   }
 
   async componentDidMount() {
     var branch_list = await about_model.getAboutBy()
-    console.log("branch_list", branch_list);
-
+    // console.log("branch_list", branch_list);
 
     this.setState({
-      branch_list: branch_list.data
+      branch_list: branch_list.data,
     })
 
-    console.log("branch_list", this.state.branch_list);
+    var about = await about_model.getAboutByCode(this.props.user.about_code)
+    // console.log("abouttt", about);
 
+    this.setState({
+      about: about.data,
+    })
   }
 
+  ChangeBranch(about) {
+    var user = this.props.user
+    user["about_code"] = about.about_code
+    this.props.setUser(user);
+    // console.log("userrrr :", user);
+    window.location.reload();
+  }
+
+  renderAboutName() {
+    if (this.state.about != undefined) {
+      var show_about_name_th = []
+      // console.log("this.state.about :", this.state.about);
+
+
+      show_about_name_th.push(
+        <label> {this.state.about.about_name_th}</label>
+      )
+    }
+
+    return show_about_name_th;
+  }
 
   renderBranch() {
 
@@ -46,12 +69,12 @@ class DefaultHeader extends Component {
       var branch = []
       for (var key in this.state.branch_list) {
         branch.push(
-        <DropdownItem><i className="fa fa-user"></i>{this.state.branch_list[key].about_name_th}</DropdownItem>
+          <DropdownItem value={this.state.branch_list[key].about_code} onClick={this.ChangeBranch.bind(this, this.state.branch_list[key])}><i className="fa fa-user"></i>{this.state.branch_list[key].about_name_th}</DropdownItem>
         )
+      }
+      return branch;
     }
-    return branch;
   }
-}
 
   render() {
 
@@ -75,7 +98,7 @@ class DefaultHeader extends Component {
 
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
-              <NavLink to="#" className="nav-link">  <i className="fa fa-user"></i> </NavLink>
+              <NavLink to="#" className="nav-link">  <i className="fa fa-user"></i> สาขา {this.renderAboutName()}</NavLink>
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               {this.renderBranch()}
@@ -98,5 +121,16 @@ const mapStatetoProps = (state) => {
     user: state.user,
   }
 }
-export default connect(mapStatetoProps)(DefaultHeader);
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    setUser: (data) => {
+      console.log(data)
+      dispatch({
+        type: "setMemberLogin",
+        payload: data
+      })
+    }
+  }
+}
+export default connect(mapStatetoProps, mapDispatchtoProps)(DefaultHeader);
 

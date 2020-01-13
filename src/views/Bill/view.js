@@ -68,7 +68,7 @@ class BillView extends Component {
 
     async componentDidMount() {
 
-        var bill_order = await order_model.getOrderBy()
+        var bill_order = await order_model.getOrderBy(this.props.user)
         var zone_menu = await zone_model.getZoneBy(this.props.user)
 
 

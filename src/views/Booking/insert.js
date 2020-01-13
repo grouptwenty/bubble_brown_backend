@@ -105,6 +105,7 @@ class HomeView extends Component {
 
             arr['booking_code'] = booking_code
             arr['table_code'] = table_code
+            arr['about_code'] = this.props.user.about_code
             console.log(this.check(arr))
             if (this.check(arr)) {
                 var res = await booking_model.insertBooking(arr);
@@ -261,10 +262,9 @@ class HomeView extends Component {
         )
     }
 }
-// const mapStatetoProps = (state) => {
-//     return {
-//         member: state.member,
-//     }
-// }
-// export default connect(mapStatetoProps)(HomeView);
-export default (HomeView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(HomeView);

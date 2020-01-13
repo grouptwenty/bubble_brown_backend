@@ -41,6 +41,7 @@ class InsertProductTypeModal extends Component {
       var arr = {};
 
       arr['product_type_name'] = form.elements['product_type_name'].value;
+      arr['about_code'] = this.props.user.about_code;
       // console.log("xxx",data)
       console.log("xxx", arr)
       var res = await product_type_model.insertProductType(arr);
@@ -121,13 +122,12 @@ class InsertProductTypeModal extends Component {
     )
   }
 }
-// const mapStatetoProps = (state) => {
-//   return {
-//     member: state.member,
-//   }
-// }
-// export default connect(mapStatetoProps)(InsertProductTypeModal);
-export default (InsertProductTypeModal);
+const mapStatetoProps = (state) => {
+  return {
+    user: state.user,
+  }
+}
+export default connect(mapStatetoProps)(InsertProductTypeModal);
 
 
 

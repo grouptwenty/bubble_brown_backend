@@ -46,7 +46,7 @@ class updateView extends Component {
             unit_list: unit_list.data,
         })
 
-console.log(product.data);
+        console.log(product.data);
 
 
         this.setval(product.data)
@@ -73,53 +73,20 @@ console.log(product.data);
         for (let name of data.keys()) {
             arr[name] = form.elements[name.toString()].value;
         }
-        // var product_type__id = document.getElementById("product_type__id").value
-        // // console.log("product_type__id",product_type__id);
-        // const max_code = await product_model.getProductMaxCode(product_type__id)
-        // // console.log("max_code",max_code);
-        // product_type__id = product_type__id.replace('PTY0',"")
-        // var product_code = 'PT' + product_type__id + max_code.data.product_code_max
-        // // console.log("product_code",product_code);
-        
-        // arr['product_code'] = product_code
-
-        // console.log(this.check(arr))
-        // if (this.check(arr)) {
-            var res = await product_model.updateProduct(arr);
-              console.log(res)
-            // if (res.data) {
-                swal({
-                    title: "Good job!",
-                    text: "Update Brand Ok",
-                    icon: "success",
-                    button: "Close",
-                });
-                this.props.history.push('/product-manage/product/')
-            // }
+        arr['about_code'] = this.props.user.about_code
+        var res = await product_model.updateProduct(arr);
+        console.log(res)
+        // if (res.data) {
+        swal({
+            title: "Good job!",
+            text: "Update Brand Ok",
+            icon: "success",
+            button: "Close",
+        });
+        this.props.history.push('/product-manage/product/')
+        // }
         // }
     }
-
-    // check(form) {
-
-    //     if (form.washing_machine_brand_code == '') {
-    //         swal({
-    //             text: "กรุณากรอก รหัสแบรนด์/ Brand Code",
-    //             icon: "warning",
-    //             button: "close",
-    //         });
-    //         return false
-    //     } else if (form.washing_machine_brand_name == '') {
-    //         swal({
-    //             text: "กรุณากรอก ชื่อ แบรนด์ / Brand",
-    //             icon: "warning",
-    //             button: "close",
-    //         });
-    //         return false
-    //     } else {
-    //         return true
-    //     }
-
-    // }
 
     renderUnit() {
 
@@ -152,71 +119,71 @@ console.log(product.data);
     render() {
         return (
             <div className="animated fadeIn">
-                 <Row style={{ padding: '30px' }}>
+                <Row style={{ padding: '30px' }}>
                     <Col>
                         <Card>
                             <Form onSubmit={this.handleSubmit} id="myForm">
-                            <CardHeader>
-                                แก้ไขข้อมูลสินค้า
-
+                                <CardHeader>
+                                    แก้ไขข้อมูลสินค้า
+    
                             </CardHeader>
-                            <CardBody>
-                                <Row>
+                                <CardBody>
+                                    <Row>
 
-                                    <Col lg="12">
-                                        <br />
-                                        <Row>
-                                            <Col lg="4">
-                                                <Label className="text_head"> รหัสสินค้า<font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="product_code" name="product_code" class="form-control" readOnly ></Input>
-                                                {/* <p id="product_code" className="text_head_sub">Example : WMB001</p> */}
-                                            </Col>
-                                            
+                                        <Col lg="12">
+                                            <br />
+                                            <Row>
+                                                <Col lg="4">
+                                                    <Label className="text_head"> รหัสสินค้า<font color='red'><b> * </b></font></Label>
+                                                    <Input type="text" id="product_code" name="product_code" class="form-control" readOnly ></Input>
+                                                    {/* <p id="product_code" className="text_head_sub">Example : WMB001</p> */}
+                                                </Col>
 
-                                        </Row>
-                                        <br />
-                                        <Row>
-                                            <Col lg="6">
-                                                <Label className="text_head"> ชื่อสินค้า<font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="product_name" name="product_name" class="form-control" autocomplete="off"></Input>
-                                                {/* <p id="washing_machine_brand_name" className="text_head_sub">Example : SAMSUNG</p> */}
-                                            </Col>
-                                            <Col lg="6">
-                                                <Label className="text_head"> จุดสั่งซื้อ <font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="product_minimum" name="product_minimum" class="form-control" autocomplete="off"></Input>
-                                                {/* <p id="washing_machine_brand_name" className="text_head_sub">Example : SAMSUNG</p> */}
-                                            </Col>
-                                            
-                                        </Row>
-                                        <br />
-                                        <Row>
-                                            <Col lg="6">
-                                                <Label className="text_head"> ประเภทสินค้า <font color='red'><b> * </b></font></Label>
-                                                <Input type="select" id="product_type__id" name="product_type__id" class="form-control" >
-                                                    <option value="">Select</option>
-                                                    {this.renderType()}
-                                                </Input>
-                                            </Col>
-                                            <Col lg="6">
-                                                <Label className="text_head"> หน่วยสินค้า <font color='red'><b> * </b></font></Label>
-                                                <Input type="select" id="unit_id" name="unit_id" class="form-control" >
-                                                    <option value="">Select</option>
-                                                    {this.renderUnit()}
-                                                </Input>
-                                            </Col>
-                                            
-                                        </Row>
-                                        
-                                    </Col>
-                                </Row>
-                            </CardBody>
-                            <CardFooter>
-                                <Link to="/product-manage/product/">
-                                    <Button type="buttom" size="lg">Back</Button>
-                                </Link>
-                                <Button type="reset" size="lg" color="danger">Reset</Button>
-                                <Button type="submit " size="lg" color="success">Save</Button>
-                            </CardFooter>
+
+                                            </Row>
+                                            <br />
+                                            <Row>
+                                                <Col lg="6">
+                                                    <Label className="text_head"> ชื่อสินค้า<font color='red'><b> * </b></font></Label>
+                                                    <Input type="text" id="product_name" name="product_name" class="form-control" autocomplete="off"></Input>
+                                                    {/* <p id="washing_machine_brand_name" className="text_head_sub">Example : SAMSUNG</p> */}
+                                                </Col>
+                                                <Col lg="6">
+                                                    <Label className="text_head"> จุดสั่งซื้อ <font color='red'><b> * </b></font></Label>
+                                                    <Input type="text" id="product_minimum" name="product_minimum" class="form-control" autocomplete="off"></Input>
+                                                    {/* <p id="washing_machine_brand_name" className="text_head_sub">Example : SAMSUNG</p> */}
+                                                </Col>
+
+                                            </Row>
+                                            <br />
+                                            <Row>
+                                                <Col lg="6">
+                                                    <Label className="text_head"> ประเภทสินค้า <font color='red'><b> * </b></font></Label>
+                                                    <Input type="select" id="product_type__id" name="product_type__id" class="form-control" >
+                                                        <option value="">Select</option>
+                                                        {this.renderType()}
+                                                    </Input>
+                                                </Col>
+                                                <Col lg="6">
+                                                    <Label className="text_head"> หน่วยสินค้า <font color='red'><b> * </b></font></Label>
+                                                    <Input type="select" id="unit_id" name="unit_id" class="form-control" >
+                                                        <option value="">Select</option>
+                                                        {this.renderUnit()}
+                                                    </Input>
+                                                </Col>
+
+                                            </Row>
+
+                                        </Col>
+                                    </Row>
+                                </CardBody>
+                                <CardFooter>
+                                    <Link to="/product-manage/product/">
+                                        <Button type="buttom" size="lg">Back</Button>
+                                    </Link>
+                                    <Button type="reset" size="lg" color="danger">Reset</Button>
+                                    <Button type="submit " size="lg" color="success">Save</Button>
+                                </CardFooter>
                             </Form>
                         </Card>
                     </Col>

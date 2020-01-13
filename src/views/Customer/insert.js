@@ -100,6 +100,7 @@ class insertView extends Component {
         }
 
         arr['customer_code'] = customer_code
+        arr['about_code'] = this.props.user.about_code
 
         if (this.check(arr)) {
             var res = await customer_model.insertCustomer(arr);
@@ -247,11 +248,9 @@ class insertView extends Component {
         )
     }
 }
-
 const mapStatetoProps = (state) => {
     return {
-
+        user: state.user,
     }
 }
-
 export default connect(mapStatetoProps)(insertView);

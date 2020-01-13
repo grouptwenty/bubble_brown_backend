@@ -65,7 +65,7 @@ class ProductTypeView extends Component {
         )
     }
     async componentDidMount() {
-        const product_type_list = await product_type_model.getProductTypeBy();
+        const product_type_list = await product_type_model.getProductTypeBy(this.props.user);
         const data_product_type_list = {
             rows: []
         }
@@ -130,10 +130,9 @@ class ProductTypeView extends Component {
         )
     }
 }
-// const mapStatetoProps = (state) => {
-//     return {
-//         member: state.member,
-//     }
-// }
-// export default connect(mapStatetoProps)(ProductTypeView);
-export default (ProductTypeView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(ProductTypeView);

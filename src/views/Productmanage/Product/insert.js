@@ -88,6 +88,7 @@ class insertView extends Component {
         // console.log("product_code",product_code);
 
         arr['product_code'] = product_code
+        arr['about_code'] = this.props.user.about_code
 
         // if (this.check(arr)) {
         var res = await product_model.insertProduct(arr);
@@ -103,30 +104,6 @@ class insertView extends Component {
         }
         // }
     }
-
-
-    // check(form) {
-
-    //     if (form.washing_machine_brand_code == '') {
-    //         swal({
-    //             text: "กรุณากรอก รหัสแบรนด์/ Brand Code",
-    //             icon: "warning",
-    //             button: "close",
-    //         });
-    //         return false
-    //     } else if (form.washing_machine_brand_name == '') {
-    //         swal({
-    //             text: "กรุณากรอก ชื่อ แบรนด์ / Brand",
-    //             icon: "warning",
-    //             button: "close",
-    //         });
-    //         return false
-    //     } else {
-    //         return true
-    //     }
-
-    // }
-
 
     renderUnit() {
 
@@ -167,7 +144,7 @@ class insertView extends Component {
                             <Form onSubmit={this.handleSubmit} id="myForm">
                                 <CardHeader>
                                     เพิ่มข้อมูลสินค้า
-    
+
                             </CardHeader>
                                 <CardBody>
 
@@ -175,15 +152,6 @@ class insertView extends Component {
 
                                         <Col lg="12">
                                             <br />
-                                            {/* <Row>
-                                            <Col lg="4">
-                                                <Label className="text_head"> รหัสแบรนด์/ Brand Code<font color='red'><b> * </b></font></Label>
-                                                <Input type="text" id="washing_machine_brand_code" name="washing_machine_brand_code" class="form-control" readOnly ></Input>
-                                                <p id="washing_machine_brand_code" className="text_head_sub">Example : WMB001</p>
-                                            </Col>
-                                            <br />
-
-                                        </Row> */}
                                             <br />
                                             <Row>
                                                 <Col lg="6">
@@ -234,10 +202,9 @@ class insertView extends Component {
         )
     }
 }
-
 const mapStatetoProps = (state) => {
     return {
-
+        user: state.user
     }
 }
 

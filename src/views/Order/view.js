@@ -554,25 +554,6 @@ class OrderView extends Component {
         }
     }
 
-    // rendershowOldPromotion() {
-    //     if (this.state.promotion_use_list != undefined) {
-    //         // console.log("promotion_list", promotion_list);
-    //         var show_promotion = []
-
-
-    //         show_promotion.push(
-    //             <Row>
-    //                 <Col lg="6">
-    //                     <label> {this.state.promotion_use_list.promotion_header}</label>
-    //                 </Col>
-    //             </Row>
-    //         )
-
-
-    //         return show_promotion;
-    //     }
-    // }
-
     async insertOrder() {
 
 
@@ -599,6 +580,7 @@ class OrderView extends Component {
                 'order_code': order_code,
                 'amount': total_sum.sum_price,
                 'promotion_code': this.state.promotion_use_list.promotion_code,
+                'about_code': this.state.user.about_code,
                 'order_total_price': total_sum.total
 
             }
@@ -612,21 +594,13 @@ class OrderView extends Component {
                 'order_code': order_code,
                 'amount': total_sum.sum_price,
                 'promotion_code': '',
+                'about_code': this.props.user.about_code,
                 'order_total_price': total_sum.total
             }
         }
 
-
-
-
-
-
         const res = await order_model.insertOrder(order)
         for (var key in this.state.cart) {
-            // this.state.cart[key].code
-            // this.state.cart[key].count
-            // this.state.cart[key].name
-            // this.state.cart[key].price
             var order_list = {
                 order_code: order_code,
                 menu_code: this.state.cart[key].code,
@@ -637,9 +611,6 @@ class OrderView extends Component {
                 order_list_price_sum: total_sum.sum_price
             }
             const arr = await order_list_model.insertOrderList(order_list)
-
-
-
 
             if (order_list != undefined) {
                 swal({
@@ -671,6 +642,7 @@ class OrderView extends Component {
             'order_date': toDay,
             'amount': total_sum.sum_price,
             'order_code': this.props.match.params.code,
+            'about_code': this.props.user.about_code,
             'order_total_price': total_sum.total
         }
 
@@ -680,10 +652,6 @@ class OrderView extends Component {
         const arr = await order_list_model.deleteOrderListByCode(this.state.order_old)
 
         for (var key in this.state.cart) {
-            // this.state.cart[key].code
-            // this.state.cart[key].count
-            // this.state.cart[key].name
-            // this.state.cart[key].price
             var order_list = {
                 order_code: this.state.order_old.order_code,
                 menu_code: this.state.cart[key].code,
@@ -733,20 +701,6 @@ class OrderView extends Component {
         }
 
     }
-
-    async onMenuAdd() {
-        // const max_code = await table_model.getTableMaxCode()//province data
-        // // console.log("max_code", max_code);
-
-        // var table_code = 'T' + max_code.data.table_code_max
-        // this.setState({
-        //     table_code_add: table_code
-        // })
-        // this.toggle_Table_Add()
-    }
-
-
-
 
     async checkCancelOrder() {
 
@@ -912,14 +866,6 @@ class OrderView extends Component {
                                             </Input>
                                         </FormGroup>
                                     </Col>
-                                    {/* <Col lg="3">
-                                        <FormGroup>
-                                            <Input type="select" id="order_service" name="order_service" class="form-control" >
-                                                <option value="ทานที่ร้าน">ทานที่ร้าน</option>
-                                                <option value="สั่งกลับบ้าน">สั่งกลับบ้าน</option>
-                                            </Input>
-                                        </FormGroup>
-                                    </Col> */}
                                 </Row>
                                 : ''}
                         </CardBody>
@@ -941,10 +887,6 @@ class OrderView extends Component {
                         : ''}
                     <Card style={{ backgroundColor: '#fff', borderColor: 'transparent', minWidth: '100%', height: '100%', minHeight: '65vh', padding: '0' }}>
                         <CardBody >
-                            {/* <Row style={{  borderBottomStyle: 'dashed', borderBottomColor: 'dimgrey', borderBottomWidth: '1.5px' }}>
-                                <label>รายการอาหาร</label>
-
-                            </Row> */}
 
                             {this.rendercart()}
 

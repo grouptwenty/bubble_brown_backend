@@ -68,13 +68,13 @@ class CustomerView extends Component {
         // var url = "http://localhost:3006/" + row.Picture;
         return (
             <>
-                <img src={GOBALS.URL_IMG + "customer/" + row.Img} className="Img"></img>
+                <img src={GOBALS.URL_IMG + "customer/" + row.Img} className="img"></img>
             </>
         )
     }
 
     async componentDidMount() {
-        const customer_list = await customer_model.getCustomerBy()
+        const customer_list = await customer_model.getCustomerBy(this.props.user)
         console.log("customer_list", customer_list);
 
         const data_customer_list = {
@@ -145,4 +145,9 @@ class CustomerView extends Component {
         )
     }
 }
-export default (CustomerView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(CustomerView);

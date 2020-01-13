@@ -136,7 +136,8 @@ class HomeView extends Component {
                 'discount_giveaway_buy': "",
                 'discount_price': "",
                 'startdate': this.state.startdate,
-                'enddate': this.state.enddate
+                'enddate': this.state.enddate,
+                'about_code': this.props.user.about_code
             }
         }
         if (type == "ส่วนลด") {
@@ -152,7 +153,8 @@ class HomeView extends Component {
                 'discount_price': form.elements['number'].value,
                 'discount_percent': "",
                 'startdate': this.state.startdate,
-                'enddate': this.state.enddate
+                'enddate': this.state.enddate,
+                'about_code': this.props.user.about_code
             }
         }
         if (type == "แถม") {
@@ -168,7 +170,8 @@ class HomeView extends Component {
                 'discount_price': "",
                 'discount_percent': "",
                 'startdate': this.state.startdate,
-                'enddate': this.state.enddate
+                'enddate': this.state.enddate,
+                'about_code': this.props.user.about_code
             }
         }
 

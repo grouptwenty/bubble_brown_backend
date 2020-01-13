@@ -109,6 +109,7 @@ class insertView extends Component {
         }
 
         arr['menu_code'] = menu_code
+        arr['about_code'] = this.props.user.about_code
         if (this.check(arr)) {
             var res = await menu_model.insertMenu(arr);
             //   console.log(res)
@@ -197,7 +198,7 @@ class insertView extends Component {
                                 <CardBody>
                                     <br />
                                     <Row>
-                                    <br />
+                                        <br />
                                         <Col lg="6">
                                             <Row>
                                                 <Col lg="12">
@@ -266,8 +267,7 @@ class insertView extends Component {
 
 const mapStatetoProps = (state) => {
     return {
-
+        user: state.user,
     }
 }
-
 export default connect(mapStatetoProps)(insertView);

@@ -139,8 +139,12 @@ class EditMenuTypeModal extends Component {
     )
   }
 }
-
-export default (EditMenuTypeModal);
+const mapStatetoProps = (state) => {
+  return {
+    user: state.user,
+  }
+}
+export default connect(mapStatetoProps)(EditMenuTypeModal);
 
 
 

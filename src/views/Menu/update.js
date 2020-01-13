@@ -141,6 +141,7 @@ class editView extends Component {
             arr['menu_image'] = this.state.menu_img_old
 
         }
+        arr['about_code'] = this.props.user.about_code
 
         if (this.check(arr)) {
             var res = await menu_model.updateMenuByCode(arr);

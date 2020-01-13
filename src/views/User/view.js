@@ -74,7 +74,7 @@ class UserView extends Component {
     }
 
     async componentDidMount() {
-        const user_list = await user_model.getUserBy();
+        const user_list = await user_model.getUserBy(this.props.user);
         console.log("user_list", user_list);
 
         const data_user_list = {
@@ -127,7 +127,7 @@ class UserView extends Component {
                                             // className="table-overflow"
                                             >
                                                 {/* <TableHeaderColumn width={"15%"} dataField='Code' headerAlign="center" dataAlign="center" >Code</TableHeaderColumn> */}
-                                                <TableHeaderColumn width={"15%"} dataField='Img' headerAlign="center" dataAlign="center"dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
+                                                <TableHeaderColumn width={"15%"} dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
                                                 <TableHeaderColumn width={"10%"} dataField='userCode' headerAlign="center" dataAlign="center" dataSort isKey={true}>รหัสพนักงาน</TableHeaderColumn>
                                                 <TableHeaderColumn width={"10%"} dataField='Position' headerAlign="center" dataAlign="center" dataSort>ตำแหน่ง</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อ-นามสกุล</TableHeaderColumn>
@@ -146,4 +146,9 @@ class UserView extends Component {
         )
     }
 }
-export default (UserView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(UserView);

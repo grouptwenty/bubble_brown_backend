@@ -41,6 +41,7 @@ class InsertMenuTypeModal extends Component {
       var arr = {};
 
       arr['menu_type_name'] = form.elements['menu_type_name'].value;
+      arr['about_code'] = this.props.user.about_code;
       // console.log("xxx",data)
       console.log("xxx", arr)
       var res = await menu_type_model.insertMenuType(arr);
@@ -121,13 +122,12 @@ class InsertMenuTypeModal extends Component {
     )
   }
 }
-// const mapStatetoProps = (state) => {
-//   return {
-//     member: state.member,
-//   }
-// }
-// export default connect(mapStatetoProps)(InsertMenuTypeModal);
-export default (InsertMenuTypeModal);
+const mapStatetoProps = (state) => {
+  return {
+    user: state.user,
+  }
+}
+export default connect(mapStatetoProps)(InsertMenuTypeModal);
 
 
 

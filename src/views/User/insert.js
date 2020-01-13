@@ -124,7 +124,7 @@ class insertView extends Component {
 
             var res = await user_model.insertUserBy(arr);
 
-              console.log(res);
+            console.log(res);
             if (res.data) {
                 swal({
                     title: "สำเร็จ!",
@@ -252,7 +252,7 @@ class insertView extends Component {
                                                     สาขา : <font color='red'><b> * </b></font>
                                                 </Col>
                                                 <Col lg="5" md="5" sm="5">
-                                                <Input type="select" id="about_code" name="about_code" class="form-control" >
+                                                    <Input type="select" id="about_code" name="about_code" class="form-control" >
                                                         <option value="">Select</option>
                                                         {this.renderBranch()}
                                                     </Input>
@@ -344,11 +344,9 @@ class insertView extends Component {
         )
     }
 }
-
 const mapStatetoProps = (state) => {
     return {
-
+        user: state.user,
     }
 }
-
 export default connect(mapStatetoProps)(insertView);

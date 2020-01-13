@@ -48,7 +48,6 @@ class editView extends Component {
                 about_list.push(
                     <option value={this.state.about[i].about_code}>{this.state.about[i].about_name_th}</option>
                 )
-
             }
             return about_list;
         }
