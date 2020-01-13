@@ -8,7 +8,7 @@ import swal from 'sweetalert';
 import Swal from 'sweetalert2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-
+import moment from 'moment'
 import MenuModel from '../../models/MenuModel'
 import MenuTypeModel from '../../models/MenuTypeModel'
 import OrderModel from '../../models/OrderModel'
@@ -582,20 +582,23 @@ class OrderView extends Component {
         const max_code = await order_model.getOrderMaxCode()//province data
         var order_code = 'OD' + max_code.data.order_code_max
         // console.log(max_code);
-
+// console.log("this.state.promotion_use_list.promotion_code",this.state.promotion_use_list.promotion_code);
         const date_now = new Date();
-        var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
+        var order_date = moment(new Date()).format('YYYY-MM-DD');
+        var order_time = moment(new Date()).format('HH:mm:ss'); 
         const data = new FormData();
         var date = Date.now();
         var order_service = document.getElementById('order_service').value
         var table_code = document.getElementById('table_code').value
-        var total_sum = this.sumtotal()
+        var total_sum = this.sumtotal()     
+        
         if (this.state.promotion_use_list != undefined) {
             var order = {
                 'table_code': table_code,
                 'order_service': order_service,
                 'customer_code': 'CM001',
-                'order_date': toDay,
+                'order_date': order_date,
+                'order_time': order_time,
                 'order_code': order_code,
                 'amount': total_sum.sum_price,
                 'promotion_code': this.state.promotion_use_list.promotion_code,
@@ -603,23 +606,20 @@ class OrderView extends Component {
 
             }
 
+
         } else {
             var order = {
                 'table_code': table_code,
                 'order_service': order_service,
                 'customer_code': 'CM001',
-                'order_date': toDay,
+                'order_date': order_date,
+                'order_time': order_time,
                 'order_code': order_code,
                 'amount': total_sum.sum_price,
                 'promotion_code': '',
                 'order_total_price': total_sum.total
             }
         }
-
-
-
-
-
 
         const res = await order_model.insertOrder(order)
         for (var key in this.state.cart) {
