@@ -105,7 +105,7 @@ class AboutView extends Component {
                         <Card>
                             <CardHeader>
                                 โปรโมชั่น
-                                <NavLink exact to={'../About/editbrance'} style={{ width: '100%' }}>
+                                <NavLink exact to={'../About/editbranch'} style={{ width: '100%' }}>
                                     <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> ตั้งต่าสาชาหลัก</button>
                                 </NavLink>
                                 <NavLink exact to={'../About/insert'} style={{ width: '100%' }}>

@@ -5,7 +5,7 @@ const loading = () => <div className="animated fadeIn pt-3 text-center">Loading.
 // Pages
 const AboutView = React.lazy(() => import('./view'));
 const AboutInsert = React.lazy(() => import('./insert'));
-const AboutBranceEdit = React.lazy(() => import('./editbrance'));
+const AboutBranchEdit = React.lazy(() => import('./editbranch'));
 const AboutEdit = React.lazy(() => import('./update'));
 const AboutDetail = React.lazy(() => import('./detail'));
 
@@ -21,7 +21,7 @@ class About extends Component {
           <Switch>
             <Route exact path="/about/" render={props => <AboutView {...props} />} />
             <Route exact path="/about/insert" render={props => <AboutInsert {...props} />} />
-            <Route exact path="/about/editbrance" render={props => <AboutBranceEdit {...props} />} />
+            <Route exact path="/about/editbranch" render={props => <AboutBranchEdit {...props} />} />
             <Route exact path="/about/update/:code" render={props => <AboutEdit {...props} />} />
             <Route exact path="/about/detail/:code" render={props => <AboutDetail {...props} />} />
           </Switch>

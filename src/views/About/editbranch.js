@@ -65,7 +65,7 @@ class editView extends Component {
         }
         console.log("arr :", arr);
 
-        var res = await about_model.updateAboutMainBranceByCode(arr);
+        var res = await about_model.updateAboutMainBranchByCode(arr);
         //   console.log(res)
         if (res.data) {
             swal({

@@ -135,8 +135,8 @@ export default class AboutModel {
             });
     }
 
-    async updateAboutMainBranceByCode(data) {
-        return fetch(GOBALS.URL + '/about/updateAboutMainBranceByCode', {
+    async updateAboutMainBranchByCode(data) {
+        return fetch(GOBALS.URL + '/about/updateAboutMainBranchByCode', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

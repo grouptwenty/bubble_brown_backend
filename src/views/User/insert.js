@@ -75,24 +75,24 @@ class insertView extends Component {
     }
 
     async componentDidMount() {
-        const brance = await about_model.getAboutBy();
+        const branch = await about_model.getAboutBy();
         this.setState({
-            brance: brance.data
+            branch: branch.data
         })
         // console.log("max_code",user_code_max);
     }
 
-    renderBrance() {
-        if (this.state.brance != undefined) {
-            let brance_type = []
+    renderBranch() {
+        if (this.state.branch != undefined) {
+            let branch_type = []
 
-            for (let i = 0; i < this.state.brance.length; i++) {
-                brance_type.push(
-                    <option value={this.state.brance[i].about_code}>{this.state.brance[i].about_name_th}</option>
+            for (let i = 0; i < this.state.branch.length; i++) {
+                branch_type.push(
+                    <option value={this.state.branch[i].about_code}>{this.state.branch[i].about_name_th}</option>
                 )
 
             }
-            return brance_type;
+            return branch_type;
         }
     }
 
@@ -254,7 +254,7 @@ class insertView extends Component {
                                                 <Col lg="5" md="5" sm="5">
                                                 <Input type="select" id="about_code" name="about_code" class="form-control" >
                                                         <option value="">Select</option>
-                                                        {this.renderBrance()}
+                                                        {this.renderBranch()}
                                                     </Input>
                                                 </Col>
                                             </Row>
