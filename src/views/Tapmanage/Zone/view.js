@@ -105,7 +105,7 @@ class ZoneView extends Component {
         const { data } = this.state;
         return (
             <div className="animated fadeIn">
-                <Row>
+                <Row style={{ padding: '15px' }}>
                     <Col lg='12'>
                         <Card>
                             <CardHeader>

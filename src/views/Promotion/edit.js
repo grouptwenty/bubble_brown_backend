@@ -253,7 +253,7 @@ class HomeView extends Component {
         return (
             <Form onSubmit={this.SavePromotion} id="myForm">
                 <div className="animated fadeIn">
-                    <Row>
+                    <Row style={{ padding: '15px' }}>
                         <Col>
                             <Card>
                                 <CardHeader>

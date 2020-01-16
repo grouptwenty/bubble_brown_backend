@@ -222,7 +222,7 @@ class editView extends Component {
 
         return (
             <div className="animated fadeIn">
-                <Row>
+                <Row style={{ padding: '15px' }}>
                     <Col>
                         <Card>
                             <Form onSubmit={this.handleSubmit} id="myForm">
@@ -230,7 +230,7 @@ class editView extends Component {
                                     แก้ไขเมนู
                                 </CardHeader>
                                 <CardBody>
-                                    <Row>
+                                    <Row >
                                         <Col lg="12">
                                             <br />
                                             <Row>

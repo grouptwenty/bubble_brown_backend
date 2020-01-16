@@ -7,7 +7,7 @@ import {
     Card,
     CardBody,
     CardFooter,
-    Modal, ModalBody, ModalFooter, ListGroup, ListGroupItem, CardHeader
+    Modal, ModalBody, ModalFooter, ListGroup, ListGroupItem, ButtonGroup
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link, } from 'react-router-dom';
@@ -18,7 +18,9 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import RecipeModel from '../../../models/RecipeModel'
 import ProductModel from '../../../models/ProductModel'
 import UnitModel from '../../../models/UnitModel'
+import ProductTypeModel from '../../../models/ProductTypeModel'
 
+const product_type_model = new ProductTypeModel
 const unit_model = new UnitModel
 const recipe_model = new RecipeModel
 const product_model = new ProductModel
@@ -45,7 +47,7 @@ class insertView extends Component {
     async componentDidMount() {
         const code = this.props.match.params.code
         var recipe = await recipe_model.getRecipeByCode(code)
-        // console.log(code);
+        // console.log("this.props.user",this.props.user);
 
 
         this.setState({
@@ -107,6 +109,7 @@ class insertView extends Component {
             <div>
 
                 <ProductTable history={this.props.history} onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} recipes={this.state.recipe} filterText={this.state.filterText} />
+                <ModelProduct user={this.props.user} />
             </div>
         );
 
@@ -136,6 +139,9 @@ class ProductTable extends React.Component {
         this.calculatQty = this.calculatQty.bind(this)
 
     }
+
+
+
     calculatQty(qty, unit_id) {
         var unit = ''
         if (unit_id == 2) {
@@ -157,7 +163,7 @@ class ProductTable extends React.Component {
         var product_code = document.getElementsByName('product_code')
         var product_qty = document.getElementsByName('product_qty')
         var unit_id = document.getElementsByName('unit_id')
-        console.log("unit_id", unit_id);
+
         var insert = false
         if (product_name.length > 0) {
             for (let i = 0; i < product_name.length; i++) {
@@ -195,7 +201,7 @@ class ProductTable extends React.Component {
                     qty_cal: qty_cal,
                     about_code: this.props.user.about_code
                 }
-                console.log("unit_id", unit_id[i].value);
+                // console.log("unit_id", unit_id[i].value);
                 src = await recipe_model.insertRecipe(recipe_list)
                 // const price_qty = await stock_model.getStockByPriceQty(recipe_list)
                 // console.log("price_qty", price_qty);
@@ -285,7 +291,7 @@ class ProductRow extends React.Component {
 
     async componentDidMount() {
         var unit_list = await unit_model.getUnitBy()
-        console.log("unit_list", unit_list);
+        // console.log("unit_list", unit_list);
 
 
         this.setState({
@@ -303,7 +309,7 @@ class ProductRow extends React.Component {
         this.setState({
             data: data
         })
-        console.log("data", data);
+        // console.log("data", data);
 
     }
 
@@ -466,18 +472,45 @@ class ModelProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            product_type: [],
             modal: false
         }
         this.renderProductList = this.renderProductList.bind(this);
+        // this.renderProductType = this.renderProductType.bind(this);
+        this.getProductByType = this.getProductByType.bind(this);
     }
 
     async componentDidMount() {
-
-        var product = await product_model.getProductBy(this.props.user)
-        console.log(product);
+        const product = await product_model.getProductByType(2);
 
         this.setState({
-            product: product.data
+            product: product.data,
+        })
+
+        var type_list = []
+        if (this.props.user != undefined) {
+            // var product = await product_model.getProductBy(this.props.user)
+            const product_type = await product_type_model.getProductTypeBy(this.props.user)
+
+            console.log("product_type fhfgjgf", product_type.data);
+
+
+            if (product_type.data != undefined) {
+
+
+                for (var key in product_type.data) {
+                    type_list.push(
+                        // <option value={this.state.product_type[key].product_type_id} >{this.state.product_type[key].product_type_name}</option>
+                        <Button outline color="primary" >{product_type.data[key].product_type_name}</Button>
+
+                    )
+                }
+
+
+            }
+        }
+        this.setState({
+            x: type_list
         })
 
     }
@@ -488,12 +521,17 @@ class ModelProduct extends React.Component {
         this.toggle()
     }
     toggle() {
-        console.log("kkk");
+        // console.log("kkk");
 
         this.setState({
             modal: !this.state.modal
         })
     }
+
+    // renderProductType() {
+
+
+    // }
 
     renderProductList() {
         if (this.state.product != undefined) {
@@ -503,11 +541,8 @@ class ModelProduct extends React.Component {
 
                     <ListGroupItem onClick={this.toggle2.bind(this, this.state.product[i])}>
                         <Row style={{ fontSize: '15px', textAlign: 'center' }}>
-                            <Col lg="6">
+                            <Col lg="12">
                                 {this.state.product[i].product_name}
-                            </Col>
-                            <Col lg="6">
-                                {this.state.product[i].product_type_name}
                             </Col>
                         </Row>
                     </ListGroupItem>
@@ -516,6 +551,36 @@ class ModelProduct extends React.Component {
             } return product_list;
         }
     }
+
+    async getProductByType(code) {
+
+        //   console.log("this.state.product_type[key].product_type_name",code);
+        const product = await product_model.getProductByType(code)
+        this.setState({
+            product: product.data
+        });
+
+        if (this.state.product != undefined) {
+            let product_list = []
+            for (let i = 0; i < this.state.product.length; i++) {
+                product_list.push(
+
+                    <ListGroupItem onClick={this.toggle2.bind(this, this.state.product[i])}>
+                        <Row style={{ fontSize: '15px', textAlign: 'center' }}>
+                            <Col lg="12">
+                                {this.state.product[i].product_name}
+                            </Col>
+                        </Row>
+                    </ListGroupItem>
+
+                )
+            } return product_list;
+        }
+
+
+
+    }
+
     render() {
 
 
@@ -524,19 +589,22 @@ class ModelProduct extends React.Component {
                 <Modal
                     isOpen={this.state.modal}
                     // toggle={this.toggle} 
-                    className={this.props.className} size="lg">
+                    className={this.props.className} size="sm">
                     <ModalBody style={{ paddingTop: '5%' }}>
+                        <Row style={{ textAlign: "end", paddingBottom: '10px' }}>
+                            <Col lg="12">
+
+                                <ButtonGroup >
+                                    {/* {this.renderProductType()} */}
+                                    {this.state.type_list}
+                                    <Button>1</Button>
+                                </ButtonGroup>
+                            </Col>
+
+                        </Row>
+
                         <ListGroup>
-                            <ListGroupItem color="warning" style={{ fontSize: '20px', textAlign: 'center' }}>
-                                <Row>
-                                    <Col lg="6">
-                                        <label>วัตถุดิบ</label>
-                                    </Col>
-                                    <Col lg="6">
-                                        <label>ประเภท</label>
-                                    </Col>
-                                </Row>
-                            </ListGroupItem>
+
                             {this.renderProductList()}
                         </ListGroup>
                     </ModalBody>

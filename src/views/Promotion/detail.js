@@ -77,9 +77,8 @@ class HomeView extends Component {
         return (
             <Form id="myForm">
                 <div className="animated fadeIn">
-                    <h2>Promotion</h2>
-                    <hr />
-                    <Row>
+                    
+                    <Row style={{ padding: '15px' }}>
                         <Col>
                             <Card>
                                 <CardHeader>

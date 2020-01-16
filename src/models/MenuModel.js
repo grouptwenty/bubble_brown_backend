@@ -46,6 +46,29 @@ export default class MenuModel {
                 };
             });
     }
+
+    async getMenuByType(data) {
+        return fetch(GOBALS.URL + '/menu/getMenuByType', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({menu_type_id:data})
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+
     async getMenuByMenuCode(data) {
         return fetch(GOBALS.URL + '/menu/getMenuByMenuCode', {
             method: 'POST',

@@ -138,7 +138,7 @@ class insertView extends Component {
 
         return (
             <div className="animated fadeIn">
-                <Row style={{ padding: '30px' }}>
+                <Row style={{ padding: '15px' }}>
                     <Col>
                         <Card>
                             <Form onSubmit={this.handleSubmit} id="myForm">

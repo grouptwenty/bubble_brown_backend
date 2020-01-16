@@ -114,6 +114,28 @@ export default class ProductModel {
             });
     }
 
+    async getProductByType(data) {
+        return fetch(GOBALS.URL + '/product/getProductByType', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({product_type_id: data})
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result:false
+                };
+            });
+    }
+
     async updateProduct(data) {
         return fetch(GOBALS.URL + '/product/updateProduct', {
             method: 'POST',

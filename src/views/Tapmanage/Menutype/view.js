@@ -90,9 +90,8 @@ class MenutypeView extends Component {
         const { data } = this.state;
         return (
             <div className="animated fadeIn">
-                <h2>MenuType</h2>
-                <hr />
-                <Row>
+              
+                <Row style={{ padding: '15px' }}>
                     <Col lg='12'>
                         <Card>
                             <CardHeader>
