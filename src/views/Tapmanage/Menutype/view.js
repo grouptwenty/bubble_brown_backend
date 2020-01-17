@@ -65,7 +65,7 @@ class MenutypeView extends Component {
         )
     }
     async componentDidMount() {
-        const menu_type_list = await menu_type_model.getMenuTypeBy();
+        const menu_type_list = await menu_type_model.getMenuTypeBy(this.props.user);
         const data_menu_type_list = {
             rows: []
         }
@@ -129,10 +129,9 @@ class MenutypeView extends Component {
         )
     }
 }
-// const mapStatetoProps = (state) => {
-//     return {
-//         member: state.member,
-//     }
-// }
-// export default connect(mapStatetoProps)(MenutypeView);
-export default (MenutypeView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(MenutypeView);

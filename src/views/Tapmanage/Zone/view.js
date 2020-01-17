@@ -80,7 +80,7 @@ class ZoneView extends Component {
         )
     }
     async componentDidMount() {
-        const zone_list = await zone_model.getZoneBy();
+        const zone_list = await zone_model.getZoneBy(this.props.user);
         const data_zone_list = {
             rows: []
         }
@@ -144,10 +144,9 @@ class ZoneView extends Component {
         )
     }
 }
-// const mapStatetoProps = (state) => {
-//     return {
-//         member: state.member,
-//     }
-// }
-// export default connect(mapStatetoProps)(PositionView);
-export default (ZoneView);
+    const mapStatetoProps = (state) => {
+        return {
+            user: state.user,
+        }
+    }
+    export default connect(mapStatetoProps)(ZoneView);

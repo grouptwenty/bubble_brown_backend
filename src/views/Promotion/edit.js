@@ -122,7 +122,7 @@ class HomeView extends Component {
         });
         console.log("setState", this.state.promotion.promotion);
 
-        const menu_type = await menu_type_model.getMenuTypeBy();
+        const menu_type = await menu_type_model.getMenuTypeBy(this.props.user);
         this.setState({
             menu_type: menu_type.data
         })
@@ -275,7 +275,7 @@ class HomeView extends Component {
                                                     เงื่อนไข :
                                                     </Col>
                                                 <Col lg="9" md="9" sm="9">
-                                                    <Input placeholder="promotion_detail" type="textarea" id={"promotion_detail"} name={"promotion_detail"} defaultValue={this.state.promotion.promotion_detail} required />
+                                                    <Input placeholder="promotion_detail" type="text" id={"promotion_detail"} name={"promotion_detail"} defaultValue={this.state.promotion.promotion_detail} required />
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
@@ -316,6 +316,37 @@ class HomeView extends Component {
                                                         < Input placeholder="number" type="text" id={"number"} name={"number"} defaultValue={this.state.promotion.discount_percent} required />
                                                         : <Input placeholder="number" type="text" id={"number"} name={"number"} defaultValue={this.state.promotion.discount_price} required />
                                                     }
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    จำนวนที่ซื้อ :
+                                                    </Col>
+                                                <Col lg="4" md="4" sm="4">
+                                                    < Input placeholder="discount_giveaway_buy" type="text" id={"discount_giveaway_buy"} name={"discount_giveaway_buy"} defaultValue={this.state.promotion.discount_giveaway_buy} required />
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    จำนวนที่แถม :
+                                                    </Col>
+                                                <Col lg="4" md="4" sm="4">
+                                                    <Input placeholder="discount_giveaway" type="text" id={"discount_giveaway"} name={"discount_giveaway"} defaultValue={this.state.promotion.discount_giveaway} required />
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="6">
+                                                    <Label className="text_head"> วันที่เริ่มต้น<font color='red'><b> * </b></font></Label>
+                                                    <DayPickerInput
+                                                        format="DD/MM/YYYY"
+                                                        formatDate={formatDate}
+                                                        onDayChange={this.handleDayChangestart.bind(this)}
+                                                        value={this.state.startdate}
+                                                        selecteDay={this.state.startdate}
+                                                        dayPickerProps={{ disabledDays: { before: new Date() } }}
+                                                    // inputProps = {{readOnly}}
+                                                    />
+                                                    <p id="startdate" className="text_head_sub">Example : 10-09-2019</p>
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>

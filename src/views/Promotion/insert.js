@@ -85,7 +85,7 @@ class HomeView extends Component {
     }
 
     async componentDidMount() {
-        const menu_type = await menu_type_model.getMenuTypeBy();
+        const menu_type = await menu_type_model.getMenuTypeBy(this.props.user);
         this.setState({
             menu_type: menu_type.data
         })

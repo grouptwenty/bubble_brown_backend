@@ -54,7 +54,7 @@ class insertView extends Component {
 
         var unit_list = await unit_model.getUnitBy()
 
-        var product_type = await product_type_model.getProductTypeBy()
+        var product_type = await product_type_model.getProductTypeBy(this.props.user)
         console.log("product_type", product_type);
 
         this.setState({
