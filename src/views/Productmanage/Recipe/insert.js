@@ -46,12 +46,12 @@ class insertView extends Component {
 
     async componentDidMount() {
         const code = this.props.match.params.code
+
         var recipe = await recipe_model.getRecipeByCode(code)
-        // console.log("this.props.user",this.props.user);
-
-
+       
         this.setState({
             recipe: recipe.data,
+          
 
         })
         // console.log("this.state.code",this.state.code);
@@ -108,8 +108,8 @@ class insertView extends Component {
         return (
             <div>
 
-                <ProductTable history={this.props.history} onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} recipes={this.state.recipe} filterText={this.state.filterText} />
-                <ModelProduct user={this.props.user} />
+                <ProductTable user={this.props.user} history={this.props.history} onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} recipes={this.state.recipe} filterText={this.state.filterText} />
+                {/* <ModelProduct user={this.props.user} /> */}
             </div>
         );
 
@@ -137,10 +137,15 @@ class ProductTable extends React.Component {
     constructor(props) {
         super(props);
         this.calculatQty = this.calculatQty.bind(this)
-
+        this.renderProductRow = this.renderProductRow.bind(this)
     }
 
+    componentDidMount() {
 
+        this.setState({
+            user: this.props.user
+        })
+    }
 
     calculatQty(qty, unit_id) {
         var unit = ''
@@ -201,7 +206,8 @@ class ProductTable extends React.Component {
                     qty_cal: qty_cal,
                     about_code: this.props.user.about_code
                 }
-                // console.log("unit_id", unit_id[i].value);
+
+                console.log("recipe_list ====>", recipe_list);
                 src = await recipe_model.insertRecipe(recipe_list)
                 // const price_qty = await stock_model.getStockByPriceQty(recipe_list)
                 // console.log("price_qty", price_qty);
@@ -217,15 +223,17 @@ class ProductTable extends React.Component {
             }
         }
     }
-
-    render() {
+    renderProductRow(recipe) {
         var onProductTableUpdate = this.props.onProductTableUpdate;
         var rowDel = this.props.onRowDel;
         var filterText = this.props.filterText;
-        var recipe = this.props.recipes.map(function (recipe) {
 
-            return (<ProductRow onProductTableUpdate={onProductTableUpdate} recipe={recipe} onDelEvent={rowDel.bind(this)} key={recipe.id} />)
-        });
+        return (<ProductRow user={this.props.user} onProductTableUpdate={onProductTableUpdate} recipe={recipe} onDelEvent={rowDel.bind(this)} key={recipe.id} />)
+
+    }
+    render() {
+
+        var recipe = this.props.recipes.map(this.renderProductRow);
         return (
 
             <div style={{ padding: '30px' }}>
@@ -291,7 +299,7 @@ class ProductRow extends React.Component {
 
     async componentDidMount() {
         var unit_list = await unit_model.getUnitBy()
-        // console.log("unit_list", unit_list);
+
 
 
         this.setState({
@@ -326,7 +334,7 @@ class ProductRow extends React.Component {
                     id: this.props.recipe.menu_code
                 }} /> */}
 
-                <ModelProduct test={this.product_select.bind(this)} />
+                <ModelProduct user={this.props.user} test={this.product_select.bind(this)} />
                 {this.state.data == '' ?
                     <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
                         type: "product_name",
@@ -481,36 +489,16 @@ class ModelProduct extends React.Component {
     }
 
     async componentDidMount() {
-        const product = await product_model.getProductByType(2);
+        var product = await product_model.getProductBy(this.props.user)
 
+        // var product = await product_model.getProductBy(this.props.user)
+
+        const product_type = await product_type_model.getProductTypeBy(this.props.user)
+
+        console.log("this.props.user55", this.props.user);
         this.setState({
             product: product.data,
-        })
-
-        var type_list = []
-        if (this.props.user != undefined) {
-            // var product = await product_model.getProductBy(this.props.user)
-            const product_type = await product_type_model.getProductTypeBy(this.props.user)
-
-            console.log("product_type fhfgjgf", product_type.data);
-
-
-            if (product_type.data != undefined) {
-
-
-                for (var key in product_type.data) {
-                    type_list.push(
-                        // <option value={this.state.product_type[key].product_type_id} >{this.state.product_type[key].product_type_name}</option>
-                        <Button outline color="primary" >{product_type.data[key].product_type_name}</Button>
-
-                    )
-                }
-
-
-            }
-        }
-        this.setState({
-            x: type_list
+            product_type: product_type.data
         })
 
     }
@@ -528,10 +516,20 @@ class ModelProduct extends React.Component {
         })
     }
 
-    // renderProductType() {
+    renderProductType() {
+        if (this.state.product_type != undefined) {
 
+            var type_list = []
+            for (var key in this.state.product_type) {
+                type_list.push(
+                    // <option value={this.state.product_type[key].product_type_id} >{this.state.product_type[key].product_type_name}</option>
+                    <Button outline color="primary" onClick={this.getProductByType.bind(this, this.state.product_type[key].product_type_id)} >{this.state.product_type[key].product_type_name}</Button>
 
-    // }
+                )
+            }
+            return type_list;
+        }
+    }
 
     renderProductList() {
         if (this.state.product != undefined) {
@@ -540,7 +538,7 @@ class ModelProduct extends React.Component {
                 product_list.push(
 
                     <ListGroupItem onClick={this.toggle2.bind(this, this.state.product[i])}>
-                        <Row style={{ fontSize: '15px', textAlign: 'center' }}>
+                        <Row style={{ fontSize: '15px', }}>
                             <Col lg="12">
                                 {this.state.product[i].product_name}
                             </Col>
@@ -566,7 +564,7 @@ class ModelProduct extends React.Component {
                 product_list.push(
 
                     <ListGroupItem onClick={this.toggle2.bind(this, this.state.product[i])}>
-                        <Row style={{ fontSize: '15px', textAlign: 'center' }}>
+                        <Row style={{ fontSize: '15px',  }}>
                             <Col lg="12">
                                 {this.state.product[i].product_name}
                             </Col>
@@ -589,21 +587,20 @@ class ModelProduct extends React.Component {
                 <Modal
                     isOpen={this.state.modal}
                     // toggle={this.toggle} 
-                    className={this.props.className} size="sm">
+                    className={this.props.className} size="lg">
                     <ModalBody style={{ paddingTop: '5%' }}>
                         <Row style={{ textAlign: "end", paddingBottom: '10px' }}>
                             <Col lg="12">
 
                                 <ButtonGroup >
-                                    {/* {this.renderProductType()} */}
-                                    {this.state.type_list}
-                                    <Button>1</Button>
+                                    {this.renderProductType()}
+                                    <Button outline color="primary" onClick={this.componentDidMount.bind(this)}>ทั้งหมด</Button>
                                 </ButtonGroup>
                             </Col>
 
                         </Row>
 
-                        <ListGroup>
+                        <ListGroup  className="vc" ref="iScroll" style={{ height: "420px", overflow: "auto", }}>
 
                             {this.renderProductList()}
                         </ListGroup>
@@ -627,4 +624,5 @@ const mapStatetoProps = (state) => {
         user: state.user,
     }
 }
-export default connect(mapStatetoProps)(insertView);
+
+export default connect(mapStatetoProps)(insertView)

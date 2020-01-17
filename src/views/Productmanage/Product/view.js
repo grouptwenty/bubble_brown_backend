@@ -26,7 +26,7 @@ class ProductView extends Component {
 
     async componentDidMount() {
 
-        const product_list = await product_model.getProductByType(2);
+        const product_list = await product_model.getProductBy(this.props.user);
         var product_type = await product_type_model.getProductTypeBy(this.props.user)
         console.log("user",this.props.user);
         
@@ -175,6 +175,7 @@ class ProductView extends Component {
                                     <Col lg="12">
                                         <ButtonGroup >
                                         {this.renderProductType()}
+                                        <Button outline color="primary" onClick={this.componentDidMount.bind(this)}>ทั้งหมด</Button>
                                         </ButtonGroup>
                                     </Col>
                                 </Row>

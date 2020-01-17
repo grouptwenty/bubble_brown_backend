@@ -26,11 +26,12 @@ class RecipeView extends Component {
     async componentDidMount() {
         var menutype_list = await menutype_model.getMenuTypeBy(this.props.user)
 
+
         this.setState({
             menutype_list: menutype_list.data
         })
 
-        const menu_list = await menu_model.getMenuByType(1);
+        const menu_list = await menu_model.getMenuBy(this.props.user);
         console.log("menu_list55555",menu_list);
         
         const data_menu_list = {
@@ -122,6 +123,7 @@ class RecipeView extends Component {
                                     <Col lg="12">
                                         <ButtonGroup >
                                         {this.renderMenuType()}
+                                        <Button outline color="primary" onClick={this.componentDidMount.bind(this)}>ทั้งหมด</Button>
                                         </ButtonGroup>
                                     </Col>
                                 </Row>

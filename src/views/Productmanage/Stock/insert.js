@@ -7,7 +7,7 @@ import {
     Card,
     CardBody,
     CardFooter,
-    Modal, ModalBody, ModalFooter, ListGroup, ListGroupItem, CardHeader
+    Modal, ModalBody, ModalFooter, ListGroup, ListGroupItem, ButtonGroup
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link, } from 'react-router-dom';
@@ -18,7 +18,9 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import StockModel from '../../../models/StockModel'
 import ProductModel from '../../../models/ProductModel'
 import UnitModel from '../../../models/UnitModel'
+import ProductTypeModel from '../../../models/ProductTypeModel'
 
+const product_type_model = new ProductTypeModel
 const unit_model = new UnitModel
 const stock_model = new StockModel
 const product_model = new ProductModel
@@ -95,7 +97,7 @@ class insertView extends Component {
         return (
             <div>
 
-                <ProductTable history={this.props.history} onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} stocks={this.state.stock} filterText={this.state.filterText} />
+                <ProductTable user={this.props.user} history={this.props.history} onProductTableUpdate={this.handleProductTable.bind(this)} menuCode={this.props.match.params.code} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} stocks={this.state.stock} filterText={this.state.filterText} />
             </div>
         );
 
@@ -123,7 +125,14 @@ class ProductTable extends React.Component {
     constructor(props) {
         super(props);
         this.calculatQty = this.calculatQty.bind(this)
+        this.renderProductRow = this.renderProductRow.bind(this)
+    }
 
+    componentDidMount() {
+
+        this.setState({
+            user: this.props.user
+        })
     }
     calculatQty(qty, unit_id) {
         var unit = ''
@@ -208,15 +217,17 @@ class ProductTable extends React.Component {
             }
         }
     }
-
-    render() {
+    renderProductRow(stock) {
         var onProductTableUpdate = this.props.onProductTableUpdate;
         var rowDel = this.props.onRowDel;
         var filterText = this.props.filterText;
-        var stock = this.props.stocks.map(function (stock) {
+        return (<ProductRow user={this.props.user} onProductTableUpdate={onProductTableUpdate} stock={stock} onDelEvent={rowDel.bind(this)} key={stock.id} />)
+    }
 
-            return (<ProductRow onProductTableUpdate={onProductTableUpdate} stock={stock} onDelEvent={rowDel.bind(this)} key={stock.id} />)
-        });
+    render() {
+
+        var stock = this.props.stocks.map(this.renderProductRow);
+
         return (
 
             <div style={{ padding: '30px' }}>
@@ -313,7 +324,7 @@ class ProductRow extends React.Component {
                     id: this.props.stock.menu_code
                 }} /> */}
 
-                <ModelProduct test={this.product_select.bind(this)} />
+                <ModelProduct user={this.props.user} test={this.product_select.bind(this)} />
 
 
                 <EditableCell onProductTableUpdate={this.props.onProductTableUpdate} cellData={{
@@ -433,15 +444,20 @@ class ModelProduct extends React.Component {
             modal: false
         }
         this.renderProductList = this.renderProductList.bind(this);
+        // this.renderProductType = this.renderProductType.bind(this);
+        this.getProductByType = this.getProductByType.bind(this);
     }
 
     async componentDidMount() {
 
         var product = await product_model.getProductBy(this.props.user)
-        console.log(product);
-
+        const product_type = await product_type_model.getProductTypeBy(this.props.user)
+        // console.log(product);
+        // var product_type_button = document.getElementsByName('product_type')
+        // product_type_button[0].click()
         this.setState({
-            product: product.data
+            product: product.data,
+            product_type: product_type.data
         })
 
     }
@@ -466,12 +482,9 @@ class ModelProduct extends React.Component {
                 product_list.push(
 
                     <ListGroupItem onClick={this.toggle2.bind(this, this.state.product[i])}>
-                        <Row style={{ fontSize: '15px', textAlign: 'center' }}>
-                            <Col lg="6">
+                        <Row style={{ fontSize: '15px', }}>
+                            <Col lg="12">
                                 {this.state.product[i].product_name}
-                            </Col>
-                            <Col lg="6">
-                                {this.state.product[i].product_type_name}
                             </Col>
                         </Row>
                     </ListGroupItem>
@@ -479,6 +492,51 @@ class ModelProduct extends React.Component {
                 )
             } return product_list;
         }
+    }
+
+
+    renderProductType() {
+        if (this.state.product_type != undefined) {
+
+            var type_list = []
+            for (var key in this.state.product_type) {
+                type_list.push(
+                    // <option value={this.state.product_type[key].product_type_id} >{this.state.product_type[key].product_type_name}</option>
+                    <Button name="product_type" outline color="primary" onClick={this.getProductByType.bind(this, this.state.product_type[key].product_type_id)} >{this.state.product_type[key].product_type_name}</Button>
+
+                )
+            }
+            return type_list;
+        }
+    }
+
+    async getProductByType(code) {
+
+        //   console.log("this.state.product_type[key].product_type_name",code);
+        const product = await product_model.getProductByType(code)
+        this.setState({
+            product: product.data
+        });
+
+        if (this.state.product != undefined) {
+            let product_list = []
+            for (let i = 0; i < this.state.product.length; i++) {
+                product_list.push(
+
+                    <ListGroupItem onClick={this.toggle2.bind(this, this.state.product[i])}>
+                        <Row style={{ fontSize: '15px', }}>
+                            <Col lg="12">
+                                {this.state.product[i].product_name}
+                            </Col>
+                        </Row>
+                    </ListGroupItem>
+
+                )
+            } return product_list;
+        }
+
+
+
     }
     render() {
 
@@ -491,17 +549,20 @@ class ModelProduct extends React.Component {
                     // toggle={this.toggle}
                     className={this.props.className} size="lg">
                     <ModalBody style={{ paddingTop: '5%' }}>
-                        <ListGroup>
-                            <ListGroupItem color="warning" style={{ fontSize: '20px', textAlign: 'center' }}>
-                                <Row>
-                                    <Col lg="6">
-                                        <label>วัตถุดิบ</label>
-                                    </Col>
-                                    <Col lg="6">
-                                        <label>ประเภท</label>
-                                    </Col>
-                                </Row>
-                            </ListGroupItem>
+                        <Row style={{ textAlign: "end", paddingBottom: '10px' }}>
+                            <Col lg="12">
+
+                                <ButtonGroup >
+                                    {this.renderProductType()}
+                                    <Button outline color="primary" onClick={this.componentDidMount.bind(this)}>ทั้งหมด</Button>
+
+                                </ButtonGroup>
+                            </Col>
+
+                        </Row>
+
+                        <ListGroup className="vc" ref="iScroll" style={{ height: "420px", overflow: "auto", }}>
+
                             {this.renderProductList()}
                         </ListGroup>
                     </ModalBody>
