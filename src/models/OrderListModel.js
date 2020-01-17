@@ -55,7 +55,7 @@ export default class OrderListModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({order_code:data})
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -94,6 +94,50 @@ export default class OrderListModel {
 
     async deleteOrderListByCode(data) {
         return fetch(GOBALS.URL + '/order_list/deleteOrderListByCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result:false
+                };
+            });
+    }
+
+    async updateRevisedListByCode(data) {
+        return fetch(GOBALS.URL + '/order_list/updateRevisedListByCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result:false
+                };
+            });
+    }
+    
+    async getOrderListOldBy(data) {
+        return fetch(GOBALS.URL + '/order_list/getOrderListOldBy', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

@@ -35,6 +35,7 @@ class BillView extends Component {
             zone_menu: [],
             table_list: [],
             tabIndex: 0,
+            recive_num: 0,
             refresh: false,
             x: [],
             recive: 0,
@@ -56,7 +57,8 @@ class BillView extends Component {
         this.renderModalBill = this.renderModalBill.bind(this);
         this.renderModelTableEdit = this.renderModelTableEdit.bind(this);
         this.renderModelTableAdd = this.renderModelTableAdd.bind(this);
-        // this.renderModelCheckBill = this.renderModelCheckBill.bind(this);
+        this.compareOrderList = this.compareOrderList.bind(this);
+        this.compareOrderListQty = this.compareOrderListQty.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onDelete = this.onDelete.bind(this);
         this.start = this.start.bind(this);
@@ -70,6 +72,7 @@ class BillView extends Component {
 
         var bill_order = await order_model.getOrderBy(this.props.user)
         var zone_menu = await zone_model.getZoneBy(this.props.user)
+        // console.log("bill_ordercom",bill_order);
 
 
         this.setState({
@@ -121,6 +124,10 @@ class BillView extends Component {
 
 
     async onBillDetail(order_code) {
+
+        console.log("order_code=====>", order_code);
+
+        var order_list_old = await orderlist_model.getOrderListOldBy(order_code)
         var order_list = await orderlist_model.getOrderListBy(order_code)
         var order_Bycode = await order_model.getOrderByCode(order_code)
 
@@ -128,11 +135,42 @@ class BillView extends Component {
             order_list: order_list.data,
             order_code_list: order_code,
             order_Bycode: order_Bycode.data,
+            order_list_old: order_list_old.data
         })
 
         this.toggle_Bill()
 
     }
+
+    compareOrderList(order_list, order_list_old) {
+
+        console.log("order_list", order_list);
+        console.log("order_list_old", order_list_old);
+
+        for (var key in order_list_old) {
+            if (order_list_old[key].menu_code == order_list.menu_code) {
+                return 'red'
+            }
+        }
+        return 'green'
+    }
+
+    compareOrderListQty(order_list, order_list_old) {
+
+        console.log("order_list", order_list);
+        console.log("order_list_old", order_list_old);
+
+        for (var key in order_list_old) {
+            if (order_list_old[key].menu_code == order_list.menu_code) {
+                if (order_list_old[key].order_list_qty != order_list.order_list_qty) {
+                    return 'เดิม' + ' ' + order_list_old[key].order_list_qty + ' ' + 'ใหม่' + ' ' + (parseInt(order_list.order_list_qty) - parseInt(order_list_old[key].order_list_qty))
+                }
+
+            }
+        }
+        return order_list.order_list_qty
+    }
+
 
     async onTableEdit(table_code) {
 
@@ -247,12 +285,13 @@ class BillView extends Component {
 
 
     start(order_code) {
-        this.props.history.push('/order/' + order_code)
+        this.props.history.push('/order/' + order_code.order_code)
     }
 
     async confirmOrder(bill_order) {
 
-        var order_list_confirm = await orderlist_model.getOrderListBy(bill_order.order_code)
+        var order_list_confirm = await orderlist_model.getOrderListBy(bill_order)
+        console.log("bill_order....>>", bill_order);
 
         var order_list = ''
         for (var key in order_list_confirm.data) {
@@ -298,7 +337,7 @@ class BillView extends Component {
         var order_list_confirm = await order_model.updateConfirmOrder(order_code)
 
         var date = Date.now();
-        var order_list = await orderlist_model.getOrderListBy(order_code)
+        var order_list = await orderlist_model.getOrderListBy({ "order_code": order_code })
         console.log("order_list ==>", order_list);
         console.log("order_list ==>", order_list.order_list_qty);
 
@@ -371,7 +410,7 @@ class BillView extends Component {
                                 </Col>
                                 <Col lg="6">
                                     <div style={{ textAlign: 'start' }}>
-                                        <Button onClick={this.onBillDetail.bind(this, this.state.bill_order[i].order_code)} color="secondary" >ดูบิล</Button>
+                                        <Button onClick={this.onBillDetail.bind(this, this.state.bill_order[i])} color="secondary" >ดูบิล</Button>
                                     </div>
                                 </Col>
                             </Row>
@@ -400,12 +439,12 @@ class BillView extends Component {
 
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-action">
-                        <Row>
+                        <Row style={{ backgroundColor: this.compareOrderList(this.state.order_list[i], this.state.order_list_old) }}>
                             <Col lg="4">
                                 <Label className="text_head" >{this.state.order_list[i].order_list_name}  </Label>
                             </Col>
                             <Col lg="4" style={{ textAlign: 'center' }}>
-                                <Label className="text_head" > {this.state.order_list[i].order_list_qty} </Label>
+                                <Label className="text_head" > {this.compareOrderListQty(this.state.order_list[i], this.state.order_list_old)}  </Label>
 
                             </Col>
                             <Col lg="4" style={{ textAlign: 'center' }}>
@@ -508,7 +547,7 @@ class BillView extends Component {
         if (this.state.order_code_list != undefined) {
             modal_bill.push(
                 <Modal isOpen={this.state.modal_bill} toggle={this.toggle_Bill} className={this.props.className} >
-                    <ModalHeader toggle={this.toggle} close={closeBtn}>Order : {this.state.order_code_list}</ModalHeader>
+                    {/* <ModalHeader toggle={this.toggle} close={closeBtn}>Order : {this.state.order_code_list}</ModalHeader> */}
                     <ModalBody >
 
                         <Row>
@@ -533,10 +572,10 @@ class BillView extends Component {
                                 <Label className="text_head"> ส่วนลด :  </Label>
                             </Col>
                             <Col lg="6" >
-                                <Label className="text_head"> {this.state.order_Bycode.promotion_header} </Label>
+                                {/* <Label className="text_head"> {this.state.order_Bycode.promotion_header} </Label> */}
                             </Col>
                             <Col lg="4" style={{ textAlign: 'center' }} >
-                                <Label className="text_head"> {this.state.order_Bycode.discount_percent} {this.state.order_Bycode.discount_price} </Label>
+                                {/* <Label className="text_head"> {this.state.order_Bycode.discount_percent} {this.state.order_Bycode.discount_price} </Label> */}
 
                             </Col>
 
@@ -549,7 +588,7 @@ class BillView extends Component {
 
                             </Col>
                             <Col lg="4" style={{ textAlign: 'center' }}>
-                                <Label className="text_head"> {this.state.order_Bycode.amount} </Label>
+                                {/* <Label className="text_head"> {this.state.order_Bycode.amount} </Label> */}
 
                             </Col>
 
@@ -831,16 +870,34 @@ class BillView extends Component {
         console.log("number", number);
 
         await this.setState({
-            recive: parseInt(this.state.recive + number)
+            recive_num: parseInt(this.state.recive_num + number)
         })
+
+        if (this.state.recive_set > parseInt(this.state.recive_num)) {
+            await this.setState({
+                recive: parseInt(this.state.recive_set) + parseInt(this.state.recive_num),
+            })
+            // console.log(" this.state.recive_num", parseInt(this.state.recive_num + number) );
+            console.log(" recive_num", this.state.recive_num);
+
+
+        } else {
+            await this.setState({
+                recive: parseInt(this.state.recive_num)
+            })
+        }
+
         this.calculate()
     }
 
     async calculatePaymentSet(number) {
         console.log("number", number);
-
         await this.setState({
-            recive: parseInt(number)
+            recive_num: 0
+        })
+        await this.setState({
+            recive: parseInt(number),
+            recive_set: parseInt(number)
         })
         this.calculate()
     }
@@ -856,12 +913,34 @@ class BillView extends Component {
         } else {
             strArr = 0
             strArr = strArr.toString().replace(/,/g, '')
+
+            await this.setState({
+                recive_set: 0,
+                recive_num: 0
+            })
         }
 
         await this.setState({
             recive: Number(strArr.toString().replace(/,/g, ''))
         });
         this.calculate()
+
+        var array = String(this.state.recive_num.toString().replace(/,/g, ''));
+        let strArr2 = [...array];
+
+        if (strArr2.length > 1) {
+            strArr2.splice(strArr2.length - 1, 1);
+            strArr2 = strArr2.toString().replace(/,/g, '')
+            console.log("strArr", strArr2);
+        } else {
+            strArr2 = 0
+            strArr2 = strArr2.toString().replace(/,/g, '')
+        }
+
+        await this.setState({
+            recive_num: Number(strArr2.toString().replace(/,/g, ''))
+        });
+
     }
 
     calculate() {
@@ -1097,7 +1176,7 @@ class ComponentToPrint extends React.Component {
     async componentDidMount() {
         var code = this.props.print_order.order_code
 
-        var print_order_list = await orderlist_model.getOrderListBy(code)
+        var print_order_list = await orderlist_model.getOrderListBy({ "order_code": code })
 
 
 

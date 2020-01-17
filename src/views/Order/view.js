@@ -634,8 +634,13 @@ class OrderView extends Component {
 
     async updateOrder() {
 
+        var order_date = moment(new Date()).format('YYYY-MM-DD');
+        var order_time = moment(new Date()).format('HH:mm:ss'); 
         var order = []
+        const revised_num = await order_model.getOrderRevisedNum(this.props.match.params.code)
 
+        console.log("revised_num.data",revised_num.data);
+        
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
         const data = new FormData();
@@ -648,13 +653,18 @@ class OrderView extends Component {
             'amount': total_sum.sum_price,
             'order_code': this.props.match.params.code,
             'about_code': this.props.user.about_code,
-            'order_total_price': total_sum.total
+            'order_total_price': total_sum.total,
+            'order_date': order_date,
+            'order_time': order_time,
+            'revised_num': revised_num.data.revised_num_max
+            
         }
 
 
-
-        const res = await order_model.updateOrderByCode(order)
-        const arr = await order_list_model.deleteOrderListByCode(this.state.order_old)
+        
+        const update_revised = await order_model.updateRevisedByCode(order)
+        const insert = await order_model.insertOrder(order)
+        const update_revised_list = await order_list_model.updateRevisedListByCode(order)
 
         for (var key in this.state.cart) {
             var order_list = {
@@ -664,12 +674,12 @@ class OrderView extends Component {
                 order_list_name: this.state.cart[key].name,
                 order_list_price_qty: this.state.cart[key].price,
                 order_list_price_sum_qty: this.state.cart[key].count * this.state.cart[key].price,
-                order_list_price_sum: total_sum.sum_price
+                order_list_price_sum: total_sum.sum_price,
+                revised_num: revised_num.data.revised_num_max
             }
             // console.log("===>", order_list);
 
             const arr = await order_list_model.insertOrderList(order_list)
-
             const DeleteStockOut = await stock_out_model.deleteStockOutByOrderCode(this.state.order_old)
             // console.log(DeleteStockOut);
 
