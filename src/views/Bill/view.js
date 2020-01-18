@@ -9,6 +9,8 @@ import ClickNHold from 'react-click-n-hold';
 import swal from 'sweetalert';
 import Swal from 'sweetalert2';
 import ReactToPrint from 'react-to-print';
+import axios from 'axios';
+import Pusher from 'pusher-js';
 
 import OrderModel from '../../models/OrderModel'
 import OrderListModel from '../../models/OrderListModel'
@@ -68,7 +70,37 @@ class BillView extends Component {
 
     }
 
+
+    handleTextChange(e) {
+
+        const payload = {
+            username: 'username',
+            message: 'pushpush'
+        };
+        axios.post('http://localhost:5002/message', payload);
+
+
+    }
+
     async componentDidMount() {
+
+
+        const pusher = new Pusher('def17c9634c093c2935d', {
+            cluster: 'ap1',
+            encrypted: true
+        });
+        const channel = pusher.subscribe('chat');
+        channel.bind('message', async data => {
+
+            var bill_order = await order_model.getOrderBy(this.props.user)
+            this.setState({
+                bill_order: bill_order.data,
+
+            })
+            console.log("data>>>", data);
+
+        });
+        this.handleTextChange = this.handleTextChange.bind(this);
 
         var bill_order = await order_model.getOrderBy(this.props.user)
         var zone_menu = await zone_model.getZoneBy(this.props.user)

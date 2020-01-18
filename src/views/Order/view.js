@@ -9,6 +9,9 @@ import Swal from 'sweetalert2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import moment from 'moment'
+
+
+
 import MenuModel from '../../models/MenuModel'
 import MenuTypeModel from '../../models/MenuTypeModel'
 import OrderModel from '../../models/OrderModel'
@@ -17,7 +20,8 @@ import TableModel from '../../models/TableModel'
 import StockOutModel from '../../models/StockOutModel'
 import OrderCencelModel from '../../models/OrderCencelModel'
 import PromotionModel from '../../models/PromotionModel';
-
+import PromotionUseModel from '../../models/PromotionUseModel'
+const promotion_use_model = new PromotionUseModel
 var promotion_model = new PromotionModel;
 const stock_out_model = new StockOutModel
 const menu_model = new MenuModel
@@ -60,10 +64,13 @@ class OrderView extends Component {
     }
 
 
+  
+
     async componentDidMount() {
+
         cart = []
         const code = this.props.match.params.code
-        console.log(code);
+        // console.log(code);
 
 
         var menutype_list = await menutype_model.getMenuTypeBy(this.props.user)
@@ -83,7 +90,7 @@ class OrderView extends Component {
         this.setState({
             promotion_list: promotion_list.data,
         })
-        console.log("promotion_list ---> ", promotion_list);
+        // console.log("promotion_list ---> ", promotion_list);
 
 
 
@@ -99,8 +106,8 @@ class OrderView extends Component {
 
             var order_old = await order_model.getOrderByCode(code)
             var orderlist_old = await order_list_model.getOrderListByOrderCode(code)
-            console.log("order_old", order_old);
-            console.log("orderlist_old", orderlist_old);
+            // console.log("order_old", order_old);
+            // console.log("orderlist_old", orderlist_old);
 
             this.setState({
                 order_old: order_old.data,
@@ -135,7 +142,7 @@ class OrderView extends Component {
         arr["about_main_branch"] = this.props.user.about_main_branch
         arr["about_menu_data"] = this.props.user.about_menu_data
         var menu_list = await menu_model.getMenuByCode(arr)
-        console.log("menulistbycode", menu_list);
+        // console.log("menulistbycode", menu_list);
         this.setState({
             menu_list: menu_list.data
         })
@@ -145,14 +152,14 @@ class OrderView extends Component {
 
 
     start(e) {
-        console.log('start');
+        // console.log('start');
     }
 
     end(e, enough) {
         if (enough) {
             alert("เพิ่มลบแก้ไขจ้าาาา")
-            console.log('END');
-            console.log(enough ? 'Click released after enough time' : 'Click released too soon');
+            // console.log('END');
+            // console.log(enough ? 'Click released after enough time' : 'Click released too soon');
 
         }
     }
@@ -226,7 +233,7 @@ class OrderView extends Component {
             type: type
         });
 
-        console.log("cart", cart);
+        // console.log("cart", cart);
         this.setState({
             cart: cart
         })
@@ -349,7 +356,7 @@ class OrderView extends Component {
 
             }
             if (this.state.promotion != undefined) {
-                console.log("this.state.promotion", this.state.promotion);
+
 
                 if (this.state.promotion.discount_percent != "") {
                     var discount_price = (sum * this.state.promotion.discount_percent) / 100
@@ -374,7 +381,7 @@ class OrderView extends Component {
                                     break;
                                 }
                             }
-                            console.log('sum1_discount', sum1_discount);
+                            // console.log('sum1_discount', sum1_discount);
 
                         }
                         total = sum1 + sum2 + sum3
@@ -421,7 +428,7 @@ class OrderView extends Component {
                 sum_price: sum,
                 total: total
             }
-            console.log("5555555555", total_sum);
+            // console.log("5555555555", total_sum);
             return total_sum;
         }
     }
@@ -435,7 +442,7 @@ class OrderView extends Component {
                 arr["about_code"] = this.props.user.about_code
                 arr["about_main_branch"] = this.props.user.about_main_branch
                 arr["about_menu_data"] = this.props.user.about_menu_data
-                console.log("555555555", this.props.user);
+                // console.log("555555555", this.props.user);
 
                 var menu_list = await menu_model.getMenuByCode(arr)
                 this.setState({
@@ -563,84 +570,114 @@ class OrderView extends Component {
         const max_code = await order_model.getOrderMaxCode()//province data
         var order_code = 'OD' + max_code.data.order_code_max
         // console.log(max_code);
-// console.log("this.state.promotion_use_list.promotion_code",this.state.promotion_use_list.promotion_code);
+
         const date_now = new Date();
         var order_date = moment(new Date()).format('YYYY-MM-DD');
-        var order_time = moment(new Date()).format('HH:mm:ss'); 
+        var order_time = moment(new Date()).format('HH:mm:ss');
         const data = new FormData();
         var date = Date.now();
         var order_service = document.getElementById('order_service').value
         var table_code = document.getElementById('table_code').value
-        var total_sum = this.sumtotal()     
-        
-        if (this.state.promotion_use_list != undefined) {
-            var order = {
-                'table_code': table_code,
-                'order_service': order_service,
-                'customer_code': 'CM001',
-                'order_date': order_date,
-                'order_time': order_time,
-                'order_code': order_code,
-                'amount': total_sum.sum_price,
-                'promotion_code': this.state.promotion_use_list.promotion_code,
-                'about_code': this.state.user.about_code,
-                'order_total_price': total_sum.total
+        var total_sum = this.sumtotal()
 
-            }
+        console.log("order_service", order_service);
+        console.log("order_service", table_code);
+        console.log("bfdhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        var insert = true
+        if (table_code == '') {
+            swal({
+                text: "กรุณาเลือกโต๊ะ",
+                icon: "warning",
+                button: "Close",
+            });
+            insert = false
 
-
-        } else {
-            var order = {
-                'table_code': table_code,
-                'order_service': order_service,
-                'customer_code': 'CM001',
-                'order_date': order_date,
-                'order_time': order_time,
-                'order_code': order_code,
-                'amount': total_sum.sum_price,
-                'promotion_code': '',
-                'about_code': this.props.user.about_code,
-                'order_total_price': total_sum.total
-            }
         }
 
-        const res = await order_model.insertOrder(order)
-        for (var key in this.state.cart) {
-            var order_list = {
-                order_code: order_code,
-                menu_code: this.state.cart[key].code,
-                order_list_qty: this.state.cart[key].count,
-                order_list_name: this.state.cart[key].name,
-                order_list_price_qty: this.state.cart[key].price,
-                order_list_price_sum_qty: this.state.cart[key].count * this.state.cart[key].price,
-                order_list_price_sum: total_sum.sum_price
-            }
-            const arr = await order_list_model.insertOrderList(order_list)
+        if (insert) {
+            if (this.state.promotion_use_list != undefined) {
+                var order = {
+                    'table_code': table_code,
+                    'order_service': order_service,
+                    'customer_code': 'CM001',
+                    'order_date': order_date,
+                    'order_time': order_time,
+                    'order_code': order_code,
+                    'amount': total_sum.sum_price,
+                    'promotion_code': this.state.promotion_use_list.promotion_code,
+                    'about_code': this.props.user.about_code,
+                    'order_total_price': total_sum.total
 
-            if (order_list != undefined) {
-                swal({
-                    title: "สั่งอาหารเรียบร้อย",
-                    text: "โปรดรออาหารสักครู่...",
-                    icon: "success",
-                    button: "Close",
-                });
-                this.props.history.push('/bill/')
+
+                }
+            } else {
+                var order = {
+                    'table_code': table_code,
+                    'order_service': order_service,
+                    'customer_code': 'CM001',
+                    'order_date': order_date,
+                    'order_time': order_time,
+                    'order_code': order_code,
+                    'amount': total_sum.sum_price,
+                    'promotion_code': '',
+                    'about_code': this.props.user.about_code,
+                    'order_total_price': total_sum.total
+                }
             }
+
+
+
+            const res = await order_model.insertOrder(order)
+
+            if (this.state.promotion_use_list != undefined) {
+                var promotion_use = {
+                    'customer_code': '',
+                    'promotion_code': this.state.promotion_use_list.promotion_code,
+                    'discount_code': this.state.promotion_use_list.discount_code,
+                    'order_code': order_code,
+                    'order_total_price': total_sum.total,
+                    'amount': total_sum.sum_price,
+                }
+                const res2 = await promotion_use_model.insertPromotionUse(promotion_use)
+            }
+
+            for (var key in this.state.cart) {
+                var order_list = {
+                    order_code: order_code,
+                    menu_code: this.state.cart[key].code,
+                    order_list_qty: this.state.cart[key].count,
+                    order_list_name: this.state.cart[key].name,
+                    order_list_price_qty: this.state.cart[key].price,
+                    order_list_price_sum_qty: this.state.cart[key].count * this.state.cart[key].price,
+                    order_list_price_sum: total_sum.sum_price
+                }
+                const arr = await order_list_model.insertOrderList(order_list)
+
+                if (order_list != undefined) {
+                    swal({
+                        title: "สั่งอาหารเรียบร้อย",
+                        text: "โปรดรออาหารสักครู่...",
+                        icon: "success",
+                        button: "Close",
+                    });
+                    this.props.history.push('/bill/')
+                }
+            }
+            this.setState({
+                sum_price: total_sum.sum_price
+            })
         }
-        this.setState({
-            sum_price: total_sum.sum_price
-        })
     }
 
     async updateOrder() {
 
         var order_date = moment(new Date()).format('YYYY-MM-DD');
-        var order_time = moment(new Date()).format('HH:mm:ss'); 
+        var order_time = moment(new Date()).format('HH:mm:ss');
         var order = []
         const revised_num = await order_model.getOrderRevisedNum(this.props.match.params.code)
 
-        console.log("revised_num.data",revised_num.data);
-        
+        // console.log("revised_num.data", revised_num.data);
+
         const date_now = new Date();
         var toDay = date_now.getFullYear() + "" + (date_now.getMonth() + 1) + "" + date_now.getDate() + "" + date_now.getTime();
         const data = new FormData();
@@ -657,11 +694,11 @@ class OrderView extends Component {
             'order_date': order_date,
             'order_time': order_time,
             'revised_num': revised_num.data.revised_num_max
-            
+
         }
 
 
-        
+
         const update_revised = await order_model.updateRevisedByCode(order)
         const insert = await order_model.insertOrder(order)
         const update_revised_list = await order_list_model.updateRevisedListByCode(order)
@@ -756,7 +793,7 @@ class OrderView extends Component {
                     </ListGroup>
 
                 )
-                console.log(this.state.order_cencel[key].cencel_list_id);
+                // console.log(this.state.order_cencel[key].cencel_list_id);
 
             }
         }
@@ -789,7 +826,7 @@ class OrderView extends Component {
 
 
     async updateCencel(order_cencel_id) {
-        console.log("order_cencel_id", order_cencel_id);
+        // console.log("order_cencel_id", order_cencel_id);
 
 
         var cencel = {
@@ -876,30 +913,31 @@ class OrderView extends Component {
                                     <Col lg="6">
                                         <FormGroup>
                                             <Input type="select" id="table_code" name="table_code" class="form-control">
-                                                <option>เลือกโต๊ะ</option>
+                                                <option value="">เลือกโต๊ะ</option>
                                                 {this.renderTable()}
                                             </Input>
                                         </FormGroup>
                                     </Col>
                                 </Row>
                                 : ''}
+                            {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ?
+                                <Row >
+                                    <Col lg="4">
+                                        <label>{this.state.order_old.order_service}</label>
+                                    </Col>
+                                    <Col lg="6">
+                                        <a>{this.state.order_old.zone_name} - {this.state.order_old.table_name}</a>
+                                    </Col>
+                                    <Col lg="2">
+                                        <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '15px' }} /> <a>{this.state.order_old.table_amount}</a>
+                                    </Col>
+
+                                </Row>
+
+                                : ''}
                         </CardBody>
                     </Card>
-                    {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ?
-                        <Row >
-                            <Col lg="4">
-                                <label>{this.state.order_old.order_service}</label>
-                            </Col>
-                            <Col lg="6">
-                                <a>{this.state.order_old.zone_name} - {this.state.order_old.table_name}</a>
-                            </Col>
-                            <Col lg="2">
-                                <i class="fa fa-user" aria-hidden="true" style={{ color: '#515A5A', fontSize: '15px' }} /> <a>{this.state.order_old.table_amount}</a>
-                            </Col>
 
-                        </Row>
-
-                        : ''}
                     <Card style={{ backgroundColor: '#fff', borderColor: 'transparent', minWidth: '100%', height: '100%', minHeight: '65vh', padding: '0' }}>
                         <CardBody >
 
@@ -950,6 +988,7 @@ class OrderView extends Component {
                         </CardBody>
                     </Card>
                 </Col>
+
             </Row >
 
 
