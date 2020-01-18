@@ -64,7 +64,7 @@ class OrderView extends Component {
     }
 
 
-  
+
 
     async componentDidMount() {
 
@@ -452,7 +452,7 @@ class OrderView extends Component {
                 for (let j = 0; j < this.state.menu_list.length; j++) {
                     menulist.push(
 
-                        <Col lg="4">
+                        <Col lg="4" >
                             {/* <ClickNHold
                             time={0.5}
                             onStart={this.start}
@@ -486,6 +486,7 @@ class OrderView extends Component {
         })
     }
 
+ 
     renderTable() {
         if (this.state.table_list != undefined) {
             var table = []
