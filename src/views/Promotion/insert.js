@@ -18,11 +18,6 @@ import 'react-day-picker/lib/style.css';
 var promotion_model = new PromotionModel();
 const menu_type_model = new MenuTypeModel
 var upload_model = new UploadModel();
-const promotion_type = [
-    { value: 'เปอร์เซ็น', label: 'เปอร์เซ็น' },
-    { value: 'ส่วนลด', label: 'ส่วนลด' },
-    { value: 'แถม', label: 'แถม' },
-];
 var today = new Date();
 class HomeView extends Component {
     constructor(props) {
@@ -43,6 +38,7 @@ class HomeView extends Component {
         this.handleDayChangestart = this.handleDayChangestart.bind(this);
         this.handleDayChangeend = this.handleDayChangeend.bind(this);
         this.renderMenuType = this.renderMenuType.bind(this);
+        this.show_promotiomType = this.show_promotiomType.bind(this);
     }
 
     goBack() {
@@ -85,6 +81,7 @@ class HomeView extends Component {
     }
 
     async componentDidMount() {
+
         const menu_type = await menu_type_model.getMenuTypeBy(this.props.user);
         this.setState({
             menu_type: menu_type.data
@@ -213,6 +210,52 @@ class HomeView extends Component {
         }
     }
 
+    show_promotiomType() {
+        var promotion_type = document.getElementById('promotion_type').value
+        console.log("promotion_type", promotion_type);
+        if (promotion_type != undefined || promotion_type != null) {
+            var type = []
+
+            if (promotion_type == "เปอร์เซ็นต์" || promotion_type == "ส่วนลด") {
+                type.push(
+                    <Row className="center" style={{ marginBottom: 10 }}>
+                        <Col lg="2" md="2" sm="2" className="right" >
+                            จำนวน
+                        </Col>
+                        <Col lg="4" md="4" sm="4">
+                            <Input placeholder="number" type="text" id={"number"} name={"number"} required />
+                        </Col>
+                    </Row>
+                )
+            } else if (promotion_type == "แถม") {
+                type.push(
+                    <div>
+                        <Row className="center" style={{ marginBottom: 10 }}>
+                            <Col lg="2" md="2" sm="2" className="right" >
+                                จำนวนที่ซื้อ
+                                                    </Col>
+                            <Col lg="4" md="4" sm="4">
+                                <Input placeholder="discount_giveaway_buy" type="text" id={"discount_giveaway_buy"} name={"discount_giveaway_buy"} required />
+                            </Col>
+                        </Row>
+                        <Row className="center" style={{ marginBottom: 10 }}>
+                            <Col lg="2" md="2" sm="2" className="right" >
+                                จำนวนที่แถม
+                                                    </Col>
+                            <Col lg="4" md="4" sm="4">
+                                <Input placeholder="discount_giveaway" type="text" id={"discount_giveaway"} name={"discount_giveaway"} required />
+                            </Col>
+                        </Row>
+                    </div>
+                )
+            }
+            this.setState({
+                promotion_show: type
+            })
+            console.log('this.state.promotion_show', this.state.promotion_show);
+
+        }
+    }
     render() {
 
         let { imagePreviewUrl } = this.state;
@@ -239,7 +282,7 @@ class HomeView extends Component {
                                         <Col lg="8">
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    ชื่อโปรโมชั่น :
+                                                    ชื่อโปรโมชั่น
                                                     </Col>
                                                 <Col lg="9" md="9" sm="9" style={{ textAlign: 'left' }}>
                                                     <Input placeholder="promotion_header" type="text" id={"promotion_header"} name={"promotion_header"} required />
@@ -247,7 +290,7 @@ class HomeView extends Component {
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    เงื่อนไข :
+                                                    เงื่อนไข
                                                     </Col>
                                                 <Col lg="9" md="9" sm="9">
                                                     <Input placeholder="promotion_detail" type="text" id={"promotion_detail"} name={"promotion_detail"} required />
@@ -255,10 +298,10 @@ class HomeView extends Component {
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    ประเภท :
+                                                    ประเภท
                                                     </Col>
                                                 <Col lg="5" md="5" sm="5">
-                                                    <Input type="select" id="menu_type_id" name="menu_type_id" class="form-control" >
+                                                    <Input type="select" id="menu_type_id" name="menu_type_id" class="form-control"  >
                                                         <option value="">Select</option>
                                                         {this.renderMenuType()}
                                                     </Input>
@@ -266,7 +309,7 @@ class HomeView extends Component {
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    โค๊ดโปรโมชั่น :
+                                                    โค๊ดโปรโมชั่น
                                                     </Col>
                                                 <Col lg="4" md="4" sm="4">
                                                     <Input placeholder="discount_code" type="text" id={"discount_code"} name={"discount_code"} required />
@@ -274,36 +317,20 @@ class HomeView extends Component {
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    ประเภทส่วนลด :
+                                                    ประเภทส่วนลด
                                                     </Col>
                                                 <Col lg="5" md="5" sm="5">
-                                                    <Select options={promotion_type} name={"promotion_type"} required />
+                                                    <Input type="select" name={"promotion_type"} id="promotion_type" required onChange={this.show_promotiomType} >
+                                                        <option value="">select</option>
+                                                        <option value="เปอร์เซ็นต์">เปอร์เซ็นต์</option>
+                                                        <option value="ส่วนลด">ส่วนลด</option>
+                                                        <option value="แถม">แถม</option>
+                                                    </Input>
                                                 </Col>
                                             </Row>
-                                            <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
-                                                    จำนวน :
-                                                    </Col>
-                                                <Col lg="4" md="4" sm="4">
-                                                    <Input placeholder="number" type="text" id={"number"} name={"number"} />
-                                                </Col>
-                                            </Row>
-                                            <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
-                                                    จำนวนที่ซื้อ :
-                                                    </Col>
-                                                <Col lg="4" md="4" sm="4">
-                                                    <Input placeholder="discount_giveaway_buy" type="text" id={"discount_giveaway_buy"} name={"discount_giveaway_buy"} />
-                                                </Col>
-                                            </Row>
-                                            <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
-                                                    จำนวนที่แถม :
-                                                    </Col>
-                                                <Col lg="4" md="4" sm="4">
-                                                    <Input placeholder="discount_giveaway" type="text" id={"discount_giveaway"} name={"discount_giveaway"} />
-                                                </Col>
-                                            </Row>
+
+                                            {this.state.promotion_show}
+
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="6">
                                                     <Label className="text_head"> วันที่เริ่มต้น<font color='red'><b> * </b></font></Label>

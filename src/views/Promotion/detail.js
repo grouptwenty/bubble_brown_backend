@@ -14,17 +14,6 @@ import UploadModel from '../../models/UploadModel';
 import GOBALS from '../../GOBALS';
 import 'react-day-picker/lib/style.css';
 var promotion_model = new PromotionModel();
-var upload_model = new UploadModel();
-const type = [
-    { value: 'MNT01', label: 'เครื่องดื่ม' },
-    { value: 'MNT02', label: 'อาหาร' },
-    { value: 'MNT03', label: 'เบเกอร์รี่' },
-];
-const promotion_type = [
-    { value: 'เปอร์เซ็น', label: 'เปอร์เซ็น' },
-    { value: 'ส่วนลด', label: 'ส่วนลด' },
-];
-var today = new Date();
 class HomeView extends Component {
     constructor(props) {
         super(props);
@@ -47,17 +36,17 @@ class HomeView extends Component {
     async componentDidMount() {
         var promotion_code = this.props.match.params.code;
         const promotion = await promotion_model.getPromotionByCol({ 'promotion_code': promotion_code });
-        console.log("promotion :", promotion.data[0])
+        console.log("promotion :", promotion.data)
         this.setState({
             promotion_code: this.props.match.params.code,
-            promotion: promotion.data[0],
-            startdate: promotion.data[0].startdate,
-            enddate: promotion.data[0].enddate,
-            discount_percent: promotion.data[0].discount_percent,
-            discount_price: promotion.data[0].discount_price,
-            promotion_img_old: promotion.data[0].promotion_image,
+            promotion: promotion.data,
+            startdate: promotion.data.startdate,
+            enddate: promotion.data.enddate,
+            discount_percent: promotion.data.discount_percent,
+            discount_price: promotion.data.discount_price,
+            promotion_img_old: promotion.data.promotion_image,
         });
-        console.log("setState", this.state.promotion.promotion);
+        console.log("setState", this.state.promotion);
     }
 
     render() {
@@ -77,7 +66,7 @@ class HomeView extends Component {
         return (
             <Form id="myForm">
                 <div className="animated fadeIn">
-                    
+
                     <Row style={{ padding: '15px' }}>
                         <Col>
                             <Card>
@@ -89,7 +78,7 @@ class HomeView extends Component {
                                         <Col lg="8">
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    ชื่อโปรโมชั่น :
+                                                    ชื่อโปรโมชั่น
                                                     </Col>
                                                 <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.promotion_header}</label>
@@ -97,7 +86,7 @@ class HomeView extends Component {
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    เงื่อนไข :
+                                                    เงื่อนไข
                                                     </Col>
                                                 <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.promotion_detail}</label>
@@ -105,15 +94,15 @@ class HomeView extends Component {
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    ประเภท :
+                                                    ประเภท
                                                     </Col>
                                                 <Col lg="10" md="10" sm="10">
-                                                    <label>{this.state.promotion.menu_type_id}</label>
+                                                    <label>{this.state.promotion.menu_type_name}</label>
                                                 </Col>
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    โค๊ดโปรโมชั่น :
+                                                    โค๊ดโปรโมชั่น
                                                     </Col>
                                                 <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.discount_code}</label>
@@ -121,42 +110,47 @@ class HomeView extends Component {
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    ประเภทส่วนลด :
+                                                    ประเภทส่วนลด
                                                     </Col>
                                                 <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.promotion_type}</label>
                                                 </Col>
                                             </Row>
-                                            <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
-                                                    จำนวน :
+                                            {this.state.promotion.promotion_type != "แถม" ?
+                                                <Row className="center" style={{ marginBottom: 10 }}>
+                                                    <Col lg="2" md="2" sm="2" className="right" >
+                                                        จำนวน
                                                     </Col>
-                                                <Col lg="10" md="10" sm="10">
-                                                    {this.state.promotion.promotion_type == "เปอร์เซ็น" ?
-                                                        <label>{this.state.promotion.discount_percent}</label>
-                                                        : <label>{this.state.promotion.discount_price}</label>
-                                                    }
-                                                </Col>
-                                            </Row>
-                                            <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
-                                                    จำนวนที่ซื้อ :
+                                                    <Col lg="10" md="10" sm="10">
+                                                        {this.state.promotion.promotion_type == "เปอร์เซ็นต์" ?
+                                                            <label>{this.state.promotion.discount_percent}</label>
+                                                            : <label>{this.state.promotion.discount_price}</label>
+                                                        }
                                                     </Col>
-                                                <Col lg="10" md="10" sm="10">
-                                                    <label>{this.state.promotion.discount_giveaway_buy}</label>
-                                                </Col>
-                                            </Row>
-                                            <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
-                                                    จำนวนที่แถม :
+                                                </Row>
+                                                :
+                                                <div>
+                                                    <Row className="center" style={{ marginBottom: 10 }}>
+                                                        <Col lg="2" md="2" sm="2" className="right" >
+                                                            จำนวนที่ซื้อ
                                                     </Col>
-                                                <Col lg="10" md="10" sm="10">
-                                                    <label>{this.state.promotion.discount_giveaway}</label>
-                                                </Col>
-                                            </Row>
+                                                        <Col lg="10" md="10" sm="10">
+                                                            <label>{this.state.promotion.discount_giveaway_buy}</label>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row className="center" style={{ marginBottom: 10 }}>
+                                                        <Col lg="2" md="2" sm="2" className="right" >
+                                                            จำนวนที่แถม
+                                                    </Col>
+                                                        <Col lg="10" md="10" sm="10">
+                                                            <label>{this.state.promotion.discount_giveaway}</label>
+                                                        </Col>
+                                                    </Row>
+                                                </div>
+                                            }
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    วันที่เริ่ม :
+                                                    วันที่เริ่ม
                                                     </Col>
                                                 <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.startdate}</label>
@@ -164,7 +158,7 @@ class HomeView extends Component {
                                             </Row>
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="2" md="2" sm="2" className="right" >
-                                                    วันสิ้นสุด :
+                                                    วันสิ้นสุด
                                                     </Col>
                                                 <Col lg="10" md="10" sm="10">
                                                     <label>{this.state.promotion.enddate}</label>

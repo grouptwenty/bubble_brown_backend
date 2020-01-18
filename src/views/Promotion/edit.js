@@ -17,11 +17,6 @@ import 'react-day-picker/lib/style.css';
 var promotion_model = new PromotionModel();
 const menu_type_model = new MenuTypeModel
 var upload_model = new UploadModel();
-const promotion_type = [
-    { value: 'เปอร์เซ็น', label: 'เปอร์เซ็น' },
-    { value: 'ส่วนลด', label: 'ส่วนลด' },
-    { value: 'แถม', label: 'แถม' },
-];
 var today = new Date();
 class HomeView extends Component {
     constructor(props) {
@@ -42,6 +37,8 @@ class HomeView extends Component {
         this.handleDayChangestart = this.handleDayChangestart.bind(this);
         this.handleDayChangeend = this.handleDayChangeend.bind(this);
         this.renderMenuType = this.renderMenuType.bind(this);
+        this.setval = this.setval.bind(this);
+        this.show_promotiomType = this.show_promotiomType.bind(this);
     }
     goBack() {
         this.props.history.goBack();
@@ -109,16 +106,21 @@ class HomeView extends Component {
 
     async componentDidMount() {
         var promotion_code = this.props.match.params.code;
-        const promotion = await promotion_model.getPromotionByCol({ 'promotion_code': promotion_code });
-        console.log("promotion :", promotion.data[0])
+        var arr = {}
+        arr['promotion_code'] = promotion_code
+        arr['about_code'] = this.props.user.about_code
+        console.log("arr", arr);
+
+        const promotion = await promotion_model.getPromotionByCol(arr);
+        // console.log("promotion :", promotion.data[0])
         this.setState({
             promotion_code: this.props.match.params.code,
-            promotion: promotion.data[0],
-            startdate: promotion.data[0].startdate,
-            enddate: promotion.data[0].enddate,
-            discount_percent: promotion.data[0].discount_percent,
-            discount_price: promotion.data[0].discount_price,
-            promotion_img_old: promotion.data[0].promotion_image,
+            promotion: promotion.data,
+            startdate: promotion.data.startdate,
+            enddate: promotion.data.enddate,
+            discount_percent: promotion.data.discount_percent,
+            discount_price: promotion.data.discount_price,
+            promotion_img_old: promotion.data.promotion_image,
         });
         console.log("setState", this.state.promotion.promotion);
 
@@ -126,8 +128,17 @@ class HomeView extends Component {
         this.setState({
             menu_type: menu_type.data
         })
+        this.setval(promotion.data)
+
     }
 
+
+    async setval(data) {
+        console.log('data', data)
+        document.getElementById('menu_type_id').value = data.menu_type_id
+        document.getElementById('promotion_type').value = data.promotion_type
+
+    }
     async SavePromotion(event) {
         event.preventDefault();
         const form = event.target;
@@ -136,8 +147,9 @@ class HomeView extends Component {
         var arr
         var promotion_img
         var type = form.elements['promotion_type'].value
+        console.log("typeeee :", type);
 
-        if (type == "เปอร์เซ็น") {
+        if (type == "เปอร์เซ็นต์") {
             arr = {
                 'promotion_code': this.props.match.params.code,
                 'updateby': '1',
@@ -148,6 +160,8 @@ class HomeView extends Component {
                 'promotion_type': form.elements['promotion_type'].value,
                 'discount_percent': form.elements['number'].value,
                 'discount_price': "",
+                'discount_giveaway_buy': "",
+                'discount_giveaway': "",
                 'startdate': this.state.startdate,
                 'enddate': this.state.enddate
             }
@@ -177,6 +191,39 @@ class HomeView extends Component {
                 'promotion_type': form.elements['promotion_type'].value,
                 'discount_percent': "",
                 'discount_price': form.elements['number'].value,
+                'discount_giveaway_buy': "",
+                'discount_giveaway': "",
+                'startdate': this.state.startdate,
+                'enddate': this.state.enddate
+            }
+            if (this.state.selectedFile != null) {
+
+                if (this.state.promotion_img_old != "" && this.state.promotion_img_old != null) {
+                    var req = await upload_model.deleteImages(this.state.promotion_img_old, "promotion")
+                    console.log("Delect :" + req);
+                }
+
+                arr['promotion_image'] = await this.fileUpload(this.state.selectedFile, 'promotion', this.state.promotion_code + "_" + toDay);
+                // console.log("this.state.selectedFile :", this.state.selectedFile);
+
+            } else {
+                arr['promotion_image'] = this.state.promotion_img_old
+
+            }
+        }
+        if (type == "แถม") {
+            arr = {
+                'promotion_code': this.props.match.params.code,
+                'updateby': '1',
+                'promotion_header': form.elements['promotion_header'].value,
+                'promotion_detail': form.elements['promotion_detail'].value,
+                'menu_type_id': form.elements['menu_type_id'].value,
+                'discount_code': form.elements['discount_code'].value,
+                'promotion_type': form.elements['promotion_type'].value,
+                'discount_percent': "",
+                'discount_price': "",
+                'discount_giveaway_buy': form.elements['discount_giveaway_buy'].value,
+                'discount_giveaway': form.elements['discount_giveaway'].value,
                 'startdate': this.state.startdate,
                 'enddate': this.state.enddate
             }
@@ -233,6 +280,64 @@ class HomeView extends Component {
                 )
             }
             return menutype;
+        }
+    }
+
+    show_promotiomType() {
+        var promotion_type = document.getElementById('promotion_type').value
+        console.log("promotion_type", promotion_type);
+        if (promotion_type != undefined || promotion_type != null) {
+            var type = []
+
+            if (promotion_type == "เปอร์เซ็นต์" || promotion_type == "ส่วนลด") {
+                type.push(
+                    <div>
+                        {this.state.promotion.promotion_type != "เปอร์เซ็นต์" && this.state.promotion.promotion_type != "ส่วนลด" ?
+                            <Row className="center" style={{ marginBottom: 10 }}>
+                                <Col lg="2" md="2" sm="2" className="right" >
+                                    จำนวน
+                        </Col>
+                                <Col lg="4" md="4" sm="4">
+                                    <Input placeholder="number" type="text" id={"number"} name={"number"} />
+                                </Col>
+                            </Row> : null}
+                    </div>
+                )
+            } else if (promotion_type == "แถม") {
+                // if (this.state.promotion.promotion_type == undefined) {
+                type.push(
+
+                    <div>
+                        {this.state.promotion.promotion_type != "แถม" ?
+                            <div>
+                                <Row className="center" style={{ marginBottom: 10 }}>
+                                    <Col lg="2" md="2" sm="2" className="right" >
+                                        จำนวนที่ซื้อ
+                                                    </Col>
+                                    <Col lg="4" md="4" sm="4">
+                                        <Input placeholder="discount_giveaway_buy" type="text" id={"discount_giveaway_buy"} name={"discount_giveaway_buy"} />
+                                    </Col>
+                                </Row>
+                                <Row className="center" style={{ marginBottom: 10 }}>
+                                    <Col lg="2" md="2" sm="2" className="right" >
+                                        จำนวนที่แถม
+                                                    </Col>
+                                    <Col lg="4" md="4" sm="4">
+                                        <Input placeholder="discount_giveaway" type="text" id={"discount_giveaway"} name={"discount_giveaway"} />
+                                    </Col>
+                                </Row>
+                            </div>
+                            : ''}
+                    </div>
+                )
+                // }
+
+            }
+            this.setState({
+                promotion_show: type
+            })
+            console.log('this.state.promotion_show', this.state.promotion_show);
+
         }
     }
 
@@ -302,38 +407,52 @@ class HomeView extends Component {
                                                     ประเภทส่วนลด :
                                                     </Col>
                                                 <Col lg="5" md="5" sm="5">
-                                                    {this.state.promotion.promotion_type ?
-                                                        <Select options={promotion_type} value={{ value: this.state.promotion.promotion_type, label: this.state.promotion.promotion_type }} name={"promotion_type"} />
-                                                        : null}
+                                                    <Input type="select" name={"promotion_type"} id="promotion_type" required
+                                                        onChange={this.show_promotiomType}
+                                                    >
+                                                        <option value="">select</option>
+                                                        <option value="เปอร์เซ็นต์">เปอร์เซ็นต์</option>
+                                                        <option value="ส่วนลด">ส่วนลด</option>
+                                                        <option value="แถม">แถม</option>
+                                                    </Input>
                                                 </Col>
                                             </Row>
-                                            <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
-                                                    จำนวน :
+                                            {this.state.promotion.promotion_type != "แถม" ?
+                                                <div>
+                                                    <Row className="center" style={{ marginBottom: 10 }}>
+                                                        <Col lg="2" md="2" sm="2" className="right" >
+                                                            จำนวน :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
-                                                    {this.state.promotion.promotion_type == "เปอร์เซ็น" ?
-                                                        < Input placeholder="number" type="text" id={"number"} name={"number"} defaultValue={this.state.promotion.discount_percent} required />
-                                                        : <Input placeholder="number" type="text" id={"number"} name={"number"} defaultValue={this.state.promotion.discount_price} required />
-                                                    }
-                                                </Col>
-                                            </Row>
-                                            <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
-                                                    จำนวนที่ซื้อ :
+                                                        <Col lg="4" md="4" sm="4">
+                                                            {this.state.promotion.promotion_type == "เปอร์เซ็นต์" ?
+                                                                < Input placeholder="number" type="text" id={"number"} name={"number"} defaultValue={this.state.promotion.discount_percent} />
+                                                                : <Input placeholder="number" type="text" id={"number"} name={"number"} defaultValue={this.state.promotion.discount_price} />
+                                                            }
+                                                        </Col>
+                                                    </Row>
+                                                    {this.state.promotion_show}
+                                                </div>
+                                                :
+                                                <div>
+                                                    {this.state.promotion_show}
+                                                    <Row className="center" style={{ marginBottom: 10 }}>
+                                                        <Col lg="2" md="2" sm="2" className="right" >
+                                                            จำนวนที่ซื้อ :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
-                                                    < Input placeholder="discount_giveaway_buy" type="text" id={"discount_giveaway_buy"} name={"discount_giveaway_buy"} defaultValue={this.state.promotion.discount_giveaway_buy} required />
-                                                </Col>
-                                            </Row>
-                                            <Row className="center" style={{ marginBottom: 10 }}>
-                                                <Col lg="2" md="2" sm="2" className="right" >
-                                                    จำนวนที่แถม :
+                                                        <Col lg="4" md="4" sm="4">
+                                                            < Input placeholder="discount_giveaway_buy" type="text" id={"discount_giveaway_buy"} name={"discount_giveaway_buy"} defaultValue={this.state.promotion.discount_giveaway_buy} required />
+                                                        </Col>
+                                                    </Row>
+                                                    <Row className="center" style={{ marginBottom: 10 }}>
+                                                        <Col lg="2" md="2" sm="2" className="right" >
+                                                            จำนวนที่แถม :
                                                     </Col>
-                                                <Col lg="4" md="4" sm="4">
-                                                    <Input placeholder="discount_giveaway" type="text" id={"discount_giveaway"} name={"discount_giveaway"} defaultValue={this.state.promotion.discount_giveaway} required />
-                                                </Col>
-                                            </Row>
+                                                        <Col lg="4" md="4" sm="4">
+                                                            <Input placeholder="discount_giveaway" type="text" id={"discount_giveaway"} name={"discount_giveaway"} defaultValue={this.state.promotion.discount_giveaway} required />
+                                                        </Col>
+                                                    </Row>
+                                                </div>
+                                            }
                                             <Row className="center" style={{ marginBottom: 10 }}>
                                                 <Col lg="6">
                                                     <Label className="text_head"> วันที่เริ่มต้น<font color='red'><b> * </b></font></Label>
