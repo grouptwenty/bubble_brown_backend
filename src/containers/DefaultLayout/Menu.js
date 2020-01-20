@@ -106,6 +106,10 @@ export default class MenuComponent {
                             url: '/report/report_sale',
                         },
                         {
+                            name: 'รายงานยอดขายตามประเภท',
+                            url: '/report/report_sale_type',
+                        },
+                        {
                             name: 'รายงานเมนูขายดี',
                             url: '/report/report_best_sale/',
                         },
