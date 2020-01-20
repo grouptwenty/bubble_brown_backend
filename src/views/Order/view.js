@@ -94,7 +94,7 @@ class OrderView extends Component {
 
 
 
-        var order_Bycode = await order_model.getOrderByCode(this.props.match.params.code)
+        var order_Bycode = await order_model.getOrderByCode({ 'order_code': this.props.match.params.code })
 
         this.setState({
             order_Bycode: order_Bycode.data
@@ -104,19 +104,34 @@ class OrderView extends Component {
 
         if (code != undefined) {
 
-            var order_old = await order_model.getOrderByCode(code)
+            var order_old = await order_model.getOrderByCode({ 'order_code': code })
             var orderlist_old = await order_list_model.getOrderListByOrderCode(code)
-            // console.log("order_old", order_old);
+            var promotion_old = await promotion_model.getPromotionByPromotionCode(order_old.data.promotion_code)
+            console.log("order_old", promotion_old.data);
             // console.log("orderlist_old", orderlist_old);
 
             this.setState({
                 order_old: order_old.data,
-                orderlist_old: orderlist_old.data
+                orderlist_old: orderlist_old.data,
+                promotion: promotion_old.data[0],
+                promotion_use_list: promotion_old.data[0],
             })
+
             for (var i in orderlist_old.data) {
 
-                this.addItemTocart(orderlist_old.data[i].order_list_name, orderlist_old.data[i].order_list_price_qty, orderlist_old.data[i].menu_code, orderlist_old.data[i].order_list_qty)
+                this.addItemTocart(orderlist_old.data[i].order_list_name, orderlist_old.data[i].order_list_price_qty, orderlist_old.data[i].menu_code, orderlist_old.data[i].order_list_qty, orderlist_old.data[i].menu_type_id)
             }
+
+            var promotion_list = await promotion_model.getPromotionBy(this.props.user);
+            this.setState({
+                promotion_list: promotion_list.data,
+            })
+
+            var menutype_list = await menutype_model.getMenuTypeBy(this.props.user)
+            this.setState({
+                menutype_list: menutype_list.data,
+            })
+
 
         }
 
@@ -285,7 +300,7 @@ class OrderView extends Component {
                             <label>ราคารวม</label>
                         </Col>
                         <Col lg="4" style={{ textAlign: 'center', paddingTop: '30px' }}>
-                            <label>{this.state.order_old.amount}</label>
+                            <label>{sumtotal.sum_price}</label>
                         </Col>
                     </Row>
                 )
@@ -301,11 +316,6 @@ class OrderView extends Component {
                     </Row>
                 )
             }
-
-            // console.log("3333333333", sum);
-            // this.setState({
-            //     sum_price: sum
-            // })
             return order_total;
         }
 
@@ -313,6 +323,8 @@ class OrderView extends Component {
 
     sumtotal() {
         if (this.state.cart != undefined) {
+            console.log("this.state.promotion :", this.state.promotion);
+
             var sum = 0;
             var total = 0;
             var sum1 = 0;
@@ -324,111 +336,83 @@ class OrderView extends Component {
             var price1 = []
             var price2 = []
             var price3 = []
+            var sum_all = []
+            var price_all = []
+            var sum_count_all = {}
+            var discount = 0;
 
             for (let i = 0; i < this.state.cart.length; i++) {
                 sum += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
                 total += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
             }
+
+
             for (let i = 0; i < this.state.cart.length; i++) {
-                if (this.state.cart[i].type == 1) {
-                    for (var j = 0; j < this.state.cart[i].count; j++) {
-                        price1.push(this.state.cart[i].price)
-                    }
+                for (let key = 0; key < this.state.menutype_list.length; key++) {
+                    if (this.state.cart[i].type == this.state.menutype_list[key].menu_type_id) {
+                        for (var x = 0; x < this.state.cart[i].count; x++) {
+                            price1.push(this.state.cart[i].price)
+                        }
+                        price_all[this.state.menutype_list[key].menu_type_id] = price1
 
-                    sum1_count += parseFloat(this.state.cart[i].count)
-                    sum1 += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
 
-                }
-                if (this.state.cart[i].type == 2) {
-                    for (var j = 0; j < this.state.cart[i].count; j++) {
-                        price2.push(this.state.cart[i].price)
+                        sum_count_all[this.state.menutype_list[key].menu_type_id] = parseFloat(this.state.cart[i].count)
+                        // console.log("sum_count_all[this.state.menutype_list[key].menu_type_id] :", parseFloat(sum_count_all[this.state.menutype_list[key].menu_type_id]));
+                        sum_all[this.state.menutype_list[key].menu_type_id] = parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
                     }
-                    sum2_count += parseFloat(this.state.cart[i].count)
-                    sum2 += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
-                }
-                if (this.state.cart[i].type == 3) {
-                    for (var j = 0; j < this.state.cart[i].count; j++) {
-                        price3.push(this.state.cart[i].price)
+                    else {
+                        sum_all[this.state.menutype_list[key].menu_type_id] = 0
+
                     }
-                    sum3_count += parseFloat(this.state.cart[i].count)
-                    sum3 += parseFloat(this.state.cart[i].count) * parseFloat(this.state.cart[i].price)
                 }
+                console.log('sum_all', sum_all);
 
             }
             if (this.state.promotion != undefined) {
 
 
+
+                var sum_discount = {}
+                if (this.state.promotion.promotion_type == "แถม") {
+                    for (let key = 0; key < this.state.menutype_list.length; key++) {
+                        console.log("sum_count_all[this.state.menutype_list[key].menu_type_id] :", sum_count_all[this.state.menutype_list[key].menu_type_id]);
+
+                        if (this.state.promotion.menu_type_id == this.state.menutype_list[key].menu_type_id && this.state.promotion.discount_giveaway_buy <= sum_count_all[this.state.menutype_list[key].menu_type_id]) {
+
+                            sum_discount[this.state.menutype_list[key].menu_type_id] = sum_all[this.state.menutype_list[key].menu_type_id];
+                            for (let i = 0; i < this.state.promotion.discount_giveaway; i++) {
+                                var min = Math.min.apply(Math, price_all[this.state.menutype_list[key].menu_type_id]);
+                                console.log("min", min)
+                                discount += parseFloat(min);
+                                sum_discount[this.state.menutype_list[key].menu_type_id] = sum_discount[this.state.menutype_list[key].menu_type_id] - min
+                                console.log("sum_discount :", sum_discount[this.state.menutype_list[key].menu_type_id]);
+
+                                for (var x in price_all[this.state.menutype_list[key].menu_type_id]) {
+                                    if (price_all[this.state.menutype_list[key].menu_type_id][x] == min) {
+                                        price_all[this.state.menutype_list[key].menu_type_id].splice(x, 1);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 if (this.state.promotion.discount_percent != "") {
                     var discount_price = (sum * this.state.promotion.discount_percent) / 100
                     sum = sum - discount_price
-                    // console.log("sum_discount_percent", sum);
                 }
                 if (this.state.promotion.discount_price != "") {
                     var discount_price = sum - this.state.promotion.discount_price
                     sum = discount_price
-                    // console.log("sum_discount_price", sum);
                 }
                 if (this.state.promotion.promotion_type == "แถม") {
-                    if (this.state.promotion.menu_type_id == 1 && this.state.promotion.discount_giveaway_buy <= sum1_count) {
-                        var sum1_discount = sum1;
-                        for (let i = 0; i < this.state.promotion.discount_giveaway; i++) {
-                            var min = Math.min.apply(Math, price1);
-                            sum1_discount = sum1_discount - min
-
-                            for (var key in price1) {
-                                if (price1[key] == min) {
-                                    price1.splice(key, 1);
-                                    break;
-                                }
-                            }
-                            // console.log('sum1_discount', sum1_discount);
-
-                        }
-                        total = sum1 + sum2 + sum3
-                        sum = sum1_discount + sum2 + sum3
-
-
-                    }
-                    if (this.state.promotion.menu_type_id == 2 && this.state.promotion.discount_giveaway_buy <= sum2_count) {
-                        var sum2_discount = sum2;
-                        for (let i = 0; i < this.state.promotion.discount_giveaway; i++) {
-                            var min = Math.min.apply(Math, price1);
-                            sum2_discount = sum2_discount - min
-
-                            for (var key in price2) {
-                                if (price2[key] == min) {
-                                    price2.splice(key, 1);
-                                    break;
-                                }
-                            }
-                        }
-                        total = sum1 + sum2 + sum3
-                        sum = sum2_discount + sum1 + sum3
-                    }
-                    if (this.state.promotion.menu_type_id == 3 && this.state.promotion.discount_giveaway_buy <= sum3_count) {
-                        var sum3_discount = sum3
-                        for (let i = 0; i < this.state.promotion.discount_giveaway; i++) {
-                            var min = Math.min.apply(Math, price1);
-                            sum3_discount = sum3_discount - min
-
-                            for (var key in price3) {
-                                if (price3[key] == min) {
-                                    price3.splice(key, 1);
-                                    break;
-                                }
-                            }
-                        }
-
-                        total = sum1 + sum2 + sum3
-                        sum = sum3_discount + sum2 + sum1
-                    }
+                    sum = total - discount
                 }
             }
             var total_sum = {
                 sum_price: sum,
                 total: total
             }
-            // console.log("5555555555", total_sum);
             return total_sum;
         }
     }
@@ -442,7 +426,6 @@ class OrderView extends Component {
                 arr["about_code"] = this.props.user.about_code
                 arr["about_main_branch"] = this.props.user.about_main_branch
                 arr["about_menu_data"] = this.props.user.about_menu_data
-                // console.log("555555555", this.props.user);
 
                 var menu_list = await menu_model.getMenuByCode(arr)
                 this.setState({
@@ -453,19 +436,11 @@ class OrderView extends Component {
                     menulist.push(
 
                         <Col lg="4" >
-                            {/* <ClickNHold
-                            time={0.5}
-                            onStart={this.start}
-                            onClickNHold={this.clickNHold}
-                            onEnd={this.end} > */}
                             <Card onClick={this.addItem.bind(this, this.state.menu_list[j])}>
-                                {/* <CardImg top width="100%" src="/logo_bubblebrown.png" alt="Card image cap" /> */}
                                 <CardBody>
                                     <CardTitle><label >{this.state.menu_list[j].menu_name}</label> </CardTitle>
                                 </CardBody>
                             </Card>
-
-                            {/* </ClickNHold> */}
                         </Col>
 
                     )
@@ -486,7 +461,7 @@ class OrderView extends Component {
         })
     }
 
- 
+
     renderTable() {
         if (this.state.table_list != undefined) {
             var table = []
@@ -543,6 +518,15 @@ class OrderView extends Component {
 
     }
 
+    deletePromotion() {
+        // console.log("promotion_use_list :", promotion_use_list);
+        // console.log("promotion :", promotion);
+        this.setState({
+            promotion_use_list: undefined,
+            promotion: undefined
+        })
+    }
+
     rendershowPromotion() {
         if (this.state.promotion_use_list != undefined) {
             // console.log("promotion_list", promotion_list);
@@ -553,6 +537,9 @@ class OrderView extends Component {
                 <Row>
                     <Col lg="6">
                         <label> {this.state.promotion_use_list.promotion_header}</label>
+                    </Col>
+                    <Col>
+                        <Button onClick={this.deletePromotion.bind(this, this.state.promotion_use_list, this.state.promotion)}><label>ยกเลิก</label></Button>
                     </Col>
                 </Row>
             )
@@ -643,9 +630,12 @@ class OrderView extends Component {
             }
 
             for (var key in this.state.cart) {
+                // console.log("this.state.cart :", this.state.cart);
+
                 var order_list = {
                     order_code: order_code,
                     menu_code: this.state.cart[key].code,
+                    menu_type_id: this.state.cart[key].type,
                     order_list_qty: this.state.cart[key].count,
                     order_list_name: this.state.cart[key].name,
                     order_list_price_qty: this.state.cart[key].price,
@@ -684,30 +674,61 @@ class OrderView extends Component {
         const data = new FormData();
         var date = Date.now();
         var total_sum = this.sumtotal()
-        var order = {
-            'table_code': '01',
-            'customer_code': 'CM001',
-            'order_date': toDay,
-            'amount': total_sum.sum_price,
-            'order_code': this.props.match.params.code,
-            'about_code': this.props.user.about_code,
-            'order_total_price': total_sum.total,
-            'order_date': order_date,
-            'order_time': order_time,
-            'revised_num': revised_num.data.revised_num_max
+        console.log("55555555555 :", this.state.order_old);
 
+        if (this.state.promotion_use_list != undefined) {
+            var order = {
+                'customer_code': 'CM001',
+                'order_date': toDay,
+                'amount': total_sum.sum_price,
+                'order_code': this.props.match.params.code,
+                'table_code': this.state.order_old.table_code,
+                'order_service': this.state.order_old.order_service,
+                'about_code': this.props.user.about_code,
+                'order_total_price': total_sum.total,
+                'order_date': order_date,
+                'order_time': order_time,
+                'revised_num': revised_num.data.revised_num_max,
+                'promotion_code': this.state.promotion_use_list.promotion_code
+            }
+        } else {
+            var order = {
+                'customer_code': 'CM001',
+                'order_date': toDay,
+                'amount': total_sum.sum_price,
+                'order_code': this.props.match.params.code,
+                'table_code': this.state.order_old.table_code,
+                'order_service': this.state.order_old.order_service,
+                'about_code': this.props.user.about_code,
+                'order_total_price': total_sum.total,
+                'order_date': order_date,
+                'order_time': order_time,
+                'revised_num': revised_num.data.revised_num_max,
+                'promotion_code': ''
+            }
         }
-
-
 
         const update_revised = await order_model.updateRevisedByCode(order)
         const insert = await order_model.insertOrder(order)
         const update_revised_list = await order_list_model.updateRevisedListByCode(order)
+        // if (this.state.promotion_use_list != undefined) {
+        //     var promotion_use = {
+        //         'promotion_use_code':this.,
+        //         'customer_code': '',
+        //         'promotion_code': this.state.promotion_use_list.promotion_code,
+        //         'discount_code': this.state.promotion_use_list.discount_code,
+        //         'order_code': order_code,
+        //         'order_total_price': total_sum.total,
+        //         'amount': total_sum.sum_price,
+        //     }
+        //     const res2 = await promotion_use_model.updatePromotionUse(promotion_use)
+        // }
 
         for (var key in this.state.cart) {
             var order_list = {
                 order_code: this.state.order_old.order_code,
                 menu_code: this.state.cart[key].code,
+                menu_type_id: this.state.cart[key].type,
                 order_list_qty: this.state.cart[key].count,
                 order_list_name: this.state.cart[key].name,
                 order_list_price_qty: this.state.cart[key].price,
@@ -872,9 +893,9 @@ class OrderView extends Component {
                                 <TabList >
                                     {/* <Row style={{ paddingTop: '2%' }}> */}
                                     {this.renderMenuType()}
-                                    {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? '' :
-                                        <Tab ><label >โปรโมชัน</label></Tab>
-                                    }
+                                    {/* {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? '' : */}
+                                    <Tab ><label >โปรโมชัน</label></Tab>
+                                    {/* } */}
                                     {/* </Row> */}
                                 </TabList>
                             </CardBody>
@@ -885,13 +906,12 @@ class OrderView extends Component {
 
 
                                 {this.state.x}
-                                {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? '' :
-                                    <TabPanel >
-                                        <Row>
-                                            {this.renderPromotion()}
-                                        </Row>
-                                    </TabPanel>
-                                }
+
+                                <TabPanel >
+                                    <Row>
+                                        {this.renderPromotion()}
+                                    </Row>
+                                </TabPanel>
 
 
                             </CardBody>

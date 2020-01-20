@@ -35,11 +35,14 @@ class updateView extends Component {
 
     async componentDidMount() {
         const code = this.props.match.params.code
+        var arr = {}
+        arr['product_code'] = code
+        arr['about_code'] = this.props.user.about_code
         console.log(code);
 
-        var product = await product_model.getProductByCode(code)
+        var product = await product_model.getProductByCode(arr)
         var unit_list = await unit_model.getUnitBy()
-        var product_type = await product_type_model.getProductTypeBy()
+        var product_type = await product_type_model.getProductTypeBy(arr)
 
         this.setState({
             product_type: product_type.data,
@@ -58,7 +61,7 @@ class updateView extends Component {
         document.getElementById('product_code').value = data.product_code
         document.getElementById('product_name').value = data.product_name
         document.getElementById('unit_id').value = data.unit_id
-        document.getElementById('product_type__id').value = data.product_type__id
+        document.getElementById('product_type_id').value = data.product_type_id
         document.getElementById('product_minimum').value = data.product_minimum
 
     }
@@ -108,7 +111,7 @@ class updateView extends Component {
         let type = []
         for (let i = 0; i < this.state.product_type.length; i++) {
             type.push(
-                <option value={this.state.product_type[i].product_type__id}>{this.state.product_type[i].product_type_name}</option>
+                <option value={this.state.product_type[i].product_type_id}>{this.state.product_type[i].product_type_name}</option>
             )
 
         }
@@ -125,7 +128,7 @@ class updateView extends Component {
                             <Form onSubmit={this.handleSubmit} id="myForm">
                                 <CardHeader>
                                     แก้ไขข้อมูลสินค้า
-    
+
                             </CardHeader>
                                 <CardBody>
                                     <Row>
@@ -159,7 +162,7 @@ class updateView extends Component {
                                             <Row>
                                                 <Col lg="6">
                                                     <Label className="text_head"> ประเภทสินค้า <font color='red'><b> * </b></font></Label>
-                                                    <Input type="select" id="product_type__id" name="product_type__id" class="form-control" >
+                                                    <Input type="select" id="product_type_id" name="product_type_id" class="form-control" >
                                                         <option value="">Select</option>
                                                         {this.renderType()}
                                                     </Input>

@@ -162,13 +162,18 @@ class BillView extends Component {
         var order_list_old = await orderlist_model.getOrderListOldBy(order_code)
         var order_list = await orderlist_model.getOrderListBy(order_code)
         var order_Bycode = await order_model.getOrderByCode(order_code)
+        console.log("order_Bycode :", order_Bycode);
 
         this.setState({
             order_list: order_list.data,
             order_code_list: order_code,
             order_Bycode: order_Bycode.data,
-            order_list_old: order_list_old.data
+            order_list_old: order_list_old.data,
+            total: parseFloat(order_Bycode.data.order_total_price) - parseFloat(order_Bycode.data.amount)
         })
+        console.log("totalllllllll :", this.state.total);
+        console.log("totalllllllll2222 :", order_Bycode.data.order_total_price);
+        console.log("totallllllll33333l :", order_Bycode.data.amount);
 
         this.toggle_Bill()
 
@@ -387,7 +392,7 @@ class BillView extends Component {
                     product_qty: stock_out.data[i].qty_cal,
                     menu_qty: order_list.data[key].order_list_qty,
                     product_cost: stock_out.data[i].product_cost,
-                    unit: stock_out.data[i].unit_id,
+                    unit: stock_out.data[i].recipe_unit,
                     stock_out_date: date,
 
                 }
@@ -515,8 +520,11 @@ class BillView extends Component {
 
             for (let i = 0; i < this.state.zone_menu.length; i++) {
                 console.log('55555555');
+                var arr = {}
+                arr['zone_id'] = this.state.zone_menu[i].zone_id
+                arr['about_code'] = this.props.user.about_code
 
-                var table_list = await table_model.getTableByZoneCode(this.state.zone_menu[i].zone_id)
+                var table_list = await table_model.getTableByZoneCode(arr)
                 this.setState({
                     table_list: table_list.data
                 })
@@ -604,10 +612,9 @@ class BillView extends Component {
                                 <Label className="text_head"> ส่วนลด :  </Label>
                             </Col>
                             <Col lg="6" >
-                                {/* <Label className="text_head"> {this.state.order_Bycode.promotion_header} </Label> */}
                             </Col>
                             <Col lg="4" style={{ textAlign: 'center' }} >
-                                {/* <Label className="text_head"> {this.state.order_Bycode.discount_percent} {this.state.order_Bycode.discount_price} </Label> */}
+                                <Label className="text_head">{this.state.total}</Label>
 
                             </Col>
 
@@ -617,10 +624,9 @@ class BillView extends Component {
                                 <Label className="text_head"> รวม </Label>
                             </Col>
                             <Col lg="6">
-
                             </Col>
                             <Col lg="4" style={{ textAlign: 'center' }}>
-                                {/* <Label className="text_head"> {this.state.order_Bycode.amount} </Label> */}
+                                <Label className="text_head"> {this.state.order_Bycode.amount} </Label>
 
                             </Col>
 
@@ -643,12 +649,14 @@ class BillView extends Component {
         var table_name = document.getElementById('table_name').value
         var table_amount = document.getElementById('table_amount').value
         var zone_id = document.getElementById('zone_id').value
+        var about_code = this.props.user.about_code
 
         var add_table = {
             table_code: table_code,
             table_name: table_name,
             table_amount: table_amount,
-            zone_id: zone_id
+            zone_id: zone_id,
+            about_code: about_code
         }
 
         var res = await table_model.insertTable(add_table);
@@ -661,7 +669,7 @@ class BillView extends Component {
             });
             this.toggle_Table_Edit()
         }
-
+        this.componentDidMount()
 
     }
 

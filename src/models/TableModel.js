@@ -21,7 +21,7 @@ export default class TableModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -33,7 +33,7 @@ export default class TableModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({zone_id: data})
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -43,7 +43,7 @@ export default class TableModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -65,12 +65,12 @@ export default class TableModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
 
-    
+
     async getTableByCode(data) {
         return fetch(GOBALS.URL + '/table/getTableByCode', {
             method: 'POST',
@@ -144,7 +144,7 @@ export default class TableModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({table_code:data})
+            body: JSON.stringify({ table_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -154,11 +154,11 @@ export default class TableModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
-    
-    
+
+
 
 }

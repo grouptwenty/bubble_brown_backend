@@ -119,6 +119,7 @@ class insertView extends Component {
 
         arr['user_code'] = user_code
         arr['user_password'] = md5(arr['user_password'])
+        arr['addby'] = this.props.user.user_code
 
         if (this.check(arr)) {
 
@@ -242,6 +243,7 @@ class insertView extends Component {
                                                     <Input type="select" id="user_position" name="user_position" class="form-control" >
                                                         <option value="">Select</option>
                                                         <option value="แอดมิน">แอดมิน</option>
+                                                        <option value="เจ้าของร้าน">เจ้าของร้าน</option>
                                                         <option value="แคชเชียร์">แคชเชียร์</option>
                                                         <option value="พนักงานเสิร์ฟ">พนักงานเสิร์ฟ</option>
                                                     </Input>

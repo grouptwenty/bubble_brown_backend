@@ -3,7 +3,7 @@ export default class ProductModel {
 
     constructor() {
     }
-   
+
     async getProductBy(data) {
         return fetch(GOBALS.URL + '/product/getProductBy', {
             method: 'POST',
@@ -21,7 +21,7 @@ export default class ProductModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -43,7 +43,7 @@ export default class ProductModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -65,11 +65,11 @@ export default class ProductModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
-   
+
     async insertProduct(data) {
         return fetch(GOBALS.URL + '/product/insertProduct', {
             method: 'POST',
@@ -87,11 +87,11 @@ export default class ProductModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
-   
+
     async getProductByCode(data) {
         return fetch(GOBALS.URL + '/product/getProductByCode', {
             method: 'POST',
@@ -99,7 +99,7 @@ export default class ProductModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({product_code: data})
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -109,7 +109,7 @@ export default class ProductModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -121,7 +121,7 @@ export default class ProductModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({product_type_id: data})
+            body: JSON.stringify({ product_type_id: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -131,7 +131,7 @@ export default class ProductModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -153,7 +153,7 @@ export default class ProductModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -175,7 +175,7 @@ export default class ProductModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -187,7 +187,7 @@ export default class ProductModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({product_code:data})
+            body: JSON.stringify({ product_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -197,10 +197,10 @@ export default class ProductModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
-   
+
 
 }

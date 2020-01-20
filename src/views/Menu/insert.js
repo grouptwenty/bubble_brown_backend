@@ -38,20 +38,49 @@ class insertView extends Component {
         this.setState({
             time_now: time_now
         })
-        const name = time_now + "-" + file.name;
-        file = new File([file], name, { type: files.type });
-        console.log('files', file);
-        if (file != undefined) {
-            reader.onloadend = () => {
-                this.setState({
-                    file: file,
-                    imagePreviewUrl: reader.result,
-                    selectedFile: file
-                });
+        console.log("file :", file);
+        var file_check = file
+        if (file_check != undefined) {
+            const name = time_now + "-" + file.name;
+            file = new File([file], name, { type: files.type });
+            console.log('files', file);
+            if (file != undefined) {
+                reader.onloadend = () => {
+                    this.setState({
+                        file: file,
+                        imagePreviewUrl: reader.result,
+                        selectedFile: file
+                    });
+                }
+                reader.readAsDataURL(file)
+            } else {
+
+                console.log('files', file);
+
+                reader.onloadend = () => {
+                    this.setState({
+                        file: "",
+                        imagePreviewUrl: "",
+                        selectedFile: ""
+                    });
+                }
+                console.log('imagePreviewUrl', this.state.imagePreviewUrl);
             }
-            reader.readAsDataURL(file)
         }
+        else {
+
+            console.log('files', file);
+            this.setState({
+                file: "",
+                imagePreviewUrl: "",
+                selectedFile: ""
+            });
+
+            console.log('imagePreviewUrl', this.state.imagePreviewUrl);
+        }
+
     }
+
 
     async fileUpload(file, page, _code) {
         // const url = GOBALS.URL_UPLOAD_OTHER;
@@ -110,6 +139,7 @@ class insertView extends Component {
 
         arr['menu_code'] = menu_code
         arr['about_code'] = this.props.user.about_code
+        arr['addby'] = this.props.user.user_code
         if (this.check(arr)) {
             var res = await menu_model.insertMenu(arr);
             //   console.log(res)
@@ -180,7 +210,8 @@ class insertView extends Component {
         console.log("ddd", imagePreviewUrl);
 
 
-        if (imagePreviewUrl) {
+        if (imagePreviewUrl != "") {
+
             imagePreview = (<img className="responsive" style={{ width: '100%' }} src={imagePreviewUrl} />);
         } else {
             imagePreview = (<img className="responsive" style={{ width: '100%' }} src={ImgDefault} />);

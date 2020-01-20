@@ -3,7 +3,7 @@ export default class RecipeModel {
 
     constructor() {
     }
-   
+
     async getRecipeByCode(data) {
         return fetch(GOBALS.URL + '/recipe/getRecipeByCode', {
             method: 'POST',
@@ -11,7 +11,7 @@ export default class RecipeModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({menu_code: data})
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -21,7 +21,7 @@ export default class RecipeModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -42,7 +42,7 @@ export default class RecipeModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -54,7 +54,7 @@ export default class RecipeModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({menu_code:data})
+            body: JSON.stringify({ menu_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -64,7 +64,7 @@ export default class RecipeModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -85,11 +85,11 @@ export default class RecipeModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
 
-    
+
 
 }

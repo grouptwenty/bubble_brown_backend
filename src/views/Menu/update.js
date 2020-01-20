@@ -87,19 +87,19 @@ class editView extends Component {
 
     async componentDidMount() {
         const code = this.props.match.params.code
+        var arr = {}
+        arr['menu_code'] = code
+        arr['about_code'] = this.props.user.about_code
 
-        const menu_data = await menu_model.getMenuByMenuCode(code);
+        const menu_data = await menu_model.getMenuByMenuCode(arr);
         console.log("menu_data", menu_data);
-        const menu_type = await menu_type_model.getMenuTypeBy();
+        const menu_type = await menu_type_model.getMenuTypeBy(arr);
         this.setState({
             menu_type: menu_type.data,
             menu_img_old: menu_data.data.menu_image
         })
 
-
         this.setval(menu_data.data)
-
-
     }
 
 
@@ -142,6 +142,7 @@ class editView extends Component {
 
         }
         arr['about_code'] = this.props.user.about_code
+        arr['updateby'] = this.props.user.user_code
 
         if (this.check(arr)) {
             var res = await menu_model.updateMenuByCode(arr);

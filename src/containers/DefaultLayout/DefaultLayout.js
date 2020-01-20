@@ -5,49 +5,24 @@ import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
 import { saveStateLogout } from '../../_helpers';
 import MenuComponent from './Menu';
-// import { store } from '../../_helpers';
-import {
-  AppAside,
-  AppBreadcrumb,
-  AppFooter,
-  AppHeader,
-  AppSidebar,
-  AppSidebarFooter,
-  AppSidebarForm,
-  AppSidebarHeader,
-  AppSidebarMinimizer,
-  AppSidebarNav,
-} from '@coreui/react';
-
-// routes config
+import { AppAside, AppHeader, AppSidebar, AppSidebarForm, AppSidebarHeader, AppSidebarMinimizer, AppSidebarNav, } from '@coreui/react';
 import routes from '../../routes';
 var items = []
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
-// const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 var menu = new MenuComponent();
-
-
 class DefaultLayout extends Component {
   constructor(props) {
     super(props)
     this.state = {
       items: []
     }
-    // const license = this.props.user.license
-    // var value = menu.renderMenu(license)
-    // items['items'] = value
     var currentLocation = this.props.location.pathname
     var pathMain = currentLocation.split("/")[1];
     console.log("currentLocation", pathMain);
     var value = menu.renderMenu(this.props.user)
     items['items'] = value
     console.log(" item = >", items);
-
-  }
-
-  async componentDidMount() {
-
   }
 
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
@@ -71,18 +46,14 @@ class DefaultLayout extends Component {
         </AppHeader>
         <div className="app-body" >
           <AppSidebar fixed display="lg">
-
             <AppSidebarHeader />
             <AppSidebarForm />
             <Suspense>
-              {/* <DefaultMenu />   */}
               <AppSidebarNav navConfig={items} {...this.props} />
             </Suspense>
-            {/* <AppSidebarFooter /> */}
             <AppSidebarMinimizer />
           </AppSidebar>
-          <main className="main" style={{ padding: 0 + '!important', backgroundColor: '#ebedef' ,paddingBottom:0 }}>
-            {/* <AppBreadcrumb appRoutes={routes} /> */}
+          <main className="main" style={{ padding: 0 + '!important', backgroundColor: '#ebedef', paddingBottom: 0 }}>
             <Container fluid style={{ padding: 0 + '!important' }}>
               <Suspense fallback={this.loading()}>
                 <Switch>
@@ -109,11 +80,6 @@ class DefaultLayout extends Component {
             </Suspense>
           </AppAside>
         </div>
-        {/* <AppFooter>
-          <Suspense fallback={this.loading()}>
-            <DefaultFooter />
-          </Suspense>
-        </AppFooter> */}
       </div>
     );
   }
@@ -135,6 +101,5 @@ const mapDispatchtoProps = (dispatch) => {
     }
   }
 }
-
 export default connect(mapStatetoProps, mapDispatchtoProps)(DefaultLayout);
 

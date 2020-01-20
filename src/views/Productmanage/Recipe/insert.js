@@ -46,12 +46,15 @@ class insertView extends Component {
 
     async componentDidMount() {
         const code = this.props.match.params.code
+        var arr = {}
+        arr['menu_code'] = code
+        arr['about_code'] = this.props.user.about_code
 
-        var recipe = await recipe_model.getRecipeByCode(code)
-       
+        var recipe = await recipe_model.getRecipeByCode(arr)
+
         this.setState({
             recipe: recipe.data,
-          
+
 
         })
         // console.log("this.state.code",this.state.code);
@@ -149,13 +152,13 @@ class ProductTable extends React.Component {
 
     calculatQty(qty, unit_id) {
         var unit = ''
-        if (unit_id == 2) {
+        if (unit_id == 1) {
             unit = qty
-        } else if (unit_id == 3) {
+        } else if (unit_id == 2) {
             unit = qty * 1000
-        } else if (unit_id == 4) {
+        } else if (unit_id == 3) {
             unit = qty
-        } else if (unit_id == 5) {
+        } else if (unit_id == 4) {
             unit = qty * 1000
 
         }
@@ -564,7 +567,7 @@ class ModelProduct extends React.Component {
                 product_list.push(
 
                     <ListGroupItem onClick={this.toggle2.bind(this, this.state.product[i])}>
-                        <Row style={{ fontSize: '15px',  }}>
+                        <Row style={{ fontSize: '15px', }}>
                             <Col lg="12">
                                 {this.state.product[i].product_name}
                             </Col>
@@ -600,7 +603,7 @@ class ModelProduct extends React.Component {
 
                         </Row>
 
-                        <ListGroup  className="vc" ref="iScroll" style={{ height: "420px", overflow: "auto", }}>
+                        <ListGroup className="vc" ref="iScroll" style={{ height: "420px", overflow: "auto", }}>
 
                             {this.renderProductList()}
                         </ListGroup>

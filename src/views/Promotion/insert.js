@@ -120,7 +120,7 @@ class HomeView extends Component {
         var enddate = moment(this.state.enddate).format("MMM Do YY");
         // console.log("today :", today);
 
-        if (type == "เปอร์เซ็น") {
+        if (type == "เปอร์เซ็นต์") {
             arr = {
                 'addby': '1',
                 'promotion_header': form.elements['promotion_header'].value,

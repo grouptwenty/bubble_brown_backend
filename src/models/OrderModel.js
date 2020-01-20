@@ -41,7 +41,7 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -63,7 +63,7 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -85,7 +85,7 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -97,7 +97,7 @@ export default class OrderModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({order_code:data})
+            body: JSON.stringify(data)
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -107,7 +107,7 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -129,7 +129,7 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -141,7 +141,7 @@ export default class OrderModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({menu_code:data})
+            body: JSON.stringify({ menu_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -151,7 +151,7 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -163,7 +163,7 @@ export default class OrderModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({order_code:data})
+            body: JSON.stringify({ order_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -173,7 +173,7 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -185,7 +185,7 @@ export default class OrderModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({order_code:data})
+            body: JSON.stringify({ order_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -195,7 +195,7 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -217,7 +217,7 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -239,7 +239,7 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
@@ -251,7 +251,7 @@ export default class OrderModel {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({order_code:data})
+            body: JSON.stringify({ order_code: data })
         }).then((response) => response.json())
             .then((responseJson) => {
 
@@ -261,11 +261,9 @@ export default class OrderModel {
                     data: [],
                     error: error,
                     query_result: false,
-                    server_result:false
+                    server_result: false
                 };
             });
     }
-
-    
 
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 export default class MenuComponent {
     constructor(props) {
     }
@@ -8,16 +7,7 @@ export default class MenuComponent {
         console.log("userrrr", user);
 
         var value = []
-        // value.push({
-        //     title: true,
-        //     name: 'Home',
-        //     wrapper: {
-        //         element: '',
-        //         attributes: {}
-        //     },
-        //     class: 'nav-dropdown'
-        // })
-        if (user.user_position == 'แอดมิน') {
+        if (user.user_position == 'แอดมิน' || user.user_position == 'เจ้าของร้าน') {
             value = [
                 {
                     title: true,
@@ -67,10 +57,6 @@ export default class MenuComponent {
                             name: 'สต๊อกเข้า',
                             url: '/product-manage/stock-in',
                         },
-                        // {
-                        //     name: 'สต๊อกออก',
-                        //     // url: '/product-manage/stock-out',
-                        // },
                     ],
                 },
                 {
@@ -90,14 +76,6 @@ export default class MenuComponent {
                             name: 'แท็บโซน',
                             url: '/tap-manage/zone',
                         },
-                        // {
-                        //     name: 'สต๊อกเข้า',
-                        //     url: '/product-manage/stock-in',
-                        // },
-                        // {
-                        //     name: 'สต๊อกออก',
-                        //     // url: '/product-manage/stock-out',
-                        // },
                     ],
                 },
 
@@ -171,6 +149,7 @@ export default class MenuComponent {
     }
 
 }
+
 const mapStatetoProps = (state) => {
     return {
         user: state.user

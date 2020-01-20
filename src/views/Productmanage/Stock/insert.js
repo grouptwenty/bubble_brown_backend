@@ -136,15 +136,16 @@ class ProductTable extends React.Component {
     }
     calculatQty(qty, unit_id) {
         var unit = ''
-        if (unit_id == 2) {
+        if (unit_id == 1) {
             unit = qty
+        } else if (unit_id == 2) {
+            unit = qty * 1000
         } else if (unit_id == 3) {
-            unit = qty * 1000
-        } else if (unit_id == 4) {
             unit = qty
-        } else if (unit_id == 5) {
+        } else if (unit_id == 4) {
             unit = qty * 1000
-
+        } else if (unit_id == null) {
+            unit = qty
         }
         return unit
     }
@@ -200,7 +201,7 @@ class ProductTable extends React.Component {
 
                 const src = await stock_model.insertStock(stock_list)
                 const price_qty = await stock_model.getStockByPriceQty(stock_list)
-                // console.log("price_qty", price_qty);
+                console.log("price_qty", price_qty);
 
                 const product_qty = await product_model.updateProductCost(price_qty.data)
 

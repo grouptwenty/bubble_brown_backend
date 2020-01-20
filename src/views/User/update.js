@@ -121,7 +121,7 @@ class editView extends Component {
         document.getElementById('user_email').value = data.user_email
         document.getElementById('user_address').value = data.user_address
         document.getElementById('user_username').value = data.user_username
-        document.getElementById('user_password').value = (data.user_password)
+        document.getElementById('user_password').value = data.user_password
     }
 
     async handleSubmit(event) {
@@ -136,6 +136,7 @@ class editView extends Component {
             arr[name] = form.elements[name.toString()].value;
         }
         arr['user_password'] = md5(arr['user_password'])
+        arr['updateby'] = this.props.user.user_code
 
         if (this.state.selectedFile != null) {
 
@@ -272,6 +273,7 @@ class editView extends Component {
                                                     <Input type="select" id="user_position" name="user_position" class="form-control" >
                                                         <option value="">Select</option>
                                                         <option value="แอดมิน">แอดมิน</option>
+                                                        <option value="เจ้าของร้าน">เจ้าของร้าน</option>
                                                         <option value="แคชเชียร์">แคชเชียร์</option>
                                                         <option value="พนักงานเสิร์ฟ">พนักงานเสิร์ฟ</option>
                                                     </Input>
