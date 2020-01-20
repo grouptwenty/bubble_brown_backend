@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Card, ButtonGroup, CardText, PaginationItem, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup, Form, Input } from 'reactstrap';
+import { Button, Table, Card, ButtonGroup, CardText, PaginationItem, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup, Form, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { NavLink, Link } from 'react-router-dom';
@@ -12,7 +12,7 @@ import { formatDate, parseDate, } from 'react-day-picker/moment';
 // import DayPicker from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
-import moment from 'moment'
+import moment, { months } from 'moment'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 var report_model = new ReportModel;
@@ -48,6 +48,16 @@ class ReportSaleView extends Component {
         this.renderSaleYear = this.renderSaleYear.bind(this);
         this.renderCostYear = this.renderCostYear.bind(this);
         this.renderProfitYear = this.renderProfitYear.bind(this);
+        this.renderTableSaleDay = this.renderTableSaleDay.bind(this);
+        this.renderTableSaleMonth = this.renderTableSaleMonth.bind(this);
+        this.renderTableSaleYear = this.renderTableSaleYear.bind(this);
+        this.toggle = this.toggle.bind(this);
+    }
+
+    toggle() {
+        this.setState(prevState => ({
+            modal: !prevState.modal
+        }));
     }
 
     //DAY
@@ -58,28 +68,15 @@ class ReportSaleView extends Component {
         });
 
         const report_sale_day = await report_model.getReportSalesByDay({ "payment_date": date });
+        for (var key in report_sale_day.data) {
+            var cost_sale_day = await report_model.getCostSalesByDay({
+                "payment_date": date,
+                "payment_time": report_sale_day.data[key].payment_time
+            })
+            report_sale_day.data[key]['cost_sale_day'] = cost_sale_day.data.cost
+        }
         this.setState({
             report_sale_day: report_sale_day.data
-        })
-
-        const data_report_sale_day = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_sale_day) {
-            var set_row = {
-                Date: this.state.report_sale_day[key].payment_date,
-                Time: this.state.report_sale_day[key].payment_time,
-                Total: this.state.report_sale_day[key].total_payment,
-                Cost: this.state.report_sale_day[key].cost,
-                Profit: this.state.report_sale_day[key].profit,
-            }
-            data_report_sale_day.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_day: data_report_sale_day
         })
 
     }
@@ -94,31 +91,22 @@ class ReportSaleView extends Component {
         var date = { start_month: start_month, end_month: this.state.change_end_month }
         const report_sale_start_month = await report_model.getReportSalesByMonth(date);
 
+        for (var key in report_sale_start_month.data) {
+            var cost_sale_start_month = await report_model.getCostSalesByMonth({
+                "payment_date": report_sale_start_month.data[key].month,
+                "payment_time": report_sale_start_month.data[key].payment_time
+            })
+
+            report_sale_start_month.data[key]['cost_sale_month'] = cost_sale_start_month.data.cost
+        }
+
         this.setState({
             report_sale_month: report_sale_start_month.data
         })
 
-        const data_report_sale_month = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_sale_month) {
-            var set_row = {
-                Date: this.state.report_sale_month[key].month,
-                Time: this.state.report_sale_month[key].payment_time,
-                Total: this.state.report_sale_month[key].total_payment,
-                Cost: this.state.report_sale_month[key].cost,
-                Profit: this.state.report_sale_month[key].profit,
-            }
-            data_report_sale_month.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_month: data_report_sale_month
-        })
-
     }
+
+
 
     async handleEndMonthChange(end_month) {
 
@@ -127,28 +115,19 @@ class ReportSaleView extends Component {
         });
         var date = { start_month: this.state.change_start_month, end_month: end_month }
         const report_sale_end_month = await report_model.getReportSalesByMonth(date);
+        console.log("report_sale_end_month", report_sale_end_month);
+
+        for (var key in report_sale_end_month.data) {
+            var cost_sale_end_month = await report_model.getCostSalesByMonth({
+                "payment_date": report_sale_end_month.data[key].month,
+                "payment_time": report_sale_end_month.data[key].payment_time
+            })
+
+            report_sale_end_month.data[key]['cost_sale_month'] = cost_sale_end_month.data.cost
+        }
+
         this.setState({
             report_sale_month: report_sale_end_month.data
-        })
-
-        const data_report_sale_month = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_sale_month) {
-            var set_row = {
-                Date: this.state.report_sale_month[key].month,
-                Time: this.state.report_sale_month[key].payment_time,
-                Total: this.state.report_sale_month[key].total_payment,
-                Cost: this.state.report_sale_month[key].cost,
-                Profit: this.state.report_sale_month[key].profit,
-            }
-            data_report_sale_month.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_month: data_report_sale_month
         })
     }
 
@@ -161,29 +140,15 @@ class ReportSaleView extends Component {
 
         var date = { start_year: start_year, end_year: this.state.change_end_year }
         const report_sale_start_year = await report_model.getReportSalesByYear(date);
+        for (var key in report_sale_start_year.data) {
+            var cost_sale_start_year = await report_model.getCostSalesByYear({
+                "payment_date": report_sale_start_year.data[key].month,
+            })
+            report_sale_start_year.data[key]['cost_sale_year'] = cost_sale_start_year.data.cost
+        }
         this.setState({
             report_sale_year: report_sale_start_year.data
         })
-
-        const data_report_sale_year = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_sale_year) {
-            var set_row = {
-                Date: this.state.report_sale_year[key].year,
-                Total: this.state.report_sale_year[key].total_payment,
-                Cost: this.state.report_sale_year[key].cost,
-                Profit: this.state.report_sale_year[key].profit,
-            }
-            data_report_sale_year.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_year: data_report_sale_year
-        })
-
     }
 
     async handleEndYearChange(end_year) {
@@ -192,101 +157,71 @@ class ReportSaleView extends Component {
             change_end_year: end_year
         });
 
-        var date = { start_month: this.state.change_start_year, end_year: end_year }
+        var date = { start_year: this.state.change_start_year, end_year: end_year }
         const report_sale_end_year = await report_model.getReportSalesByYear(date);
+        for (var key in report_sale_end_year.data) {
+            var cost_sale_end_year = await report_model.getCostSalesByYear({
+                "payment_date": report_sale_end_year.data[key].month,
+            })
+
+            report_sale_end_year.data[key]['cost_sale_year'] = cost_sale_end_year.data.cost
+        }
         this.setState({
             report_sale_year: report_sale_end_year.data
         })
 
-        const data_report_sale_year = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_sale_year) {
-            var set_row = {
-                Date: this.state.report_sale_year[key].year,
-                Total: this.state.report_sale_year[key].total_payment,
-                Cost: this.state.report_sale_year[key].cost,
-                Profit: this.state.report_sale_year[key].profit,
-            }
-            data_report_sale_year.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_year: data_report_sale_year
-        })
 
     }
 
     async componentDidMount() {
         //DAY
         var change_date = new Date();
-        const report_sale_day = await report_model.getReportSalesByDay({ "payment_date": change_date });
-
-        // console.log("this.state.change_date ", change_date);
+        const report_sale_day = await report_model.getReportSalesByDay({ "payment_date": date });
+        for (var key in report_sale_day.data) {
+            var cost_sale_day = await report_model.getCostSalesByDay({
+                "payment_date": date,
+                "payment_time": report_sale_day.data[key].payment_time
+            })
+            report_sale_day.data[key]['cost_sale_day'] = cost_sale_day.data.cost
+        }
         this.setState({
             report_sale_day: report_sale_day.data
         })
-
-        const data_report_sale_day = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_sale_day) {
-            var set_row = {
-                Date: this.state.report_sale_day[key].payment_date,
-                Time: this.state.report_sale_day[key].payment_time,
-                Total: this.state.report_sale_day[key].total_payment,
-                Cost: this.state.report_sale_day[key].cost,
-                Profit: this.state.report_sale_day[key].profit,
-            }
-            data_report_sale_day.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_day: data_report_sale_day
-        })
-        // console.log(data_report_list);
 
 
         //MONTH
         var change_start_month = new Date();
         var date = { start_month: this.state.change_start_month, end_month: this.state.change_end_month }
         const report_sale_start_month = await report_model.getReportSalesByMonth(date);
+        console.log("report_sale_start_month", report_sale_start_month);
 
+        for (var key in report_sale_start_month.data) {
+            var cost_sale_start_month = await report_model.getCostSalesByMonth({
+                "payment_date": report_sale_start_month.data[key].month,
+                "payment_time": report_sale_start_month.data[key].payment_time
+            })
+
+            report_sale_start_month.data[key]['cost_sale_month'] = cost_sale_start_month.data.cost
+            console.log("cost_sale_start_month", cost_sale_start_month);
+
+        }
         this.setState({
             report_sale_month: report_sale_start_month.data
         })
 
         var change_end_month = new Date();
         const report_sale_end_month = await report_model.getReportSalesByMonth(date);
+        for (var key in report_sale_end_month.data) {
+            var cost_sale_end_month = await report_model.getCostSalesByMonth({
+                "payment_date": report_sale_end_month.data[key].month,
+                "payment_time": report_sale_end_month.data[key].payment_time
+            })
 
+            report_sale_end_month.data[key]['cost_sale_month'] = cost_sale_end_month.data.cost
+        }
         this.setState({
             report_sale_month: report_sale_end_month.data
         })
-
-        const data_report_sale_month = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_sale_month) {
-            var set_row = {
-                Date: this.state.report_sale_month[key].month,
-                Time: this.state.report_sale_month[key].payment_time,
-                Total: this.state.report_sale_month[key].total_payment,
-                Cost: this.state.report_sale_month[key].cost,
-                Profit: this.state.report_sale_month[key].profit,
-            }
-            data_report_sale_month.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_month: data_report_sale_month
-        })
-
 
 
         //YEAR
@@ -294,37 +229,226 @@ class ReportSaleView extends Component {
         var change_start_year = new Date();
         var date = { start_year: this.state.change_start_year, end_year: this.state.change_end_year }
         const report_sale_start_year = await report_model.getReportSalesByYear(date);
+        console.log("report_sale_start_year", report_sale_start_year);
 
+        for (var key in report_sale_start_year.data) {
+            var cost_sale_start_year = await report_model.getCostSalesByYear({
+                "payment_date": report_sale_start_year.data[key].month,
+            })
+            console.log("cost_sale_start_year", cost_sale_start_year);
+
+            report_sale_start_year.data[key]['cost_sale_year'] = cost_sale_start_year.data.cost
+        }
         this.setState({
             report_sale_year: report_sale_start_year.data
         })
 
         var change_end_year = new Date();
         const report_sale_end_year = await report_model.getReportSalesByYear(date);
+        for (var key in report_sale_end_year.data) {
+            var cost_sale_end_year = await report_model.getCostSalesByYear({
+                "payment_date": report_sale_end_year.data[key].month,
+            })
 
+            report_sale_end_year.data[key]['cost_sale_year'] = cost_sale_end_year.data.cost
+        }
         this.setState({
             report_sale_year: report_sale_end_year.data
         })
 
-        const data_report_sale_year = {
-            rows: []
+    }
+
+
+
+    //MODAL - DAY
+    async onClickTableSaleDay(payment) {
+        console.log("payment", payment);
+
+        var sub_table_sale_day = await report_model.getTableReportSalesByDay(payment)
+        for (var key in sub_table_sale_day.data) {
+            var cost_table_sale_day = await report_model.getTableCostSalesByDay({
+                "payment_date": payment.payment_date,
+                "payment_time": payment.payment_time,
+                "menu_code": sub_table_sale_day.data[key].menu_code
+            })
+
+            sub_table_sale_day.data[key]['cost_table_sale_day'] = cost_table_sale_day.data.cost
         }
-        var i = 1;
+
+        console.log("sub_table_sale_day", sub_table_sale_day);
+        this.setState({
+            sub_table_sale_day: sub_table_sale_day.data
+        })
+        this.toggle()
+    }
+
+    saleDayDetail() {
+        var detail_sale_day = []
+
         // for(var x=0;x<10;x++)
-        for (var key in this.state.report_sale_year) {
-            var set_row = {
-                Date: this.state.report_sale_year[key].year,
-                Total: this.state.report_sale_year[key].total_payment,
-                Cost: this.state.report_sale_year[key].cost,
-                Profit: this.state.report_sale_year[key].profit,
-            }
-            data_report_sale_year.rows.push(set_row);
-            i++;
+        for (var key in this.state.sub_table_sale_day) {
+            detail_sale_day.push(
+                <tbody>
+                    <tr>
+                        <td>{this.state.sub_table_sale_day[key].payment_time}</td>
+                        <td>{this.state.sub_table_sale_day[key].order_list_name}</td>
+                        <td>{Number(this.state.sub_table_sale_day[key].perunit).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{this.state.sub_table_sale_day[key].qty}</td>
+                        <td>{Number(this.state.sub_table_sale_day[key].total_payment).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.sub_table_sale_day[key].cost_table_sale_day).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.sub_table_sale_day[key].total_payment - this.state.sub_table_sale_day[key].cost_table_sale_day).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                    </tr>
+                </tbody>
+            )
+        }
+        return detail_sale_day
+
+    }
+
+    //MODAL - Month
+    async onClickTableSaleMonth(month) {
+        console.log("month", month);
+
+        var sub_table_sale_month = await report_model.getTableReportSalesByMonth(month)
+        console.log("sub_table_sale_month", sub_table_sale_month);
+
+        for (var key in sub_table_sale_month.data) {
+            var cost_table_sale_month = await report_model.getTableCostSalesByMonth({
+                "payment_date": month.date,
+                "menu_code": sub_table_sale_month.data[key].menu_code
+            })
+
+            sub_table_sale_month.data[key]['cost_table_sale_month'] = cost_table_sale_month.data.cost
         }
         this.setState({
-            data_year: data_report_sale_year
+            sub_table_sale_month: sub_table_sale_month.data
         })
+        this.toggle()
     }
+
+    saleMonthDetail() {
+        var detail_sale_month = []
+
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.sub_table_sale_month) {
+            detail_sale_month.push(
+                <tbody>
+                    <tr>
+                        {/* <td>{this.state.sub_table_sale_month[key].payment_time}</td> */}
+                        <td>{this.state.sub_table_sale_month[key].order_list_name}</td>
+                        <td>{this.state.sub_table_sale_month[key].qty}</td>
+                        <td>{Number(this.state.sub_table_sale_month[key].total_payment).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.sub_table_sale_month[key].cost_table_sale_month).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.sub_table_sale_month[key].total_payment - this.state.sub_table_sale_month[key].cost_table_sale_month).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                    </tr>
+                </tbody>
+            )
+        }
+        return detail_sale_month
+
+    }
+
+    //MODAL - YEAR
+    async onClickTableSaleYear(month) {
+        console.log("month", month);
+
+        var sub_table_sale_year = await report_model.getTableReportSalesByYear(month)
+        for (var key in sub_table_sale_year.data) {
+            var cost_table_sale_year = await report_model.getTableCostSalesByYear({
+                "payment_date": sub_table_sale_year.data[key].month,
+            })
+
+            sub_table_sale_year.data[key]['cost_table_sale_year'] = cost_table_sale_year.data.cost
+        }
+        console.log("sub_table_sale_year", sub_table_sale_year);
+        this.setState({
+            sub_table_sale_year: sub_table_sale_year.data
+        })
+        this.toggle()
+    }
+
+    saleYearDetail() {
+        var detail_sale_year = []
+
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.sub_table_sale_year) {
+            detail_sale_year.push(
+                <tbody>
+                    <tr>
+                        <td>{this.state.sub_table_sale_year[key].month}</td>
+                        <td>{Number(this.state.sub_table_sale_year[key].total_payment).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.sub_table_sale_year[key].cost_table_sale_year).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.sub_table_sale_year[key].total_payment - this.state.sub_table_sale_year[key].cost_table_sale_year).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                    </tr>
+                </tbody>
+            )
+        }
+        return detail_sale_year
+
+    }
+
+    //DATA TABLE
+    renderTableSaleDay() {
+        var table_sale_day = []
+
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_sale_day) {
+            table_sale_day.push(
+                <tbody>
+                    <tr>
+                        <td>{this.state.report_sale_day[key].payment_date}</td>
+                        <td><a onClick={this.onClickTableSaleDay.bind(this, this.state.report_sale_day[key])} style={{ color: 'red' }}>{this.state.report_sale_day[key].payment_time}</a></td>
+                        <td>{Number(this.state.report_sale_day[key].total_payment).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.report_sale_day[key].cost_sale_day).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.report_sale_day[key].total_payment - this.state.report_sale_day[key].cost_sale_day).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                    </tr>
+
+                </tbody>
+            )
+        }
+        return table_sale_day
+    }
+
+    renderTableSaleMonth() {
+        var table_sale_month = []
+
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_sale_month) {
+            table_sale_month.push(
+                <tbody>
+                    <tr>
+                        <td><a onClick={this.onClickTableSaleMonth.bind(this, this.state.report_sale_month[key])} style={{ color: 'red' }}>{this.state.report_sale_month[key].month}</a></td>
+                        <td>{Number(this.state.report_sale_month[key].total_payment).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.report_sale_month[key].cost_sale_month).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.report_sale_month[key].total_payment - this.state.report_sale_month[key].cost_sale_month).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                    </tr>
+                </tbody>
+            )
+        }
+        return table_sale_month
+
+
+    }
+
+    renderTableSaleYear() {
+        var table_sale_year = []
+
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_sale_year) {
+            table_sale_year.push(
+                <tbody>
+                    <tr>
+                        <td><a onClick={this.onClickTableSaleYear.bind(this, this.state.report_sale_year[key])} style={{ color: 'red' }}>{this.state.report_sale_year[key].year}</a></td>
+                        <td>{Number(this.state.report_sale_year[key].total_payment).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.report_sale_year[key].cost_sale_year).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                        <td>{Number(this.state.report_sale_year[key].total_payment - this.state.report_sale_year[key].cost_sale_year).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>
+                    </tr>
+                </tbody>
+            )
+        }
+        return table_sale_year
+    }
+
 
 
     async setSeg(number) {
@@ -357,7 +481,7 @@ class ReportSaleView extends Component {
             var sum = 0
 
             for (var key in this.state.report_sale_day) {
-                sum += this.state.report_sale_day[key].cost
+                sum += this.state.report_sale_day[key].cost_sale_day
             }
             arr.push(
                 <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
@@ -376,7 +500,7 @@ class ReportSaleView extends Component {
             var sum = 0
 
             for (var key in this.state.report_sale_day) {
-                sum += this.state.report_sale_day[key].profit
+                sum += this.state.report_sale_day[key].total_payment - this.state.report_sale_day[key].cost_sale_day
             }
             arr.push(
                 <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
@@ -414,7 +538,7 @@ class ReportSaleView extends Component {
             var sum = 0
 
             for (var key in this.state.report_sale_month) {
-                sum += this.state.report_sale_month[key].cost
+                sum += this.state.report_sale_month[key].cost_sale_month
             }
             arr.push(
                 <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
@@ -433,7 +557,7 @@ class ReportSaleView extends Component {
             var sum = 0
 
             for (var key in this.state.report_sale_month) {
-                sum += this.state.report_sale_month[key].profit
+                sum += this.state.report_sale_month[key].total_payment - this.state.report_sale_month[key].cost_sale_month
             }
             arr.push(
                 <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
@@ -472,7 +596,7 @@ class ReportSaleView extends Component {
             var sum = 0
 
             for (var key in this.state.report_sale_year) {
-                sum += this.state.report_sale_year[key].cost
+                sum += this.state.report_sale_year[key].cost_sale_year
             }
             arr.push(
                 <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
@@ -491,7 +615,7 @@ class ReportSaleView extends Component {
             var sum = 0
 
             for (var key in this.state.report_sale_year) {
-                sum += this.state.report_sale_year[key].profit
+                sum += this.state.report_sale_year[key].total_payment - this.state.report_sale_year[key].cost_sale_year
             }
             arr.push(
                 <Label>{Number(sum).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</Label>
@@ -608,25 +732,28 @@ class ReportSaleView extends Component {
                                                     />
                                                 </FormGroup>
                                                 <br></br>
-                                                <LineChart data={graph_sales_day_number} />
+                                                <LineChart data={graph_sales_day_number} colors={["#800517"]} />
                                                 <br></br>
                                                 <br></br>
                                                 <Row>
                                                     <Col lg='12'>
                                                         <div>
                                                             <Row>
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+
+                                                                </Col>
                                                                 <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     <Label>ยอดขายทั้งหมด :</Label>
                                                                 </Col>
                                                                 <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     {this.renderSaleDay()}
                                                                 </Col>
+
+                                                            </Row>
+                                                            <Row>
                                                                 <Col lg='8' style={{ textAlign: 'end' }}>
 
                                                                 </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                
                                                                 <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     <Label>ต้นทุนทั้งหมด :</Label>
                                                                 </Col>
@@ -634,39 +761,63 @@ class ReportSaleView extends Component {
 
                                                                     {this.renderCostDay()}
                                                                 </Col>
-                                                                <Col lg='8' style={{ textAlign: 'end' }}>
-                                                                </Col>
                                                             </Row>
                                                             <Row>
-                                                                
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+
+                                                                </Col>
                                                                 <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     <Label>กำไรทั้งหมด :</Label>
                                                                 </Col>
                                                                 <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     {this.renderProfitDay()}
                                                                 </Col>
-                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+                                                            </Row>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Table striped>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>วันที่</th>
+                                                                                <th>เวลา</th>
+                                                                                <th>ยอดรวม</th>
+                                                                                <th>ต้นทุน</th>
+                                                                                <th>กำไร</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        {this.renderTableSaleDay()}
+                                                                    </Table>
                                                                 </Col>
                                                             </Row>
-                                                            <BootstrapTable
-                                                                ref='table'
-                                                                data={data_day.rows}
-                                                                striped hover pagination
-                                                                search={true}
-                                                            // className="table-overflow"
-                                                            >
-                                                                {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
-                                                                <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>วันที่</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Time' headerAlign="center" dataAlign="center" dataSort isKey={true}>เวลา</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ยอดขาย</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Cost' headerAlign="center" dataAlign="center" dataSort>ต้นทุน</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Profit' headerAlign="center" dataAlign="center" dataSort>กำไร</TableHeaderColumn>
-                                                            </BootstrapTable>
                                                         </div>
                                                     </Col>
                                                 </Row>
+                                                <Modal isOpen={this.state.modal} toggle={this.toggle} size="lg"  >
+                                                    <ModalHeader toggle={this.toggle} ></ModalHeader>
+                                                    <ModalBody >
+                                                        <div>
+                                                            <Table striped>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>เวลา</th>
+                                                                        <th>เมนู</th>
+                                                                        <th>ราคาต่อหน่วย</th>
+                                                                        <th>จำนวน</th>
+                                                                        <th>ยอดรวม</th>
+                                                                        <th>ต้นทุน</th>
+                                                                        <th>กำไร</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                {this.saleDayDetail()}
+                                                            </Table></div>
+                                                    </ModalBody>
+                                                    <ModalFooter>
+                                                        <Button color="primary" onClick={this.toggle} style={{ width: 100, height: 40 }}>OK</Button>
+                                                    </ModalFooter>
+                                                </Modal>
                                             </Card>
-
                                         }
 
                                         {this.state.seg === 2 &&
@@ -700,26 +851,28 @@ class ReportSaleView extends Component {
                                                     </Col>
                                                 </Row>
                                                 <br></br>
-                                                <ColumnChart data={graph_sales_month_number} />
+                                                <ColumnChart data={graph_sales_month_number} colors={["#800517"]} />
                                                 <br></br>
                                                 <br></br>
                                                 <Row>
                                                     <Col lg='12'>
                                                         <div>
                                                             <Row>
-                                                                
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+
+                                                                </Col>
                                                                 <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     <Label>ยอดขายทั้งหมด :</Label>
                                                                 </Col>
                                                                 <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     {this.renderSaleMonth()}
                                                                 </Col>
+
+                                                            </Row>
+                                                            <Row>
                                                                 <Col lg='8' style={{ textAlign: 'end' }}>
 
                                                                 </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                
                                                                 <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     <Label>ต้นทุนทั้งหมด :</Label>
                                                                 </Col>
@@ -727,37 +880,61 @@ class ReportSaleView extends Component {
 
                                                                     {this.renderCostMonth()}
                                                                 </Col>
-                                                                <Col lg='8' style={{ textAlign: 'end' }}>
-                                                                </Col>
+
                                                             </Row>
                                                             <Row>
-                                                                
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+                                                                </Col>
                                                                 <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     <Label>กำไรทั้งหมด :</Label>
                                                                 </Col>
                                                                 <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     {this.renderProfitMonth()}
                                                                 </Col>
-                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+
+                                                            </Row>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Table striped>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>วันที่</th>
+                                                                                <th>ยอดรวม</th>
+                                                                                <th>ต้นทุน</th>
+                                                                                <th>กำไร</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        {this.renderTableSaleMonth()}
+                                                                    </Table>
                                                                 </Col>
                                                             </Row>
-                                                            <BootstrapTable
-                                                                ref='table'
-                                                                data={data_month.rows}
-                                                                striped hover pagination
-                                                                search={true}
-                                                            // className="table-overflow"
-                                                            >
-                                                                {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
-                                                                <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort isKey={true}>วันที่</TableHeaderColumn>
-                                                                {/* <TableHeaderColumn dataField='Time' headerAlign="center" dataAlign="center" dataSort>เวลา</TableHeaderColumn> */}
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ยอดขาย</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Cost' headerAlign="center" dataAlign="center" dataSort>ต้นทุน</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Profit' headerAlign="center" dataAlign="center" dataSort>กำไร</TableHeaderColumn>
-                                                            </BootstrapTable>
                                                         </div>
                                                     </Col>
                                                 </Row>
+                                                <Modal isOpen={this.state.modal} toggle={this.toggle} size="lg"  >
+                                                    <ModalHeader toggle={this.toggle} ></ModalHeader>
+                                                    <ModalBody >
+                                                        <div>
+                                                            <Table striped>
+                                                                <thead>
+                                                                    <tr>
+                                                                        {/* <th>เวลา</th> */}
+                                                                        <th>เมนู</th>
+                                                                        <th>จำนวน</th>
+                                                                        <th>ยอดรวม</th>
+                                                                        <th>ต้นทุน</th>
+                                                                        <th>กำไร</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                {this.saleMonthDetail()}
+                                                            </Table></div>
+                                                    </ModalBody>
+                                                    <ModalFooter>
+                                                        <Button color="primary" onClick={this.toggle} style={{ width: 100, height: 40 }}>OK</Button>
+                                                    </ModalFooter>
+                                                </Modal>
                                             </Card>
                                         }
 
@@ -799,19 +976,20 @@ class ReportSaleView extends Component {
                                                     <Col lg='12'>
                                                         <div>
                                                             <Row>
-                                                                
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+
+                                                                </Col>
                                                                 <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     <Label>ยอดขายทั้งหมด :</Label>
                                                                 </Col>
                                                                 <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     {this.renderSaleYear()}
                                                                 </Col>
-                                                                <Col lg='8' style={{ textAlign: 'end' }}>
 
-                                                                </Col>
                                                             </Row>
                                                             <Row>
-                                                                
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+                                                                </Col>
                                                                 <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     <Label>ต้นทุนทั้งหมด :</Label>
                                                                 </Col>
@@ -819,36 +997,59 @@ class ReportSaleView extends Component {
 
                                                                     {this.renderCostYear()}
                                                                 </Col>
-                                                                <Col lg='8' style={{ textAlign: 'end' }}>
-                                                                </Col>
+
                                                             </Row>
                                                             <Row>
-                                                                
+                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+                                                                </Col>
                                                                 <Col lg='2' style={{ textAlign: 'end', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     <Label>กำไรทั้งหมด :</Label>
                                                                 </Col>
                                                                 <Col lg='2' style={{ textAlign: 'start', fontSize: '12pt', fontWeight: 'bold' }}>
                                                                     {this.renderProfitYear()}
                                                                 </Col>
-                                                                <Col lg='8' style={{ textAlign: 'end' }}>
+
+                                                            </Row>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Table striped>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>วันที่</th>
+                                                                                <th>ยอดรวม</th>
+                                                                                <th>ต้นทุน</th>
+                                                                                <th>กำไร</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        {this.renderTableSaleYear()}
+                                                                    </Table>
                                                                 </Col>
                                                             </Row>
-                                                            <BootstrapTable
-                                                                ref='table'
-                                                                data={data_year.rows}
-                                                                striped hover pagination
-                                                                search={true}
-                                                            // className="table-overflow"
-                                                            >
-                                                                {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
-                                                                <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort isKey={true}>เดือน</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort>ยอดขาย</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Cost' headerAlign="center" dataAlign="center" dataSort>ต้นทุน</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Profit' headerAlign="center" dataAlign="center" dataSort>กำไร</TableHeaderColumn>
-                                                            </BootstrapTable>
                                                         </div>
                                                     </Col>
                                                 </Row>
+                                                <Modal isOpen={this.state.modal} toggle={this.toggle} size="lg" >
+                                                    {/* <ModalHeader toggle={this.toggle} >ยอดขายประจำวันที่: {this.state.payment_date}</ModalHeader> */}
+                                                    <ModalBody >
+                                                        <div>
+                                                            <Table striped>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>วันที่</th>
+                                                                        <th>ยอดรวม</th>
+                                                                        <th>ต้นทุน</th>
+                                                                        <th>กำไร</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                {this.saleYearDetail()}
+                                                            </Table></div>
+                                                    </ModalBody>
+                                                    <ModalFooter>
+                                                        <Button color="primary" onClick={this.toggle} style={{ width: 100, height: 40 }}>OK</Button>
+                                                    </ModalFooter>
+                                                </Modal>
                                             </Card>
                                         }
                                     </Col>
@@ -856,8 +1057,8 @@ class ReportSaleView extends Component {
                             </CardBody>
                         </Card>
                     </Col>
-                </Row>
-            </div>
+                </Row >
+            </div >
 
         )
     }

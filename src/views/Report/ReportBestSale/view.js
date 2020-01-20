@@ -37,7 +37,11 @@ class ReportBestSaleView extends Component {
         this.handleStartMonthChange = this.handleStartMonthChange.bind(this);
         this.handleEndMonthChange = this.handleEndMonthChange.bind(this);        
         this.handleStartYearChange = this.handleStartYearChange.bind(this);
-        this.handleEndYearChange = this.handleEndYearChange.bind(this);    }
+        this.handleEndYearChange = this.handleEndYearChange.bind(this);
+        this.renderTableBestSaleDay = this.renderTableBestSaleDay.bind(this);    
+        // this.renderTableBestSaleMonth = this.renderTableBestSaleMonth.bind(this);    
+        // this.renderTableBestSaleYear = this.renderTableBestSaleYear.bind(this);    
+    }
 
     //DAY
     async handleDayChange(date) {
@@ -52,25 +56,6 @@ class ReportBestSaleView extends Component {
 
         this.setState({
             report_best_sale_day: report_best_sale_day.data
-        })
-
-        const data_report_best_sale_day = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_best_sale_day) {
-            var set_row = {
-                Date: this.state.report_best_sale_day[key].payment_date,
-                Time: this.state.report_best_sale_day[key].payment_time,
-                Total: this.state.report_best_sale_day[key].total_order,
-                Name: this.state.report_best_sale_day[key].order_list_name,
-            }
-            data_report_best_sale_day.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_day: data_report_best_sale_day
         })
 
     }
@@ -89,24 +74,6 @@ class ReportBestSaleView extends Component {
             report_best_sale_month: report_best_sale_start_month.data
         })
 
-        const data_report_best_sale_month = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_best_sale_month) {
-            var set_row = {
-                Date: this.state.report_best_sale_month[key].month,
-                Total: this.state.report_best_sale_month[key].total_order,
-                Name: this.state.report_best_sale_month[key].order_list_name,
-            }
-            data_report_best_sale_month.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_month: data_report_best_sale_month
-        })
-
     }
 
     async handleEndMonthChange(end_month) {
@@ -120,24 +87,6 @@ class ReportBestSaleView extends Component {
 
         this.setState({
             report_best_sale_month: report_best_sale_end_month.data
-        })
-
-        const data_report_best_sale_month = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_best_sale_month) {
-            var set_row = {
-                Date: this.state.report_best_sale_month[key].month,
-                Total: this.state.report_best_sale_month[key].total_order,
-                Name: this.state.report_best_sale_month[key].order_list_name,
-            }
-            data_report_best_sale_month.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_month: data_report_best_sale_month
         })
 
     }
@@ -156,24 +105,6 @@ class ReportBestSaleView extends Component {
             report_best_sale_year: report_best_sale_start_year.data
         })
 
-        const data_report_best_sale_year = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_best_sale_year) {
-            var set_row = {
-                Date: this.state.report_best_sale_year[key].year,
-                Total: this.state.report_best_sale_year[key].total_order,
-                Name: this.state.report_best_sale_year[key].order_list_name,
-            }
-            data_report_best_sale_year.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_year: data_report_best_sale_year
-        })
-
     }
 
     async handleEndYearChange(end_year) {
@@ -189,24 +120,6 @@ class ReportBestSaleView extends Component {
             report_best_sale_year: report_best_sale_end_year.data
         })
 
-        const data_report_best_sale_year = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_best_sale_year) {
-            var set_row = {
-                Date: this.state.report_best_sale_year[key].year,
-                Total: this.state.report_best_sale_year[key].total_order,
-                Name: this.state.report_best_sale_year[key].order_list_name,
-            }
-            data_report_best_sale_year.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_year: data_report_best_sale_year
-        })
-
     }
 
 
@@ -216,33 +129,10 @@ class ReportBestSaleView extends Component {
         var change_date = new Date();
         const report_best_sale_day = await report_model.getReportBestSalesByDay({ "payment_date": change_date });
 
-        // console.log("report_best_sale_day", report_best_sale_day);
         this.setState({
             report_best_sale_day: report_best_sale_day.data
         })
-
-        const data_report_best_sale_day = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_best_sale_day) {
-            var set_row = {
-                Date: this.state.report_best_sale_day[key].payment_date,
-                Time: this.state.report_best_sale_day[key].payment_time,
-                Total: this.state.report_best_sale_day[key].total_order,
-                Name: this.state.report_best_sale_day[key].order_list_name,
-            }
-            data_report_best_sale_day.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_day: data_report_best_sale_day
-        })
-        console.log("data_report_best_sale_day",data_report_best_sale_day);
         
-
-
         //MONTH
         var change_start_month = new Date();
         var date = { start_month: this.state.change_start_month, end_month: this.state.change_end_month }
@@ -259,23 +149,6 @@ class ReportBestSaleView extends Component {
             report_best_sale_month: report_best_sale_end_month.data
         })
 
-        const data_report_best_sale_month = {
-            rows: []
-        }
-        var i = 1;
-        // for(var x=0;x<10;x++)
-        for (var key in this.state.report_best_sale_month) {
-            var set_row = {
-                Date: this.state.report_best_sale_month[key].month,
-                Total: this.state.report_best_sale_month[key].total_order,
-                Name: this.state.report_best_sale_month[key].order_list_name,
-            }
-            data_report_best_sale_month.rows.push(set_row);
-            i++;
-        }
-        this.setState({
-            data_month: data_report_best_sale_month
-        })
 
         //YEAR
         var change_start_year = new Date();
@@ -292,26 +165,65 @@ class ReportBestSaleView extends Component {
         this.setState({
             report_best_sale_year: report_best_sale_end_year.data
         })
+        
+    }
 
-        const data_report_best_sale_year = {
-            rows: []
+    //DAY
+    renderTableBestSaleDay() {
+        var table_best_sale_day = []
+
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_best_sale_day) {
+            table_best_sale_day.push(
+                <tbody>
+                    <tr>
+                        <td>{this.state.report_best_sale_day[key].payment_date}</td>
+                        <td>{this.state.report_best_sale_day[key].payment_time}</td>
+                        <td>{this.state.report_best_sale_day[key].order_list_name}</td>
+                        <td>{this.state.report_best_sale_day[key].total_order}</td>
+                    </tr>
+                </tbody>
+            )
         }
-        var i = 1;
+        return table_best_sale_day
+    }
+
+    //MONTH
+    renderTableBestSaleMonth() {
+        var table_best_sale_month = []
+
+        // for(var x=0;x<10;x++)
+        for (var key in this.state.report_best_sale_month) {
+            table_best_sale_month.push(
+                <tbody>
+                    <tr>
+                        <td>{this.state.report_best_sale_month[key].month}</td>
+                        <td>{this.state.report_best_sale_month[key].order_list_name}</td>
+                        <td>{this.state.report_best_sale_month[key].total_order}</td>
+                    </tr>
+                </tbody>
+            )
+        }
+        return table_best_sale_month
+    }
+
+    //YEAR
+    renderTableBestSaleYear() {
+        var table_best_sale_year = []
+
         // for(var x=0;x<10;x++)
         for (var key in this.state.report_best_sale_year) {
-            var set_row = {
-                Date: this.state.report_best_sale_year[key].year,
-                Total: this.state.report_best_sale_year[key].total_order,
-                Name: this.state.report_best_sale_year[key].order_list_name,
-            }
-            data_report_best_sale_year.rows.push(set_row);
-            i++;
+            table_best_sale_year.push(
+                <tbody>
+                    <tr>
+                        <td>{this.state.report_best_sale_year[key].year}</td>
+                        <td>{this.state.report_best_sale_year[key].order_list_name}</td>
+                        <td>{this.state.report_best_sale_year[key].total_order}</td>
+                    </tr>
+                </tbody>
+            )
         }
-        this.setState({
-            data_year: data_report_best_sale_year
-        })
-        
-        
+        return table_best_sale_year
     }
 
 
@@ -412,7 +324,7 @@ class ReportBestSaleView extends Component {
 
                                             <Card body>
 
-                                                <CardTitle><h3>รายงานเมนูขายดี 5 อันดับประจำวัน</h3></CardTitle>
+                                                <CardTitle><h3>รายงานเมนูขายดี 5 อันดับ ประจำวัน</h3></CardTitle>
                                                 <FormGroup>
                                                     <Label className="text_head"> เลือกวันที่<font color='red'><b> * </b></font></Label>
                                                     <DayPickerInput
@@ -430,22 +342,26 @@ class ReportBestSaleView extends Component {
                                                 <Row>
                                                     <Col lg='12'>
                                                         <div>
-                                                            <BootstrapTable
-                                                                ref='table'
-                                                                data={data_day.rows}
-                                                                striped hover pagination
-                                                                search={true}
-                                                            // className="table-overflow"
-                                                            >
-                                                                <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>วันที่</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Time' headerAlign="center" dataAlign="center" dataSort>เวลา</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อเมนู</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort isKey={true}>จำนวน</TableHeaderColumn>
-                                                            </BootstrapTable>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Table striped>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>วันที่</th>
+                                                                                <th>เวลา</th>
+                                                                                <th>เมนู</th>
+                                                                                <th>จำนวน</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        {this.renderTableBestSaleDay()}
+                                                                    </Table>
+                                                                </Col>
+                                                            </Row>
                                                         </div>
                                                     </Col>
                                                 </Row>
-
                                             </Card>
 
                                         }
@@ -487,18 +403,22 @@ class ReportBestSaleView extends Component {
                                                 <Row>
                                                     <Col lg='12'>
                                                         <div>
-                                                            <BootstrapTable
-                                                                ref='table'
-                                                                data={data_month.rows}
-                                                                striped hover pagination
-                                                                search={true}
-                                                            // className="table-overflow"
-                                                            >
-                                                                {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
-                                                                <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>วันที่</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อเมนู</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort isKey={true}>จำนวน</TableHeaderColumn>
-                                                            </BootstrapTable>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Table striped>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>วันที่</th>
+                                                                                <th>เมนู</th>
+                                                                                <th>จำนวน</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        {this.renderTableBestSaleMonth()}
+                                                                    </Table>
+                                                                </Col>
+                                                            </Row>
                                                         </div>
                                                     </Col>
                                                 </Row>
@@ -542,18 +462,22 @@ class ReportBestSaleView extends Component {
                                                 <Row>
                                                     <Col lg='12'>
                                                         <div>
-                                                            <BootstrapTable
-                                                                ref='table'
-                                                                data={data_year.rows}
-                                                                striped hover pagination
-                                                                search={true}
-                                                            // className="table-overflow"
-                                                            >
-                                                                {/* <TableHeaderColumn dataField='Img' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn> */}
-                                                                <TableHeaderColumn dataField='Date' headerAlign="center" dataAlign="center" dataSort>เดือน</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Name' headerAlign="center" dataAlign="center" dataSort>ชื่อเมนู</TableHeaderColumn>
-                                                                <TableHeaderColumn dataField='Total' headerAlign="center" dataAlign="center" dataSort isKey={true}>จำนวน</TableHeaderColumn>
-                                                            </BootstrapTable>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Table striped>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>เดือน</th>
+                                                                                <th>เมนู</th>
+                                                                                <th>จำนวน</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        {this.renderTableBestSaleYear()}
+                                                                    </Table>
+                                                                </Col>
+                                                            </Row>
                                                         </div>
                                                     </Col>
                                                 </Row>
