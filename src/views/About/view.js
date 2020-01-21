@@ -72,7 +72,7 @@ class AboutView extends Component {
         )
     }
     async componentDidMount() {
-        const about_list = await about_model.getAboutBy();
+        const about_list = await about_model.getAboutBy(this.props.user);
         const data_about_list = {
             rows: []
         }
@@ -141,5 +141,9 @@ class AboutView extends Component {
         )
     }
 }
-
-export default (AboutView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(AboutView);

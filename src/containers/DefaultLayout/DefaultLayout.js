@@ -27,11 +27,11 @@ class DefaultLayout extends Component {
 
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
-  signOut(e) {
+  async signOut(e) {
     e.preventDefault()
-    localStorage.clear();
-    this.props.setUser([])
-    saveStateLogout()
+    await localStorage.clear();
+    await this.props.setUser([])
+    await saveStateLogout()
     this.props.history.push('/login')
   }
 

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import './App.scss';
 const DefaultLayout = React.lazy(() => import('./containers/DefaultLayout'));
 const Login = React.lazy(() => import('./views/Pages/Login'));
-const ResponseOmise = React.lazy(() => import('./views/Pages/ResponseOmise/view'));
+// const ResponseOmise = React.lazy(() => import('./views/Pages/ResponseOmise/view'));
 
 const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
 const VerifyView = React.lazy(() => import('./views/Verify/view'));
@@ -44,7 +44,7 @@ class App extends Component {
             <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
             <Switch>
               <Route exact path="/login" name="Login Page" render={props => <Login {...props} />} />
-              <Route exact path="/response-omise" name="Response Omise" render={props => <ResponseOmise {...props} />} />
+              {/* <Route exact path="/response-omise" name="Response Omise" render={props => <ResponseOmise {...props} />} /> */}
               <Route exact path="/" name="Login Page" render={props => <Login {...props} />} />
               <Route exact path="/verify/:email" name="Forgot Password" render={props => <VerifyView {...props} />} />
               <Redirect from="/" to="/login" />

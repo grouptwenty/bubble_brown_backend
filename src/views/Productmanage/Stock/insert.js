@@ -146,6 +146,8 @@ class ProductTable extends React.Component {
             unit = qty * 1000
         } else if (unit_id == null) {
             unit = qty
+        } else {
+            unit = qty
         }
         return unit
     }

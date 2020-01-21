@@ -112,6 +112,50 @@ export default class OrderModel {
             });
     }
 
+    async getOrderByAboutCode(data) {
+        return fetch(GOBALS.URL + '/order/getOrderByAboutCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+
+    async getOrderByOrderCode(data) {
+        return fetch(GOBALS.URL + '/order/getOrderByOrderCode', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
+            .then((responseJson) => {
+
+                return responseJson;
+            }).catch((error) => {
+                return {
+                    data: [],
+                    error: error,
+                    query_result: false,
+                    server_result: false
+                };
+            });
+    }
+
     async updateOrderByCode(data) {
         return fetch(GOBALS.URL + '/order/updateOrderByCode', {
             method: 'POST',

@@ -186,10 +186,10 @@ class BillView extends Component {
 
         for (var key in order_list_old) {
             if (order_list_old[key].menu_code == order_list.menu_code) {
-                return 'red'
+                return '#FFCCCC'
             }
         }
-        return 'green'
+        return '#CCFFCC'
     }
 
     compareOrderListQty(order_list, order_list_old) {
@@ -1205,8 +1205,8 @@ class ComponentToPrint extends React.Component {
         super(props);
         this.state = {
             data: [],
-
-
+            order_about: [],
+            order_data: [],
         };
 
         this.rederFormPrint = this.rederFormPrint.bind(this);
@@ -1217,12 +1217,16 @@ class ComponentToPrint extends React.Component {
         var code = this.props.print_order.order_code
 
         var print_order_list = await orderlist_model.getOrderListBy({ "order_code": code })
-
-
+        var order_data = await order_model.getOrderByOrderCode({ "order_code": code })
+        var order_about = await order_model.getOrderByAboutCode({ "order_code": code })
+        console.log("order_about : ", order_about);
 
         this.setState({
-            print_order_list: print_order_list.data
+            print_order_list: print_order_list.data,
+            order_data: order_data.data,
+            order_about: order_about.data
         })
+        console.log("order_data : ", order_data);
 
     }
     rederFormPrint() {
@@ -1230,12 +1234,10 @@ class ComponentToPrint extends React.Component {
             var print = []
             for (var key in this.state.print_order_list) {
                 print.push(
-                    <tr >
+                    <tr>
                         <th style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}><label >{this.state.print_order_list[key].order_list_name}</label></th>
                         <td ><a style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>{this.state.print_order_list[key].order_list_price_qty}</a></td>
-
                     </tr>
-
                 )
 
             }
@@ -1249,22 +1251,53 @@ class ComponentToPrint extends React.Component {
 
 
         return (
-            <div style={{ margin: '20px' }}>
+            <div style={{ margin: '20px', marginTop: '5%' }}>
                 <Row style={{ textAlign: 'center' }}>
                     <Col lg="12">
-                        <label style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>Bubble Brown Cafe</label>
+                        <label style={{ fontSize: '32pt', fontFamily: 'Kanit-ExtraLight', fontStyle: 'bold' }}><b>Bubble Brown Cafe</b></label>
                     </Col>
                 </Row>
-
-                <table style={{ width: '100%' }}>
-
+                <Row style={{ textAlign: 'center' }}>
+                    <Col lg="12">
+                        <label style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>สาขา : {this.state.order_about.about_name_th}</label>
+                    </Col>
+                </Row>
+                <Row style={{ textAlign: 'center' }}>
+                    <Col lg="12">
+                        <label style={{ fontSize: '22pt', fontFamily: 'Kanit-ExtraLight' }}>{this.state.order_data.about_address + " " + this.state.order_data.district_name + " " + this.state.order_data.amphur_name + " " + this.state.order_data.province_name + " " + this.state.order_data.district_code}</label>
+                    </Col>
+                </Row>
+                <Row style={{ textAlign: 'center' }}>
+                    <Col lg="12">
+                        <label style={{ fontSize: '22pt', fontFamily: 'Kanit-ExtraLight' }}>เบอร์ {this.state.order_data.about_tel + " อีเมล " + this.state.order_data.about_email}</label>
+                    </Col>
+                </Row>
+                <br />
+                <br />
+                <Row style={{ textAlign: 'right', marginRight: '5%' }}>
+                    <Col lg="12">
+                        <label style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>{this.state.order_data.order_date + "  " + this.state.order_data.order_time}</label>
+                    </Col>
+                </Row>
+                <Row style={{ textAlign: 'right', marginRight: '5%' }}>
+                    <Col lg="12">
+                        <label style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>ออร์เดอร์ : {this.state.order_data.order_code}</label>
+                    </Col>
+                </Row>
+                <Row style={{ textAlign: 'right', marginRight: '5%' }}>
+                    <Col lg="4">
+                        <label style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>โต๊ะ : {this.state.order_data.table_name} &nbsp;&nbsp;&nbsp;โซน : {this.state.order_data.zone_name}</label>
+                    </Col>
+                    <Col lg="4">
+                        <label style={{ fontSize: '26pt', fontFamily: 'Kanit-ExtraLight' }}>จำนวน : {this.state.order_data.table_amount} คน</label>
+                    </Col>
+                </Row>
+                <table style={{ width: '100%', marginLeft: '10%' }}>
                     <tbody>
                         <tr>
-                            <th style={{ fontSize: '26pt', fontFamily: 'Kanit-Thin' }}>รายการสินค้า</th>
+                            <th style={{ fontSize: '26pt', fontFamily: 'Kanit-Thin' }}>รายการสินค้า<br /></th>
                         </tr>
-
                         {this.rederFormPrint()}
-
                         <tr>
                             <th style={{ fontSize: '26pt', fontFamily: 'Kanit-Light' }}>ยอดรวม</th>
                             <td style={{ fontSize: '26pt', fontFamily: 'Kanit-Light' }}>{Number(this.props.print_order.amount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}</td>

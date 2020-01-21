@@ -349,6 +349,8 @@ class OrderView extends Component {
 
             for (let i = 0; i < this.state.cart.length; i++) {
                 for (let key = 0; key < this.state.menutype_list.length; key++) {
+                    // console.log("this.state.menutype_list :", this.state.menutype_list);
+
                     if (this.state.cart[i].type == this.state.menutype_list[key].menu_type_id) {
                         for (var x = 0; x < this.state.cart[i].count; x++) {
                             price1.push(this.state.cart[i].price)

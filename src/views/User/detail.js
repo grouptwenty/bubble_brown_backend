@@ -100,6 +100,16 @@ class editView extends Component {
                                         </Row>
                                         <Row className="center" style={{ marginBottom: 10 }}>
                                             <Col lg="2" md="2" sm="2" className="right" >
+                                                สาขา :
+                                                    </Col>
+                                            <Col lg="4" md="4" sm="4">
+                                                <label>{this.state.user.about_name_th}</label>
+                                            </Col>
+                                            <Col lg="6" md="6" sm="6">
+                                            </Col>
+                                        </Row>
+                                        <Row className="center" style={{ marginBottom: 10 }}>
+                                            <Col lg="2" md="2" sm="2" className="right" >
                                                 ชื่อ - นามสกุล :
                                                     </Col>
                                             <Col lg="4" md="4" sm="4">

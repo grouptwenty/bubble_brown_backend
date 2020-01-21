@@ -19,8 +19,8 @@ class Login extends Component {
   }
   async componentDidMount() {
     console.log(this.props.user.user_code)
-    if (this.props.user.user_code != undefined) {
-      this.props.history.push('/admin/home')
+    if (await this.props.user.user_code != undefined) {
+      this.props.history.push('/login')
     }
   }
 
@@ -47,7 +47,7 @@ class Login extends Component {
       var user = {}
 
       user = information;
-      this.props.setUser(user.data);
+      await this.props.setUser(user.data);
       console.log("information", user);
 
       this.props.history.push('/dashboard')
@@ -71,7 +71,7 @@ class Login extends Component {
         <div className="app flex-row align-items-center background-login" style={{ backgroundImage: `url(${Background})` }}>
           <Container>
             <div className="b-head" >
-              <h1 style={{color:'white'}}>BuBBle Brown Coffee</h1>
+              <h1 style={{ color: 'white' }}>BuBBle Brown Coffee</h1>
             </div>
             <Row className="justify-content-center">
               <Col md="6">
@@ -98,7 +98,7 @@ class Login extends Component {
                       </InputGroup>
                       <Row>
                         <Col xs="6" className="button_login">
-                          <Button backgroundColor = "#874514" size="lg" block className="px-4" name="button_login" >Login</Button>
+                          <Button backgroundColor="#874514" size="lg" block className="px-4" name="button_login" >Login</Button>
                         </Col>
                       </Row>
                     </CardBody>

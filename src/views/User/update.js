@@ -7,6 +7,7 @@ import swal from 'sweetalert';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import UserModel from '../../models/UserModel'
 import ImgDefault from '../../assets/img/img_default.png'
+import AboutModel from '../../models/AboutModel'
 import UploadModel from '../../models/UploadModel';
 import GOBALS from '../../GOBALS';
 import 'react-day-picker/lib/style.css';
@@ -14,6 +15,7 @@ var md5 = require("md5");
 // var ReverseMd5 = require('reverse-md5');
 
 var user_model = new UserModel
+const about_model = new AboutModel
 var upload_model = new UploadModel();
 var today = new Date();
 
@@ -97,8 +99,27 @@ class editView extends Component {
         this.setState({
             user_img_old: user_data.data.user_image
         })
+
+        const branch = await about_model.getAboutBy();
+       await this.setState({
+            branch: branch.data
+        })
         this.setval(user_data.data)
 
+    }
+
+    renderBranch() {
+        if (this.state.branch != undefined) {
+            let branch_type = []
+
+            for (let i = 0; i < this.state.branch.length; i++) {
+                branch_type.push(
+                    <option value={this.state.branch[i].about_code}>{this.state.branch[i].about_name_th}</option>
+                )
+
+            }
+            return branch_type;
+        }
     }
 
     async setval(data) {
@@ -116,7 +137,7 @@ class editView extends Component {
         document.getElementById('user_position').value = data.user_position
         document.getElementById('user_firstname').value = data.user_firstname
         document.getElementById('user_lastname').value = data.user_lastname
-        // document.getElementById('user_image').value = data.user_image
+        document.getElementById('about_code').value = data.about_code
         document.getElementById('user_tel').value = data.user_tel
         document.getElementById('user_email').value = data.user_email
         document.getElementById('user_address').value = data.user_address
@@ -276,6 +297,17 @@ class editView extends Component {
                                                         <option value="เจ้าของร้าน">เจ้าของร้าน</option>
                                                         <option value="แคชเชียร์">แคชเชียร์</option>
                                                         <option value="พนักงานเสิร์ฟ">พนักงานเสิร์ฟ</option>
+                                                    </Input>
+                                                </Col>
+                                            </Row>
+                                            <Row className="center" style={{ marginBottom: 10 }}>
+                                                <Col lg="2" md="2" sm="2" className="right" >
+                                                    สาขา : <font color='red'><b> * </b></font>
+                                                </Col>
+                                                <Col lg="5" md="5" sm="5">
+                                                    <Input type="select" id="about_code" name="about_code" class="form-control" >
+                                                        <option value="">Select</option>
+                                                        {this.renderBranch()}
                                                     </Input>
                                                 </Col>
                                             </Row>
