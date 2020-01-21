@@ -23,7 +23,7 @@ const menu_model = new MenuModel
 var report_model = new ReportModel;
 var today = new Date();
 
-class ReportSaleView extends Component {
+class ReportSaleTypeView extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,7 +44,6 @@ class ReportSaleView extends Component {
 
     //DATE
     async handleStartDateChange(start_date) {
-        // console.log("this.state.report_sale_type :", this.state.report_sale_type);
 
         this.setState({
             change_start_date: start_date
@@ -52,6 +51,7 @@ class ReportSaleView extends Component {
         var arr = {}
         arr['start_date'] = start_date
         arr['end_date'] = this.state.change_end_date
+        arr['about_code'] = this.props.user.about_code
         // arr['menu_type_id'] = '1'
 
         const report_sale_type_start_date = await report_model.getReportSalesByType(arr);
@@ -66,10 +66,11 @@ class ReportSaleView extends Component {
         this.setState({
             change_end_date: end_date
         });
-        // var date = { start_date: this.state.change_start_date, end_date: end_date }
+
         var arr = {}
         arr['start_date'] = this.state.change_start_date
         arr['end_date'] = end_date
+        arr['about_code'] = this.props.user.about_code
         // arr['menu_type_id'] = '1'
         const report_sale_type_end_date = await report_model.getReportSalesByType(arr);
         this.setState({
@@ -81,16 +82,20 @@ class ReportSaleView extends Component {
 
         //DATE
         var change_start_date = new Date();
-        var date = { start_date: this.state.change_start_date, end_date: this.state.change_end_date }
-        const report_sale_type_start_date = await report_model.getReportSalesByType(date);
+
+        var arr = {}
+        arr['start_date'] = this.state.change_start_date
+        arr['end_date'] = this.state.change_end_date
+        arr['about_code'] = this.props.user.about_code
+        
+        const report_sale_type_start_date = await report_model.getReportSalesByType(arr);
 
         this.setState({
             report_sale_type: report_sale_type_start_date.data
         })
 
-
         var change_end_date = new Date();
-        const report_sale_type_end_date = await report_model.getReportSalesByType(date);
+        const report_sale_type_end_date = await report_model.getReportSalesByType(arr);
 
         this.setState({
             report_sale_type: report_sale_type_end_date.data
@@ -321,4 +326,4 @@ const mapStatetoProps = (state) => {
         user: state.user,
     }
 }
-export default connect(mapStatetoProps)(ReportSaleView);
+export default connect(mapStatetoProps)(ReportSaleTypeView);

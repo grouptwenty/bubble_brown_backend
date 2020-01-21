@@ -49,8 +49,12 @@ class ReportBestSaleView extends Component {
         this.setState({
             change_date: date
         });
-
-        const report_best_sale_day = await report_model.getReportBestSalesByDay({ "payment_date": date });
+        var arr = {}
+        arr['payment_date'] = date
+        arr['about_code'] = this.props.user.about_code
+        
+        // const report_best_sale_day = await report_model.getReportBestSalesByDay({ "payment_date": date });
+        const report_best_sale_day = await report_model.getReportBestSalesByDay(arr);
         console.log("report_best_sale_day", report_best_sale_day);
 
 
@@ -67,8 +71,13 @@ class ReportBestSaleView extends Component {
             change_start_month: start_month
         });
 
-        var date = { start_month: start_month, end_month: this.state.change_end_month }
-        const report_best_sale_start_month = await report_model.getReportBestSalesByMonth(date);
+        // var date = { start_month: start_month, end_month: this.state.change_end_month }
+        var arr = {}
+        arr['start_month'] = start_month
+        arr['end_month'] = this.state.change_end_month
+        arr['about_code'] = this.props.user.about_code
+
+        const report_best_sale_start_month = await report_model.getReportBestSalesByMonth(arr);
 
         this.setState({
             report_best_sale_month: report_best_sale_start_month.data
@@ -82,8 +91,13 @@ class ReportBestSaleView extends Component {
             change_end_month: end_month
         });
 
-        var date = { start_month: this.state.change_start_month, end_month: end_month }
-        const report_best_sale_end_month = await report_model.getReportBestSalesByMonth(date);
+        // var date = { start_month: this.state.change_start_month, end_month: end_month }
+        var arr = {}
+        arr['start_month'] = this.state.change_start_month
+        arr['end_month'] = end_month
+        arr['about_code'] = this.props.user.about_code
+
+        const report_best_sale_end_month = await report_model.getReportBestSalesByMonth(arr);
 
         this.setState({
             report_best_sale_month: report_best_sale_end_month.data
@@ -98,8 +112,13 @@ class ReportBestSaleView extends Component {
             change_start_year: start_year
         });
 
-        var date = { start_year: start_year, end_year: this.state.change_end_year }
-        const report_best_sale_start_year = await report_model.getReportBestSalesByYear(date);
+        // var date = { start_year: start_year, end_year: this.state.change_end_year }
+        var arr = {}
+        arr['start_year'] = start_year
+        arr['end_year'] = this.state.change_end_year
+        arr['about_code'] = this.props.user.about_code
+
+        const report_best_sale_start_year = await report_model.getReportBestSalesByYear(arr);
 
         this.setState({
             report_best_sale_year: report_best_sale_start_year.data
@@ -113,8 +132,13 @@ class ReportBestSaleView extends Component {
             change_end_year: end_year
         });
 
-        var date = { start_year: this.state.change_start_year, end_year: end_year }
-        const report_best_sale_end_year = await report_model.getReportBestSalesByYear(date);
+        // var date = { start_year: this.state.change_start_year, end_year: end_year }
+        var arr = {}
+        arr['start_year'] = this.state.change_start_year
+        arr['end_year'] = end_year
+        arr['about_code'] = this.props.user.about_code
+
+        const report_best_sale_end_year = await report_model.getReportBestSalesByYear(arr);
 
         this.setState({
             report_best_sale_year: report_best_sale_end_year.data
@@ -127,7 +151,12 @@ class ReportBestSaleView extends Component {
 
         //DAY
         var change_date = new Date();
-        const report_best_sale_day = await report_model.getReportBestSalesByDay({ "payment_date": change_date });
+        var arr = {}
+        arr['payment_date'] = change_date
+        arr['about_code'] = this.props.user.about_code
+
+        const report_best_sale_day = await report_model.getReportBestSalesByDay(arr);
+        // const report_best_sale_day = await report_model.getReportBestSalesByDay({ "payment_date": change_date });
 
         this.setState({
             report_best_sale_day: report_best_sale_day.data
@@ -135,15 +164,20 @@ class ReportBestSaleView extends Component {
         
         //MONTH
         var change_start_month = new Date();
-        var date = { start_month: this.state.change_start_month, end_month: this.state.change_end_month }
-        const report_best_sale_start_month = await report_model.getReportBestSalesByMonth(date);
+        // var date = { start_month: this.state.change_start_month, end_month: this.state.change_end_month }
+        var arr = {}
+        arr['start_month'] = this.state.change_start_month
+        arr['end_month'] = this.state.change_end_month
+        arr['about_code'] = this.props.user.about_code
+
+        const report_best_sale_start_month = await report_model.getReportBestSalesByMonth(arr);
 
         this.setState({
             report_best_sale_month: report_best_sale_start_month.data
         })
 
         var change_end_month = new Date();
-        const report_best_sale_end_month = await report_model.getReportBestSalesByMonth(date);
+        const report_best_sale_end_month = await report_model.getReportBestSalesByMonth(arr);
 
         this.setState({
             report_best_sale_month: report_best_sale_end_month.data
@@ -152,15 +186,22 @@ class ReportBestSaleView extends Component {
 
         //YEAR
         var change_start_year = new Date();
+    
         var date = { start_year: this.state.change_start_year, end_year: this.state.change_end_year }
-        const report_best_sale_start_year = await report_model.getReportBestSalesByYear(date);
+
+        var arr = {}
+        arr['start_year'] = this.state.change_start_year
+        arr['end_year'] = this.state.change_end_year
+        arr['about_code'] = this.props.user.about_code
+
+        const report_best_sale_start_year = await report_model.getReportBestSalesByYear(arr);
 
         this.setState({
             report_best_sale_year: report_best_sale_start_year.data
         })
 
         var change_end_year = new Date();
-        const report_best_sale_end_year = await report_model.getReportBestSalesByYear(date);
+        const report_best_sale_end_year = await report_model.getReportBestSalesByYear(arr);
 
         this.setState({
             report_best_sale_year: report_best_sale_end_year.data
@@ -495,4 +536,9 @@ class ReportBestSaleView extends Component {
     }
 }
 
-export default (ReportBestSaleView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(ReportBestSaleView);
