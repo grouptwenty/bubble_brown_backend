@@ -19,6 +19,11 @@ export default class MenuComponent {
                     class: ''
                 },
                 {
+                    name: 'จองโต๊ะ',
+                    url: '/booking/',
+                    icon: 'icon-list',
+                },
+                {
                     name: 'สั่งอาหาร',
                     url: '/order/',
                     icon: 'icon-list',
@@ -43,26 +48,26 @@ export default class MenuComponent {
                 {
                     name: 'จัดการข้อมูลสินค้า',
                     url: '/product-manage/',
-                    icon: 'icon-pencil',
+                    icon: 'icon-list',
                     children: [
                         {
                             name: 'สินค้า',
                             url: '/product-manage/product',
                         },
                         {
-                            name: 'จัดการสูตร',
-                            url: '/product-manage/recipe',
-                        },
-                        {
                             name: 'สต๊อกเข้า',
                             url: '/product-manage/stock-in',
+                        },
+                        {
+                            name: 'จัดการสูตร',
+                            url: '/product-manage/recipe',
                         },
                     ],
                 },
                 {
                     name: 'จัดการแท็บ',
                     url: '/tap-manage/',
-                    icon: 'icon-pencil',
+                    icon: 'icon-list',
                     children: [
                         {
                             name: 'แท็บประเภทเมนู',
@@ -82,24 +87,17 @@ export default class MenuComponent {
                 {
                     name: 'ลูกค้า',
                     url: '/customer/',
-                    icon: 'icon-briefcase',
+                    icon: 'icon-list',
                 },
                 {
                     name: 'พนักงาน',
                     url: '/user/',
-                    icon: 'icon-briefcase',
+                    icon: 'icon-list',
                 },
-
-                {
-                    name: 'จองโต๊ะ',
-                    url: '/booking/',
-                    icon: 'icon-pencil',
-                },
-
                 {
                     name: 'รายงาน',
                     url: '/report/',
-                    icon: 'icon-pencil',
+                    icon: 'icon-list',
                     children: [
                         {
                             name: 'รายงานยอดขาย',

@@ -71,7 +71,7 @@ class DefaultHeader extends Component {
     return (
       <React.Fragment >
         <AppSidebarToggler className="d-md-down-none" display="lg" />
-        <img src="/logo_bubblebrown.png" height={80} width={80} />
+        <img src="/font-backend.png" />
 
         <Nav className="ml-auto" navbar>
           <AppHeaderDropdown direction="down">

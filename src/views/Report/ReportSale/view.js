@@ -66,13 +66,19 @@ class ReportSaleView extends Component {
         this.setState({
             change_date: date
         });
+        var arr = {}
+        arr['payment_date'] = date
+        arr['about_code'] = this.props.user.about_code
 
-        const report_sale_day = await report_model.getReportSalesByDay({ "payment_date": date });
+        const report_sale_day = await report_model.getReportSalesByDay(arr);
         for (var key in report_sale_day.data) {
-            var cost_sale_day = await report_model.getCostSalesByDay({
-                "payment_date": date,
-                "payment_time": report_sale_day.data[key].payment_time
-            })
+
+            var arr = {}
+            arr['payment_date'] = date
+            arr['payment_time'] = report_sale_day.data[key].payment_time
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_sale_day = await report_model.getCostSalesByDay(arr)
             report_sale_day.data[key]['cost_sale_day'] = cost_sale_day.data.cost
         }
         this.setState({
@@ -88,14 +94,23 @@ class ReportSaleView extends Component {
             change_start_month: start_month
         });
 
-        var date = { start_month: start_month, end_month: this.state.change_end_month }
-        const report_sale_start_month = await report_model.getReportSalesByMonth(date);
+        // var date = { start_month: start_month, end_month: this.state.change_end_month }
+
+        var arr = {}
+        arr['start_month'] = start_month
+        arr['end_month'] = this.state.change_end_month
+        arr['about_code'] = this.props.user.about_code
+
+        const report_sale_start_month = await report_model.getReportSalesByMonth(arr);
 
         for (var key in report_sale_start_month.data) {
-            var cost_sale_start_month = await report_model.getCostSalesByMonth({
-                "payment_date": report_sale_start_month.data[key].month,
-                "payment_time": report_sale_start_month.data[key].payment_time
-            })
+
+            var arr = {}
+            arr['payment_date'] = report_sale_start_month.data[key].month
+            arr['payment_time'] = report_sale_start_month.data[key].payment_time
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_sale_start_month = await report_model.getCostSalesByMonth(arr)
 
             report_sale_start_month.data[key]['cost_sale_month'] = cost_sale_start_month.data.cost
         }
@@ -113,15 +128,22 @@ class ReportSaleView extends Component {
         this.setState({
             change_end_month: end_month
         });
-        var date = { start_month: this.state.change_start_month, end_month: end_month }
-        const report_sale_end_month = await report_model.getReportSalesByMonth(date);
-        console.log("report_sale_end_month", report_sale_end_month);
+        // var date = { start_month: this.state.change_start_month, end_month: end_month }
+        var arr = {}
+        arr['start_month'] = this.state.change_start_month
+        arr['end_month'] = end_month
+        arr['about_code'] = this.props.user.about_code
+
+        const report_sale_end_month = await report_model.getReportSalesByMonth(arr);
 
         for (var key in report_sale_end_month.data) {
-            var cost_sale_end_month = await report_model.getCostSalesByMonth({
-                "payment_date": report_sale_end_month.data[key].month,
-                "payment_time": report_sale_end_month.data[key].payment_time
-            })
+
+            var arr = {}
+            arr['payment_date'] = report_sale_end_month.data[key].month
+            arr['payment_time'] = report_sale_end_month.data[key].payment_time
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_sale_end_month = await report_model.getCostSalesByMonth(arr)
 
             report_sale_end_month.data[key]['cost_sale_month'] = cost_sale_end_month.data.cost
         }
@@ -138,12 +160,20 @@ class ReportSaleView extends Component {
             change_start_year: start_year
         });
 
-        var date = { start_year: start_year, end_year: this.state.change_end_year }
-        const report_sale_start_year = await report_model.getReportSalesByYear(date);
+        // var date = { start_year: start_year, end_year: this.state.change_end_year }
+        var arr = {}
+        arr['start_year'] = start_year
+        arr['end_year'] = this.state.change_end_year
+        arr['about_code'] = this.props.user.about_code
+
+        const report_sale_start_year = await report_model.getReportSalesByYear(arr);
+
         for (var key in report_sale_start_year.data) {
-            var cost_sale_start_year = await report_model.getCostSalesByYear({
-                "payment_date": report_sale_start_year.data[key].month,
-            })
+            var arr = {}
+            arr['payment_date'] = report_sale_start_year.data[key].month
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_sale_start_year = await report_model.getCostSalesByYear(arr)
             report_sale_start_year.data[key]['cost_sale_year'] = cost_sale_start_year.data.cost
         }
         this.setState({
@@ -157,13 +187,20 @@ class ReportSaleView extends Component {
             change_end_year: end_year
         });
 
-        var date = { start_year: this.state.change_start_year, end_year: end_year }
-        const report_sale_end_year = await report_model.getReportSalesByYear(date);
-        for (var key in report_sale_end_year.data) {
-            var cost_sale_end_year = await report_model.getCostSalesByYear({
-                "payment_date": report_sale_end_year.data[key].month,
-            })
+        // var date = { start_year: this.state.change_start_year, end_year: end_year }
+        var arr = {}
+        arr['start_year'] = this.state.change_start_year
+        arr['end_year'] = end_year
+        arr['about_code'] = this.props.user.about_code
 
+        const report_sale_end_year = await report_model.getReportSalesByYear(arr);
+        for (var key in report_sale_end_year.data) {
+
+            var arr = {}
+            arr['payment_date'] = report_sale_end_year.data[key].month
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_sale_end_year = await report_model.getCostSalesByYear(arr)
             report_sale_end_year.data[key]['cost_sale_year'] = cost_sale_end_year.data.cost
         }
         this.setState({
@@ -175,13 +212,23 @@ class ReportSaleView extends Component {
 
     async componentDidMount() {
         //DAY
+        console.log("this.props.user :", this.props.user);
+
         var change_date = new Date();
-        const report_sale_day = await report_model.getReportSalesByDay({ "payment_date": date });
+
+        var arr = {}
+        arr['payment_date'] = date
+        arr['about_code'] = this.props.user.about_code
+
+        const report_sale_day = await report_model.getReportSalesByDay(arr);
         for (var key in report_sale_day.data) {
-            var cost_sale_day = await report_model.getCostSalesByDay({
-                "payment_date": date,
-                "payment_time": report_sale_day.data[key].payment_time
-            })
+
+            var arr = {}
+            arr['payment_date'] = date
+            arr['payment_time'] = report_sale_day.data[key].payment_time
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_sale_day = await report_model.getCostSalesByDay(arr)
             report_sale_day.data[key]['cost_sale_day'] = cost_sale_day.data.cost
         }
         this.setState({
@@ -192,17 +239,26 @@ class ReportSaleView extends Component {
         //MONTH
         var change_start_month = new Date();
         var date = { start_month: this.state.change_start_month, end_month: this.state.change_end_month }
-        const report_sale_start_month = await report_model.getReportSalesByMonth(date);
-        console.log("report_sale_start_month", report_sale_start_month);
+
+        var arr = {}
+        arr['start_month'] = this.state.change_start_month
+        arr['end_month'] = this.state.change_end_month
+        arr['about_code'] = this.props.user.about_code
+
+        const report_sale_start_month = await report_model.getReportSalesByMonth(arr);
+        // console.log("report_sale_start_month", report_sale_start_month);
 
         for (var key in report_sale_start_month.data) {
-            var cost_sale_start_month = await report_model.getCostSalesByMonth({
-                "payment_date": report_sale_start_month.data[key].month,
-                "payment_time": report_sale_start_month.data[key].payment_time
-            })
+
+            var arr = {}
+            arr['payment_date'] = report_sale_start_month.data[key].month
+            arr['payment_time'] = report_sale_start_month.data[key].payment_time
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_sale_start_month = await report_model.getCostSalesByMonth(arr)
 
             report_sale_start_month.data[key]['cost_sale_month'] = cost_sale_start_month.data.cost
-            console.log("cost_sale_start_month", cost_sale_start_month);
+            // console.log("cost_sale_start_month", cost_sale_start_month);
 
         }
         this.setState({
@@ -210,12 +266,14 @@ class ReportSaleView extends Component {
         })
 
         var change_end_month = new Date();
-        const report_sale_end_month = await report_model.getReportSalesByMonth(date);
+        const report_sale_end_month = await report_model.getReportSalesByMonth(arr);
         for (var key in report_sale_end_month.data) {
-            var cost_sale_end_month = await report_model.getCostSalesByMonth({
-                "payment_date": report_sale_end_month.data[key].month,
-                "payment_time": report_sale_end_month.data[key].payment_time
-            })
+            var arr = {}
+            arr['payment_date'] = report_sale_end_month.data[key].month
+            arr['payment_time'] = report_sale_end_month.data[key].payment_time
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_sale_end_month = await report_model.getCostSalesByMonth(arr)
 
             report_sale_end_month.data[key]['cost_sale_month'] = cost_sale_end_month.data.cost
         }
@@ -227,15 +285,24 @@ class ReportSaleView extends Component {
         //YEAR
 
         var change_start_year = new Date();
-        var date = { start_year: this.state.change_start_year, end_year: this.state.change_end_year }
-        const report_sale_start_year = await report_model.getReportSalesByYear(date);
-        console.log("report_sale_start_year", report_sale_start_year);
+        // var date = { start_year: this.state.change_start_year, end_year: this.state.change_end_year }
+
+        var arr = {}
+        arr['start_year'] = this.state.change_start_year
+        arr['end_year'] = this.state.change_end_year
+        arr['about_code'] = this.props.user.about_code
+
+        const report_sale_start_year = await report_model.getReportSalesByYear(arr);
+        // console.log("report_sale_start_year", report_sale_start_year);
 
         for (var key in report_sale_start_year.data) {
-            var cost_sale_start_year = await report_model.getCostSalesByYear({
-                "payment_date": report_sale_start_year.data[key].month,
-            })
-            console.log("cost_sale_start_year", cost_sale_start_year);
+
+            var arr = {}
+            arr['payment_date'] = report_sale_start_year.data[key].month
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_sale_start_year = await report_model.getCostSalesByYear(arr)
+            // console.log("cost_sale_start_year", cost_sale_start_year);
 
             report_sale_start_year.data[key]['cost_sale_year'] = cost_sale_start_year.data.cost
         }
@@ -244,11 +311,20 @@ class ReportSaleView extends Component {
         })
 
         var change_end_year = new Date();
-        const report_sale_end_year = await report_model.getReportSalesByYear(date);
+
+        var arr = {}
+        arr['start_year'] = this.state.change_start_year
+        arr['end_year'] = this.state.change_end_year
+        arr['about_code'] = this.props.user.about_code
+
+        const report_sale_end_year = await report_model.getReportSalesByYear(arr);
         for (var key in report_sale_end_year.data) {
-            var cost_sale_end_year = await report_model.getCostSalesByYear({
-                "payment_date": report_sale_end_year.data[key].month,
-            })
+
+            var arr = {}
+            arr['payment_date'] = report_sale_end_year.data[key].month
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_sale_end_year = await report_model.getCostSalesByYear(arr)
 
             report_sale_end_year.data[key]['cost_sale_year'] = cost_sale_end_year.data.cost
         }
@@ -262,20 +338,28 @@ class ReportSaleView extends Component {
 
     //MODAL - DAY
     async onClickTableSaleDay(payment) {
+
         console.log("payment", payment);
 
-        var sub_table_sale_day = await report_model.getTableReportSalesByDay(payment)
-        for (var key in sub_table_sale_day.data) {
-            var cost_table_sale_day = await report_model.getTableCostSalesByDay({
-                "payment_date": payment.payment_date,
-                "payment_time": payment.payment_time,
-                "menu_code": sub_table_sale_day.data[key].menu_code
-            })
+        var arr = {}
+        arr['payment_date'] = payment.payment_date
+        arr['payment_time'] = payment.payment_time
+        arr['about_code'] = this.props.user.about_code
 
+        var sub_table_sale_day = await report_model.getTableReportSalesByDay(arr)
+
+        for (var key in sub_table_sale_day.data) {
+            var arr = {}
+            arr['payment_date'] = payment.payment_date
+            arr['payment_time'] = payment.payment_time
+            arr['menu_code'] = sub_table_sale_day.data[key].menu_code
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_table_sale_day = await report_model.getTableCostSalesByDay(arr)
             sub_table_sale_day.data[key]['cost_table_sale_day'] = cost_table_sale_day.data.cost
         }
-
         console.log("sub_table_sale_day", sub_table_sale_day);
+
         this.setState({
             sub_table_sale_day: sub_table_sale_day.data
         })
@@ -308,15 +392,21 @@ class ReportSaleView extends Component {
     //MODAL - Month
     async onClickTableSaleMonth(month) {
         console.log("month", month);
+        var arr = {}
+        arr['payment_date'] = month.month
+        arr['about_code'] = this.props.user.about_code
 
-        var sub_table_sale_month = await report_model.getTableReportSalesByMonth(month)
+        var sub_table_sale_month = await report_model.getTableReportSalesByMonth(arr)
         console.log("sub_table_sale_month", sub_table_sale_month);
 
         for (var key in sub_table_sale_month.data) {
-            var cost_table_sale_month = await report_model.getTableCostSalesByMonth({
-                "payment_date": month.date,
-                "menu_code": sub_table_sale_month.data[key].menu_code
-            })
+
+            var arr = {}
+            arr['payment_date'] = month.date
+            arr['menu_code'] = sub_table_sale_month.data[key].menu_code
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_table_sale_month = await report_model.getTableCostSalesByMonth(arr)
 
             sub_table_sale_month.data[key]['cost_table_sale_month'] = cost_table_sale_month.data.cost
         }
@@ -350,17 +440,25 @@ class ReportSaleView extends Component {
 
     //MODAL - YEAR
     async onClickTableSaleYear(month) {
-        console.log("month", month);
+        // console.log("month", month);
+        var arr = {}
+        arr['payment_date'] = month.month
+        arr['about_code'] = this.props.user.about_code
 
-        var sub_table_sale_year = await report_model.getTableReportSalesByYear(month)
+        var sub_table_sale_year = await report_model.getTableReportSalesByYear(arr)
+
+
         for (var key in sub_table_sale_year.data) {
-            var cost_table_sale_year = await report_model.getTableCostSalesByYear({
-                "payment_date": sub_table_sale_year.data[key].month,
-            })
+
+            var arr = {}
+            arr['payment_date'] = sub_table_sale_year.data[key].month
+            arr['about_code'] = this.props.user.about_code
+
+            var cost_table_sale_year = await report_model.getTableCostSalesByYear(arr)
 
             sub_table_sale_year.data[key]['cost_table_sale_year'] = cost_table_sale_year.data.cost
         }
-        console.log("sub_table_sale_year", sub_table_sale_year);
+        // console.log("sub_table_sale_year", sub_table_sale_year);
         this.setState({
             sub_table_sale_year: sub_table_sale_year.data
         })
@@ -969,7 +1067,7 @@ class ReportSaleView extends Component {
                                                     </Col>
                                                 </Row>
                                                 <br></br>
-                                                <BarChart data={graph_sales_year_number} />
+                                                <BarChart data={graph_sales_year_number} colors={["#8D38C9"]}  />
                                                 <br></br>
                                                 <br></br>
                                                 <Row>
@@ -1064,4 +1162,9 @@ class ReportSaleView extends Component {
     }
 }
 
-export default (ReportSaleView);
+const mapStatetoProps = (state) => {
+    return {
+        user: state.user,
+    }
+}
+export default connect(mapStatetoProps)(ReportSaleView);

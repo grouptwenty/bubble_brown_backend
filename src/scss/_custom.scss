@@ -3,7 +3,7 @@ body {
   font-family: "Kanit", sans-serif !important;
 }
 .main {
-  background-color: #fff;
+  background-color: #bd8e62;
 }
 .main .container-fluid {
   padding: 0 !important;
@@ -40,8 +40,8 @@ body {
 }
 .app-header {
   height: 95px;
-  background-color: #f8f8f8;
-  border-color: #e7e7e7;
+  background-color: #b38d4d;
+  border-color: #d5d2c1;
 }
 .app-body {
   margin-top: 95px !important;
@@ -59,7 +59,7 @@ body {
 
 .sidebar .nav-link:hover {
   color: #fff;
-  background: #6c6b6b;
+  background: #d5d2c1;
 }
 
 .breadcrumb {
@@ -98,8 +98,8 @@ html:not([dir="rtl"]) .sidebar {
 }
 
 .sidebar .nav-title {
-  background: #f8f8f8 !important;
-  color: #999999;
+  background: #e4dcce !important;
+  color: #b38d4d;
   font-weight: bold;
   font-size: 100%;
 }
@@ -108,7 +108,7 @@ html:not([dir="rtl"]) .sidebar {
   width: 250px !important;
 }
 .sidebar .nav-link {
-  color: #777;
+  color: #b38d4d;
   font-weight: 500;
 }
 .sidebar .nav-dropdown-items {
@@ -117,32 +117,32 @@ html:not([dir="rtl"]) .sidebar {
 }
 
 .sidebar .nav-dropdown.open .nav-link {
-  color: #fff;
+  color: #b38d4d;
 }
 
 .sidebar .nav-dropdown.open .nav-item .nav-link {
-  color: #0c7eaf;
+  color: #b38d4d;
 }
 
 .sidebar .nav-dropdown.open {
-  color: #6c6b6b;
+  color: #b38d4d;
 }
 
 .sidebar .nav-link.active {
-  color: #0c7eaf;
-  background-color: #ddd !important;
+  color: #f3f3f3;
+  background-color: #725626 !important;
   // border-left: solid 8px #8a6d3b;
 }
 
 .sidebar .nav-dropdown.open .nav-item .nav-link.active {
-  color: #0c7eaf;
-  background-color: #ddd !important;
+  color: #f3f3f3;
+  background-color: #725626 !important;
 
   // border-left: solid 8px #8a6d3b;
 }
 
 .sidebar .nav-link.active .nav-icon {
-  color: #0c7eaf;
+  color: #f3f3f3;
 }
 
 .sidebar .nav-dropdown.open .nav-item .nav-link:hover {
@@ -413,7 +413,7 @@ h4 {
   padding-right: 35px !important;
 }
 .app-header .navbar-nav .nav-link {
-  color: #777;
+  color: #fafafa;
 }
 /*  img{
        width: 100%;
@@ -498,7 +498,7 @@ h4 {
 .text_head_sub {
   margin-top: 5px;
   font-size: 13px;
-  color: #737373;
+  color: #d5d2c1;
 }
 
 .tabs .tab {

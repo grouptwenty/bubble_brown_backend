@@ -104,9 +104,9 @@ class AboutView extends Component {
                     <Col lg='12'>
                         <Card>
                             <CardHeader>
-                                โปรโมชั่น
+                                สาขา
                                 <NavLink exact to={'../About/editbranch'} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> ตั้งต่าสาชาหลัก</button>
+                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> ตั้งต่าสาขาหลัก</button>
                                 </NavLink>
                                 <NavLink exact to={'../About/insert'} style={{ width: '100%' }}>
                                     <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> เพิ่ม</button>
@@ -124,7 +124,7 @@ class AboutView extends Component {
                                             // className="table-overflow"
 
                                             >
-                                                <TableHeaderColumn dataField='about_code' headerAlign="center" dataAlign="center" dataSort isKey={true}>โปรโมชั่น</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='about_code' headerAlign="center" dataAlign="center" dataSort isKey={true}>รหัสสาขา</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='about_name' headerAlign="center" dataAlign="center" dataSort>ชื่อร้าน</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='about_tel' headerAlign="center" dataAlign="center" dataSort>เบอร์โทร</TableHeaderColumn>

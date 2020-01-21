@@ -348,7 +348,7 @@ class editView extends Component {
                         <Card>
                             <Form onSubmit={this.handleSubmit} id="myForm">
                                 <CardHeader>
-                                    แก้ไขข้อมูลผู้ประกอบการ /  Edit About
+                                    แก้ไขข้อมูลสาขา /  Edit About
                                 <NavLink exact to={`/sale/sale-order/insert`} style={{ width: '100%' }}>
                                     </NavLink>
                                 </CardHeader>
@@ -370,7 +370,7 @@ class editView extends Component {
                                             <br />
 
                                             <Col lg="6">
-                                                <Label className="text_head"> รหัสผู้ประกอบการ / About Code<font color='red'><b> * </b></font></Label>
+                                                <Label className="text_head"> รหัสสาขา / About Code<font color='red'><b> * </b></font></Label>
                                                 <Input type="hidden" id="user_profile_img" name="user_profile_img" class="form-control" readOnly ></Input>
                                                 <Input type="text" id="about_code" name="about_code" class="form-control" readOnly ></Input>
                                                 <p id="about_code" className="text_head_sub">Example : EP0001</p>

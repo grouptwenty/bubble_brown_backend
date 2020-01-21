@@ -95,7 +95,7 @@ class MenutypeView extends Component {
                     <Col lg='12'>
                         <Card>
                             <CardHeader>
-                                MenuType List
+                                จัดการแท็บประเภทเมนู
                                 <ModalInsert refresh={() => this.componentDidMount()} />
                             </CardHeader>
                             <CardBody>
@@ -107,9 +107,9 @@ class MenutypeView extends Component {
                                                 data={data.rows}
                                                 striped hover pagination
                                                 search={true}>
-                                                <TableHeaderColumn dataField='no' width="20%" headerAlign="center" dataAlign="center" dataSort isKey={true}>No</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='name' headerAlign="center" dataAlign="center" dataSort>Name</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='edit' width="20%" headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}>Edit</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='no' width="20%" headerAlign="center" dataAlign="center" dataSort isKey={true}>ลำดับ</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='name' headerAlign="center" dataAlign="center" dataSort>ชื่อประเภทเมนู</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='edit' width="20%" headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}></TableHeaderColumn>
                                             </BootstrapTable>
                                         </div>
                                     </Col>

@@ -767,7 +767,7 @@ class BillView extends Component {
                         </Col>
                         <Col lg="4" >
                             <FormGroup>
-                                <Label>จำนวนที่ลองรับ </Label>
+                                <Label>จำนวนที่รองรับ </Label>
                                 <Input type="text" id="table_amount" name="table_amount" class="form-control" />
                             </FormGroup>
                         </Col>
@@ -836,7 +836,7 @@ class BillView extends Component {
                                 <Row>
                                     <Col lg="12" >
                                         <FormGroup>
-                                            <Label>จำนวนที่ลองรับ </Label>
+                                            <Label>จำนวนที่รองรับ </Label>
                                             <Input type="text" id="table_amount" name="table_amount" class="form-control" defaultValue={this.state.table_edit.table_amount} />
                                         </FormGroup>
                                     </Col>
