@@ -207,7 +207,7 @@ class HomeView extends Component {
 
                                         <Col lg="4">
                                             <FormGroup>
-                                                <Label className="text_head"> จำนวน <font color='red'><b> * </b></font></Label>
+                                                <Label className="text_head"> จำนวนคน <font color='red'><b> * </b></font></Label>
                                                 <Input type="number" step='2' id="booking_amount" name="booking_amount" class="form-control" min='0' max='10' >
 
                                                 </Input>
