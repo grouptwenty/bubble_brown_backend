@@ -173,7 +173,7 @@ class RecipeView extends Component {
                                 <NavLink exact to={`/product-manage/stock-in/insert/`} style={{ width: '100%' }}>
                                     <button class="btn btn-primary btn-lg float-right boottom-header" name="add_stock">
                                         <i class="fa fa-plus" ></i>
-                                        Add
+                                        เพิ่ม
                                     </button>
                                 </NavLink>
                             </CardHeader>

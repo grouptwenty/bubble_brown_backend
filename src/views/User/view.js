@@ -103,7 +103,7 @@ class UserView extends Component {
     render() {
         const { data } = this.state;
         return (
-            <div className="animated fadeIn">
+            <div className="animated fadeIn" style={{padding:'15px'}}>
                 {/* <h2>พนักงาน</h2>
                 <hr /> */}
                 <Row>

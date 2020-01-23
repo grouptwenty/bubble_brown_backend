@@ -46,16 +46,16 @@ class InsertZoneModal extends Component {
       var res = await zone_model.insertZone(arr);
       if (res.query_result) {
         swal({
-          title: "Good job!",
-          text: "Insert Zone  Ok",
+        
+          text: "เพิ่มโซนสำเร็จ !",
           icon: "success",
           button: "Close",
         });
         this.handleClose()
       } else {
         swal({
-          title: "Error !",
-          text: "Insert Zone Error ",
+          title: "มีบางอย่างผิดพลาด !",
+          text: "เพิ่มโซนไม่สำเร็จ ",
           icon: "error",
           button: "Close",
         });
@@ -99,7 +99,7 @@ class InsertZoneModal extends Component {
                   <Col xs="12" sm="12">
                     <FormGroup>
                       <Label for="zone_name">โซน :</Label>
-                      <Input valid={this.state.zone_validate == "VALID"} invalid={this.state.zone_validate == "INVALID"} name="zone_name" id="zone_name" onChange={(e) => { this.onZoneChange(e) }} placeholder="Professor" required />
+                      <Input valid={this.state.zone_validate == "VALID"} invalid={this.state.zone_validate == "INVALID"} name="zone_name" id="zone_name" onChange={(e) => { this.onZoneChange(e) }}  required />
                       <FormFeedback valid >You can use this name.</FormFeedback>
                       <FormFeedback invalid >{this.state.zone_validate_text}</FormFeedback>
                       <FormText>Example: Professor</FormText>

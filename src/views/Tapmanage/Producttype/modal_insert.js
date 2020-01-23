@@ -47,16 +47,16 @@ class InsertProductTypeModal extends Component {
       var res = await product_type_model.insertProductType(arr);
       if (res.query_result) {
         swal({
-          title: "Good job!",
-          text: "Insert ProductType  Ok",
+         
+          text: "เพิ่มประเภทสินค้าสำเร็จ !",
           icon: "success",
           button: "Close",
         });
         this.handleClose()
       } else {
         swal({
-          title: "Error !",
-          text: "Insert ProductType Error ",
+          title: "มีบางอย่างผิดพลาด",
+          text: "เพิ่มประเภทสินค้าไม่สำเร็จ !",
           icon: "error",
           button: "Close",
         });
@@ -92,15 +92,15 @@ class InsertProductTypeModal extends Component {
         >
           <Form onSubmit={this.SaveProductType} id="myForm">
             <Modal.Header closeButton>
-              <Modal.Title>Add ProductType</Modal.Title>
+              <Modal.Title>เพิ่มประเภทสินค้า</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Col xs="12" sm="12">
                 <FormGroup row className="my-0">
                   <Col xs="12" sm="12">
                     <FormGroup>
-                      <Label for="product_type_name">ProductType :</Label>
-                      <Input valid={this.state.product_type_validate == "VALID"} invalid={this.state.product_type_validate == "INVALID"} name="product_type_name" id="product_type_name" onChange={(e) => { this.onProductTypeChange(e) }} placeholder="Professor" required />
+                      <Label for="product_type_name">ประเภทสินค้า</Label>
+                      <Input valid={this.state.product_type_validate == "VALID"} invalid={this.state.product_type_validate == "INVALID"} name="product_type_name" id="product_type_name" onChange={(e) => { this.onProductTypeChange(e) }}  required />
                       <FormFeedback valid >You can use this name.</FormFeedback>
                       <FormFeedback invalid >{this.state.product_type_validate_text}</FormFeedback>
                       <FormText>Example: Professor</FormText>
@@ -110,14 +110,14 @@ class InsertProductTypeModal extends Component {
               </Col>
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" className="btn-success btn-md" color="primary">Save</Button>
+              <Button type="submit" className="btn-success btn-md" color="success">บันนทึก</Button>
               <Button variant="secondary" onClick={this.handleClose}>
-                Close
+                ปิด
           </Button>
             </Modal.Footer>
           </Form>
         </Modal>
-        <button class="btn float-right btn-success btn-md" onClick={this.handleShow}><i class="fa fa-plus"></i> Add</button>
+        <button class="btn float-right btn-success btn-md" onClick={this.handleShow}><i class="fa fa-plus"></i> เพิ่ม</button>
       </>
     )
   }

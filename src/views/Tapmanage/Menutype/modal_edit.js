@@ -59,16 +59,16 @@ class EditMenuTypeModal extends Component {
       var res = await menu_type_model.updateMenuType(data_set, data_where);
       if (res.query_result) {
         swal({
-          title: "Good job!",
-          text: "Insert MenuType  Ok",
+       
+          text: "แก้ไขประเภทเมนูสำเร็จ !",
           icon: "success",
           button: "Close",
         });
         this.handleClose()
       } else {
         swal({
-          title: "Error !",
-          text: "Insert MenuType Error ",
+          title: "มีบางอย่างผิดพลาด",
+          text: "แก้ไขประเภทเมนูไม่สำเร็จ !",
           icon: "error",
           button: "Close",
         });
@@ -104,15 +104,15 @@ class EditMenuTypeModal extends Component {
         >
           <Form onSubmit={this.SaveMenuType} id="myForm">
             <Modal.Header closeButton>
-              <Modal.Title>Edit MenuType</Modal.Title>
+              <Modal.Title>แก้ไขประเภทเมนู</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Col xs="12" sm="12">
                 <FormGroup row className="my-0">
                   <Col xs="12" sm="12">
                     <FormGroup>
-                      <Label for="menu_type_name">MenuType :</Label>
-                      <Input valid={this.state.menu_type_validate == "VALID"} invalid={this.state.menu_type_validate == "INVALID"} name="menu_type_name" id="menu_type_name" defaultValue={this.state.menu_type_name} onChange={(e) => { this.onMenuTypeChange(e) }} placeholder="Professor" required />
+                      <Label for="menu_type_name">ประเภทเมนู</Label>
+                      <Input valid={this.state.menu_type_validate == "VALID"} invalid={this.state.menu_type_validate == "INVALID"} name="menu_type_name" id="menu_type_name" defaultValue={this.state.menu_type_name} onChange={(e) => { this.onMenuTypeChange(e) }}  required />
                       <FormFeedback valid >You can use this name.</FormFeedback>
                       <FormFeedback invalid >{this.state.menu_type_validate_text}</FormFeedback>
                       <FormText>Example: Professor</FormText>
@@ -123,9 +123,9 @@ class EditMenuTypeModal extends Component {
 
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" size="md" color="primary">Save</Button>
+              <Button type="submit" size="md" color="success">บันทึก</Button>
               <Button variant="secondary" size="md" onClick={this.handleClose}>
-                Close
+                ปิด
           </Button>
             </Modal.Footer>
           </Form>

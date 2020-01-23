@@ -103,7 +103,7 @@ class CustomerView extends Component {
     render() {
         const { data } = this.state;
         return (
-            <div className="animated fadeIn">
+            <div className="animated fadeIn" style={{padding:'15px'}}>
                 <Row>
                     <Col lg='12'>
                         <Card>

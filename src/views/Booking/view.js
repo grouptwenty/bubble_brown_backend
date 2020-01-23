@@ -115,7 +115,7 @@ class BookingView extends Component {
         const closeBtn = <button className="close" onClick={this.toggle}>&times;</button>;
         const { data } = this.state;
         return (
-            <div className="animated fadeIn">
+            <div className="animated fadeIn" style={{padding:'15px'}}>
                 {/* <h2>การจองโต๊ะ</h2>
                 <hr /> */}
                 <Row>
@@ -124,7 +124,7 @@ class BookingView extends Component {
                             <CardHeader>
                                 การจองโต๊ะ
                                 <NavLink exact to={'../Booking/insert'} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> เพิ่ม</button>
                                 </NavLink>
                             </CardHeader>
                             <CardBody>

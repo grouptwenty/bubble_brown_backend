@@ -44,8 +44,8 @@ class ZoneView extends Component {
     onClickDelete(cell, row, rowIndex) {
         console.log('cell', cell);
         swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this imaginary file!",
+            title: "คุณแน่ใจ?",
+            text: "คุณแน่ที่จะลบโซน",
             icon: "warning",
             buttons: true,
             dangerMode: true,
@@ -74,8 +74,8 @@ class ZoneView extends Component {
     cellButton(cell, row, enumObject, rowIndex) {
         return (
             <>
-                <button class="btn btn-warning" onClick={() => this.onClickZoneUpdate(cell, row, rowIndex)}>Edit</button >
-                <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>Delete</button>
+                <button class="btn btn-warning" onClick={() => this.onClickZoneUpdate(cell, row, rowIndex)}>แก้ไข</button >
+                <button class="btn btn-danger" onClick={() => this.onClickDelete(cell, row, rowIndex)}>ลบ</button>
             </>
         )
     }

@@ -224,7 +224,7 @@ class insertView extends Component {
             imagePreview = (<img className="responsive" style={{ width: '100%' }} src={ImgDefault} />);
         }
         return (
-            <div className="animated fadeIn">
+            <div className="animated fadeIn" style={{padding:'15px'}}>
                 <Row>
                     <Col>
                         <Card>

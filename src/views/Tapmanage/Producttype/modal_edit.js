@@ -59,16 +59,16 @@ class EditProductTypeModal extends Component {
       var res = await product_type_model.updateProductType(data_set, data_where);
       if (res.query_result) {
         swal({
-          title: "Good job!",
-          text: "Insert ProductType  Ok",
+       
+          text: "แก้ไขประเภทสินค้าสำเร็จ !",
           icon: "success",
           button: "Close",
         });
         this.handleClose()
       } else {
         swal({
-          title: "Error !",
-          text: "Insert ProductType Error ",
+          title: "มีบางอย่างผิดพลาด",
+          text: "แก้ไขประเภทสินค้าไม่สำเร็จ !",
           icon: "error",
           button: "Close",
         });
@@ -104,14 +104,14 @@ class EditProductTypeModal extends Component {
         >
           <Form onSubmit={this.SaveProductType} id="myForm">
             <Modal.Header closeButton>
-              <Modal.Title>Edit ProductType</Modal.Title>
+              <Modal.Title>แก้ไขประเภทสินค้า</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Col xs="12" sm="12">
                 <FormGroup row className="my-0">
                   <Col xs="12" sm="12">
                     <FormGroup>
-                      <Label for="product_type_name">ProductType :</Label>
+                      <Label for="product_type_name">ประเภทสินค้า</Label>
                       <Input valid={this.state.product_type_validate == "VALID"} invalid={this.state.product_type_validate == "INVALID"} name="product_type_name" id="product_type_name" defaultValue={this.state.product_type_name} onChange={(e) => { this.onProductTypeChange(e) }} placeholder="Professor" required />
                       <FormFeedback valid >You can use this name.</FormFeedback>
                       <FormFeedback invalid >{this.state.product_type_validate_text}</FormFeedback>
@@ -123,9 +123,9 @@ class EditProductTypeModal extends Component {
 
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" size="md" color="primary">Save</Button>
+              <Button type="submit" size="md" color="primary">บันทึก</Button>
               <Button variant="secondary" size="md" onClick={this.handleClose}>
-                Close
+                ปิด
           </Button>
             </Modal.Footer>
           </Form>

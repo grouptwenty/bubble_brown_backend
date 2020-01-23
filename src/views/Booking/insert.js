@@ -183,7 +183,7 @@ class HomeView extends Component {
 
         return (
             <Form onSubmit={this.handleSubmit} id="myForm">
-                <div className="animated fadeIn">
+                <div className="animated fadeIn" style={{ padding: '15px' }}>
                     <Row>
                         <Col>
                             <Card>
@@ -252,7 +252,7 @@ class HomeView extends Component {
                                     </Row>
                                 </CardBody>
                                 <CardFooter>
-                                    <Button type="submit" size="lg" color="success" name="button_save">Booking</Button>
+                                    <Button type="submit" size="lg" color="success" name="button_save">บันทึก</Button>
                                 </CardFooter>
                             </Card>
                         </Col>

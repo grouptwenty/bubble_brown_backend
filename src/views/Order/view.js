@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import moment from 'moment'
-
+import GOBALS from '../../GOBALS'
 
 
 import MenuModel from '../../models/MenuModel'
@@ -277,7 +277,7 @@ class OrderView extends Component {
                         <Row >
                             <Col lg="4" style={{ paddingTop: '5px' }}><div>{this.state.cart[i].name}</div></Col>
                             <Col lg="4" style={{ paddingTop: '5px', textAlign: 'center' }}><div>{this.state.cart[i].price}</div></Col>
-                            <Col lg="4" style={{ paddingTop: '5px', textAlign: 'center' }}><Button style={{backgroundColor:'#b38d4d',color:'#fff'}} onClick={this.deleteItemButton.bind(this, this.state.cart[i])}> - </Button>{this.state.cart[i].count}<Button style={{backgroundColor:'#b38d4d',color:'#fff'}}  onClick={this.addItemButton.bind(this, this.state.cart[i])}> + </Button></Col>
+                            <Col lg="4" style={{ paddingTop: '5px', textAlign: 'center' }}><Button style={{ backgroundColor: '#b38d4d', color: '#fff' }} onClick={this.deleteItemButton.bind(this, this.state.cart[i])}> - </Button>{this.state.cart[i].count}<Button style={{ backgroundColor: '#b38d4d', color: '#fff' }} onClick={this.addItemButton.bind(this, this.state.cart[i])}> + </Button></Col>
                         </Row>
                         <hr />
                     </div>
@@ -297,10 +297,10 @@ class OrderView extends Component {
                 order_total.push(
                     <Row>
                         <Col lg="8" style={{ paddingTop: '30px' }}>
-                            <label style={{fontSize:'14pt',fontWeight:'bold'}}>ราคารวม</label>
+                            <label style={{ fontSize: '14pt', fontWeight: 'bold' }}>ราคารวม</label>
                         </Col>
                         <Col lg="4" style={{ textAlign: 'center', paddingTop: '30px' }}>
-                            <label style={{fontSize:'14pt',fontWeight:'bold'}}>{sumtotal.sum_price}</label>
+                            <label style={{ fontSize: '14pt', fontWeight: 'bold' }}>{sumtotal.sum_price}</label>
                         </Col>
                     </Row>
                 )
@@ -308,10 +308,10 @@ class OrderView extends Component {
                 order_total.push(
                     <Row>
                         <Col lg="8" style={{ paddingTop: '30px' }}>
-                            <label style={{fontSize:'14pt',fontWeight:'bold'}}>ราคารวม</label>
+                            <label style={{ fontSize: '14pt', fontWeight: 'bold' }}>ราคารวม</label>
                         </Col>
                         <Col lg="4" style={{ textAlign: 'center', paddingTop: '30px' }}>
-                            <label style={{fontSize:'14pt',fontWeight:'bold'}}>{sumtotal.sum_price}</label>
+                            <label style={{ fontSize: '14pt', fontWeight: 'bold' }}>{sumtotal.sum_price}</label>
                         </Col>
                     </Row>
                 )
@@ -439,6 +439,8 @@ class OrderView extends Component {
 
                         <Col lg="4" >
                             <Card onClick={this.addItem.bind(this, this.state.menu_list[j])}>
+                                <CardImg top width="50px" height="100%" className="img-manu" src={GOBALS.URL_IMG + "menu/" + this.state.menu_list[j].menu_image} alt="Card image cap" />
+
                                 <CardBody>
                                     <CardTitle><label >{this.state.menu_list[j].menu_name}</label> </CardTitle>
                                 </CardBody>
@@ -538,10 +540,10 @@ class OrderView extends Component {
             show_promotion.push(
                 <Row>
                     <Col lg="6">
-                        <label style={{color:'#229954'}}> {this.state.promotion_use_list.promotion_header}</label>
+                        <label style={{ color: '#229954' }}> {this.state.promotion_use_list.promotion_header}</label>
                     </Col>
                     <Col>
-                        <Button color="danger" style={{color:'#fff'}} onClick={this.deletePromotion.bind(this, this.state.promotion_use_list, this.state.promotion)}><label>ยกเลิก</label></Button>
+                        <Button color="danger" style={{ color: '#fff' }} onClick={this.deletePromotion.bind(this, this.state.promotion_use_list, this.state.promotion)}><label>ยกเลิก</label></Button>
                     </Col>
                 </Row>
             )
@@ -962,8 +964,8 @@ class OrderView extends Component {
                     </Card>
 
                     {/* <Card style={{ backgroundColor: '#fff', borderColor: 'transparent', minWidth: '100%',  minHeight: '65vh', padding: '0' }}> */}
-                    <Card style={{ backgroundColor: '#fff', borderColor: 'transparent',  minHeight: '65vh', padding: '0' ,marginTop:'-6px'}}>
-                            <CardBody className="vc" ref="iScroll" style={{ height: "480px", overflow: "auto", }}>
+                    <Card style={{ backgroundColor: '#fff', borderColor: 'transparent', minHeight: '65vh', padding: '0', marginTop: '-6px' }}>
+                        <CardBody className="vc" ref="iScroll" style={{ height: "480px", overflow: "auto", }}>
 
                             {this.rendercart()}
 
@@ -971,14 +973,14 @@ class OrderView extends Component {
                             {this.rendertotal()}
 
                             {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ?
-                                <Row style={{ textAlign: 'end',paddingTop:'30px', }}>
+                                <Row style={{ textAlign: 'end', paddingTop: '30px', }}>
                                     <Col lg="12">
                                         <Dropdown direction="up" isOpen={this.state.setDropdownOpen} toggle={this.toggle_cancel}>
                                             <DropdownToggle size="lg" color="secondary">
                                                 <i class="fa fa-ellipsis-h" aria-hidden="true" style={{ color: '#515A5A' }} />
                                             </DropdownToggle>
                                             <DropdownMenu style={{ backgroundColor: '#797D7F' }}>
-                                              
+
                                                 <DropdownItem style={{ hover: '#CD6155' }} onClick={this.checkCancelOrder.bind(this)} >
                                                     <Row >
                                                         <Col sm="6">
@@ -996,10 +998,10 @@ class OrderView extends Component {
                                 </Row>
 
                                 : ''}
-                            {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code == undefined ? <Row  style={{ paddingTop: '30px',fontSize:'14pt'}} ><Col lg="12"><Button style={{color:'#fff',width:'100%'}} color="success" onClick={this.insertOrder.bind(this)}><label>สั่งอาหาร</label></Button></Col></Row> : ''}
-                            {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? <Row style={{ paddingTop: '30px',fontSize:'14pt'}}><Col lg="12"><Button style={{color:'#fff',width:'100%'}}  color="success" onClick={this.updateOrder.bind(this)}><label>แก้ไขการสั่งอาหาร</label></Button></Col></Row> : ''}
+                            {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code == undefined ? <Row style={{ paddingTop: '30px', fontSize: '14pt' }} ><Col lg="12"><Button style={{ color: '#fff', width: '100%' }} color="success" onClick={this.insertOrder.bind(this)}><label>สั่งอาหาร</label></Button></Col></Row> : ''}
+                            {this.state.cart != undefined && this.state.cart != "" && this.props.match.params.code != undefined ? <Row style={{ paddingTop: '30px', fontSize: '14pt' }}><Col lg="12"><Button style={{ color: '#fff', width: '100%' }} color="success" onClick={this.updateOrder.bind(this)}><label>แก้ไขการสั่งอาหาร</label></Button></Col></Row> : ''}
 
-                          
+
 
 
                         </CardBody>

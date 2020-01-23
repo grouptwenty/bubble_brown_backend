@@ -211,7 +211,7 @@ class editView extends Component {
         }
 
         return (
-            <div className="animated fadeIn">
+            <div className="animated fadeIn" style={{padding:'15px'}}>
                 <Row>
                     <Col>
                         <Card>
@@ -280,10 +280,10 @@ class editView extends Component {
                                 </CardBody>
                                 <CardFooter>
                                     <Link to="/customer/">
-                                        <Button type="buttom" size="lg">Back</Button>
+                                        <Button type="buttom" size="lg">ย้อนกลับ</Button>
                                     </Link>
-                                    <Button type="reset" size="lg" color="danger">Reset</Button>
-                                    <Button type="submit " size="lg" color="success">Save</Button>
+                                    <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
+                                    <Button type="submit " size="lg" color="success">บันทึก</Button>
                                 </CardFooter>
                             </Form>
                         </Card>
