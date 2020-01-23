@@ -534,7 +534,7 @@ class BillView extends Component {
 
                     table.push(
 
-                        <Col lg="2" >
+                        <Col lg="2" style={{paddingTop:'2%'}}>
 
                             <ClickNHold
                                 time={0.5}
@@ -557,7 +557,7 @@ class BillView extends Component {
                     <TabPanel>
                         <Row>
                             {table}
-                            <Col lg="2">
+                            <Col lg="2" style={{paddingTop:'2%'}}>
                                 <Button color="success" size="lg" onClick={this.onTableAdd.bind(this)}>เพิ่มโต๊ะ</Button>
                             </Col>
 
@@ -1012,7 +1012,7 @@ class BillView extends Component {
                                 <Tab style={{ fontSize: '20px' }}> บิล</Tab>
                                 <Tab style={{ fontSize: '20px' }}>โต๊ะอาหาร</Tab>
                             </TabList>
-                            <TabPanel >
+                            <TabPanel style={{height:'100%',minHeight: '75vh'}}>
                                 <Row style={{ padding: '1%', overflowY: 'scroll' }}>
                                     <Col sm="3" >
                                         <Card outline color="secondary">
@@ -1032,7 +1032,7 @@ class BillView extends Component {
 
                                 </Row>
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel style={{height:'100%',minHeight: '75vh'}}>
                                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })} forceRenderTabPanel>
                                     <TabList>
                                         {this.renderZoneMenu()}

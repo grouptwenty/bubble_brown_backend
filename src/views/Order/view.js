@@ -903,7 +903,7 @@ class OrderView extends Component {
                             </CardBody>
                         </Card>
                         <Card style={{ backgroundColor: '#fff', borderColor: 'transparent', height: '100%', minHeight: '65vh' }}>
-                            <CardBody className="vc" ref="iScroll" style={{ height: "420px", overflow: "auto", }}>
+                            <CardBody className="vc" ref="iScroll" style={{ height: "480px", overflow: "auto", }}>
 
 
 
@@ -961,8 +961,9 @@ class OrderView extends Component {
                         </CardBody>
                     </Card>
 
-                    <Card style={{ backgroundColor: '#fff', borderColor: 'transparent', minWidth: '100%', height: '100%', minHeight: '65vh', padding: '0' }}>
-                        <CardBody >
+                    {/* <Card style={{ backgroundColor: '#fff', borderColor: 'transparent', minWidth: '100%',  minHeight: '65vh', padding: '0' }}> */}
+                    <Card style={{ backgroundColor: '#fff', borderColor: 'transparent',  minHeight: '65vh', padding: '0' ,marginTop:'-6px'}}>
+                            <CardBody className="vc" ref="iScroll" style={{ height: "480px", overflow: "auto", }}>
 
                             {this.rendercart()}
 

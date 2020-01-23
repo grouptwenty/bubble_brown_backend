@@ -304,11 +304,11 @@ class insertView extends Component {
 
 
         return (
-            <div className="animated fadeIn">
+            <div className="animated fadeIn" style={{padding:'15px'}}>
                 <Row>
                     <Col>
                         <Card>
-                            <Form onSubmit={this.handleSubmit} id="myForm">
+                            <Form onSubmit={this.handleSubmit} id="myForm" >
                                 <CardHeader>
                                     เพิ่มข้อมูลสาขา /  Insert About
                                 <NavLink exact to={`/sale/sale-order/insert`} style={{ width: '100%' }}>

@@ -233,7 +233,7 @@ class ReportSaleTypeView extends Component {
                                 <Row>
                                     <Col lg="12" style={{ textAlign: 'centers', paddingTop: '10px' }}>
                                         <Card body>
-                                            <CardTitle><h3>รายงานยอดขายตามประเภท</h3></CardTitle>
+                                            <CardTitle><h3>รายงานยอดขายตามประเภทสินค้า</h3></CardTitle>
                                             <Row>
                                                 <Col lg='6'>
                                                     <FormGroup>

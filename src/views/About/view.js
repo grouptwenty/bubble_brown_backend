@@ -50,6 +50,7 @@ class AboutView extends Component {
     cellButton(cell, row, enumObject, rowIndex) {
         return (
             <>
+        
                 <NavLink exact to={'../about/detail/' + row.about_code}>
                     <button class="btn btn-primary">รายละเอียด</button>
                 </NavLink>
@@ -99,10 +100,10 @@ class AboutView extends Component {
 
         const { data } = this.state;
         return (
-            <div className="animated fadeIn">
+            <div className="animated fadeIn" style={{padding:'15px'}}>
                 <Row>
                     <Col lg='12'>
-                        <Card>
+                        <Card >
                             <CardHeader>
                                 สาขา
                                 <NavLink exact to={'../About/editbranch'} style={{ width: '100%' }}>

@@ -80,7 +80,7 @@ class editView extends Component {
     render() {
 
         return (
-            <div className="animated fadeIn">
+            <div className="animated fadeIn" style={{padding:'15px'}}>
                 <Row>
                     <Col>
                         <Card>

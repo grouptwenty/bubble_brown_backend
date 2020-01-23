@@ -329,8 +329,9 @@ class ReportBestSaleView extends Component {
                                         <ButtonGroup size="lg">
                                             <Button
                                                 style={{
-                                                    backgroundColor: this.state.seg === 1 ? '#81D4FA' : '#fff',
-                                                    borderColor: this.state.seg === 1 ? '#80DEEA' : '#E0E0E0',
+                                                    backgroundColor: this.state.seg === 1 ? '#b38d4d' : '#fff',
+                                                    borderColor: this.state.seg === 1 ? '#b38d4d' : '#E0E0E0',
+                                                    color: this.state.seg === 1 ? '#fff' : '#000',
                                                 }}
                                                 first
                                                 active={this.state.seg === 1 ? true : false}
@@ -339,16 +340,18 @@ class ReportBestSaleView extends Component {
                                             >
                                                 วัน </Button>
                                             <Button style={{
-                                                backgroundColor: this.state.seg === 2 ? '#81D4FA' : '#fff',
-                                                borderColor: this.state.seg === 2 ? '#80DEEA' : '#E0E0E0',
+                                                backgroundColor: this.state.seg === 2 ? '#b38d4d' : '#fff',
+                                                borderColor: this.state.seg === 2 ? '#b38d4d' : '#E0E0E0',
+                                                color: this.state.seg === 2 ? '#fff' : '#000',
                                             }}
                                                 active={this.state.seg === 2 ? true : false}
                                                 onClick={() => this.setSeg(2)}
                                             >
                                                 เดือน</Button>
                                             <Button style={{
-                                                backgroundColor: this.state.seg === 3 ? '#81D4FA' : '#fff',
-                                                borderColor: this.state.seg === 3 ? '#80DEEA' : '#E0E0E0',
+                                                backgroundColor: this.state.seg === 3 ? '#b38d4d' : '#fff',
+                                                borderColor: this.state.seg === 3 ? '#b38d4d' : '#E0E0E0',
+                                                color: this.state.seg === 3 ? '#fff' : '#000',
                                             }}
                                                 last
                                                 active={this.state.seg === 3 ? true : false}

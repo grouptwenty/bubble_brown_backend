@@ -779,7 +779,41 @@ class ReportSaleView extends Component {
                             <CardBody>
                                 <Row>
                                     <Col lg="12">
-                                        <ButtonGroup size="lg">
+
+                                    <ButtonGroup size="lg">
+                                            <Button
+                                                style={{
+                                                    backgroundColor: this.state.seg === 1 ? '#b38d4d' : '#fff',
+                                                    borderColor: this.state.seg === 1 ? '#b38d4d' : '#E0E0E0',
+                                                    color: this.state.seg === 1 ? '#fff' : '#000',
+                                                }}
+                                                first
+                                                active={this.state.seg === 1 ? true : false}
+                                                onClick={() => this.setSeg(1)}
+
+                                            >
+                                                วัน </Button>
+                                            <Button style={{
+                                                backgroundColor: this.state.seg === 2 ? '#b38d4d' : '#fff',
+                                                borderColor: this.state.seg === 2 ? '#b38d4d' : '#E0E0E0',
+                                                color: this.state.seg === 2 ? '#fff' : '#000',
+                                            }}
+                                                active={this.state.seg === 2 ? true : false}
+                                                onClick={() => this.setSeg(2)}
+                                            >
+                                                เดือน</Button>
+                                            <Button style={{
+                                                backgroundColor: this.state.seg === 3 ? '#b38d4d' : '#fff',
+                                                borderColor: this.state.seg === 3 ? '#b38d4d' : '#E0E0E0',
+                                                color: this.state.seg === 3 ? '#fff' : '#000',
+                                            }}
+                                                last
+                                                active={this.state.seg === 3 ? true : false}
+                                                onClick={() => this.setSeg(3)}
+                                            >
+                                                ปี</Button>
+                                        </ButtonGroup>
+                                        {/* <ButtonGroup size="lg">
                                             <Button
                                                 style={{
                                                     backgroundColor: this.state.seg === 1 ? '#81D4FA' : '#fff',
@@ -808,7 +842,7 @@ class ReportSaleView extends Component {
                                                 onClick={() => this.setSeg(3)}
                                             >
                                                 ปี</Button>
-                                        </ButtonGroup>
+                                        </ButtonGroup> */}
                                     </Col>
                                 </Row>
                                 <Row>
