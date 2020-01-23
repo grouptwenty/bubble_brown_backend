@@ -442,19 +442,19 @@ class BillView extends Component {
                             <Row >
                                 <Col lg="6" >
                                     <div style={{ textAlign: 'end' }}>
-                                        <Button onClick={this.onCheckBill.bind(this, this.state.bill_order[i])} color="secondary">ชำระเงิน</Button>
+                                        <Button onClick={this.onCheckBill.bind(this, this.state.bill_order[i])} color="success">ชำระเงิน</Button>
                                     </div>
                                 </Col>
                                 <Col lg="6">
                                     <div style={{ textAlign: 'start' }}>
-                                        <Button onClick={this.onBillDetail.bind(this, this.state.bill_order[i])} color="secondary" >ดูบิล</Button>
+                                        <Button onClick={this.onBillDetail.bind(this, this.state.bill_order[i])} color="primary" >ดูบิล</Button>
                                     </div>
                                 </Col>
                             </Row>
                             : <Row >
                                 <Col lg="12" >
                                     <div style={{ textAlign: 'end' }}>
-                                        <Button onClick={this.confirmOrder.bind(this, this.state.bill_order[i])} color="secondary">ยืนยันออเดอร์</Button>
+                                        <Button onClick={this.confirmOrder.bind(this, this.state.bill_order[i])} color="warning" style={{ color: '#fff' }}>ยืนยันออเดอร์</Button>
                                     </div>
                                 </Col>
                             </Row>}
@@ -474,9 +474,9 @@ class BillView extends Component {
         for (let i = 0; i < this.state.order_list.length; i++) {
             Bill_order_list.push(
 
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-action">
-                        <Row style={{ backgroundColor: this.compareOrderList(this.state.order_list[i], this.state.order_list_old) }}>
+                <ul class="list-group" >
+                    <li class="list-group-item list-group-item-action" style={{ backgroundColor: this.compareOrderList(this.state.order_list[i], this.state.order_list_old) }}>
+                        <Row >
                             <Col lg="4">
                                 <Label className="text_head" >{this.state.order_list[i].order_list_name}  </Label>
                             </Col>
@@ -534,7 +534,7 @@ class BillView extends Component {
 
                     table.push(
 
-                        <Col lg="2" style={{paddingTop:'2%'}}>
+                        <Col lg="2" style={{ paddingTop: '2%' }}>
 
                             <ClickNHold
                                 time={0.5}
@@ -557,7 +557,7 @@ class BillView extends Component {
                     <TabPanel>
                         <Row>
                             {table}
-                            <Col lg="2" style={{paddingTop:'2%'}}>
+                            <Col lg="2" style={{ paddingTop: '2%' }}>
                                 <Button color="success" size="lg" onClick={this.onTableAdd.bind(this)}>เพิ่มโต๊ะ</Button>
                             </Col>
 
@@ -634,7 +634,7 @@ class BillView extends Component {
                     </ModalBody>
                     <ModalFooter>
                         <Button color="secondary" onClick={this.toggle_Bill} style={{ width: 100, height: 40 }}>กลับ</Button>
-                        <Button color="primary" onClick={this.start.bind(this, this.state.order_code_list)} style={{ width: 100, height: 40 }}>แก้ไขบิล</Button>
+                        <Button color="success" onClick={this.start.bind(this, this.state.order_code_list)} style={{ width: 100, height: 40 }}>แก้ไขบิล</Button>
                     </ModalFooter>
                 </Modal>
             )
@@ -1012,11 +1012,11 @@ class BillView extends Component {
                                 <Tab style={{ fontSize: '20px' }}> บิล</Tab>
                                 <Tab style={{ fontSize: '20px' }}>โต๊ะอาหาร</Tab>
                             </TabList>
-                            <TabPanel style={{height:'100%',minHeight: '75vh'}}>
+                            <TabPanel style={{ height: '100%', minHeight: '75vh' }}>
                                 <Row style={{ padding: '1%', overflowY: 'scroll' }}>
                                     <Col sm="3" >
                                         <Card outline color="secondary">
-                                            <CardHeader style={{ textAlign: 'center', }}>เพิ่มบิล</CardHeader>
+                                            <CardHeader style={{ textAlign: 'center', backgroundColor: '#229954' }}>เพิ่มบิล</CardHeader>
                                             <CardBody>
                                                 <CardText style={{ textAlign: 'center' }}>
                                                     <NavLink exact to={`/order/`} style={{ width: '100%' }}>
@@ -1032,7 +1032,7 @@ class BillView extends Component {
 
                                 </Row>
                             </TabPanel>
-                            <TabPanel style={{height:'100%',minHeight: '75vh'}}>
+                            <TabPanel style={{ height: '100%', minHeight: '75vh' }}>
                                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })} forceRenderTabPanel>
                                     <TabList>
                                         {this.renderZoneMenu()}
