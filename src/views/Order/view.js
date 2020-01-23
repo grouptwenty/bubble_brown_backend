@@ -632,12 +632,12 @@ class OrderView extends Component {
             }
 
             for (var key in this.state.cart) {
-                // console.log("this.state.cart :", this.state.cart);
+                console.log("this.state.cart :", this.state.cart);
 
                 var order_list = {
                     order_code: order_code,
                     menu_code: this.state.cart[key].code,
-                    menu_type_id: this.state.cart[key].type,
+                    // menu_type_id: this.state.cart[key].type,
                     order_list_qty: this.state.cart[key].count,
                     order_list_name: this.state.cart[key].name,
                     order_list_price_qty: this.state.cart[key].price,
@@ -730,7 +730,7 @@ class OrderView extends Component {
             var order_list = {
                 order_code: this.state.order_old.order_code,
                 menu_code: this.state.cart[key].code,
-                menu_type_id: this.state.cart[key].type,
+                // menu_type_id: this.state.cart[key].type,
                 order_list_qty: this.state.cart[key].count,
                 order_list_name: this.state.cart[key].name,
                 order_list_price_qty: this.state.cart[key].price,
@@ -849,12 +849,12 @@ class OrderView extends Component {
 
 
 
-    async updateCencel(order_cencel_id) {
+    async updateCencel(cencel_list_id) {
         // console.log("order_cencel_id", order_cencel_id);
 
 
         var cencel = {
-            order_cencel_id: order_cencel_id,
+            cencel_list_id: cencel_list_id,
             order_code: this.props.match.params.code
 
         }
