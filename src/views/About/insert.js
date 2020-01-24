@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, CardHeader, FormGroup, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Input, Label, Form } from 'reactstrap';
+import { Button, Table, Card, CustomInput, PaginationLink, PaginationItem, CardHeader, FormGroup, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Input, Label, Form } from 'reactstrap';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { NavLink, Link, } from 'react-router-dom';
@@ -323,7 +323,7 @@ class insertView extends Component {
                                                     <Col style={{ marginBottom: "15px" }}>
                                                         {imagePreview}
                                                     </Col>
-                                                    <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="about_img" />
+                                                    <CustomInput type="file" label="เลือกรูปภาพ" class="form-control" multiple onChange={this.onChangeHandler} id="about_img" />
                                                 </div>
                                             </FormGroup>
                                         </Col>
@@ -436,10 +436,10 @@ class insertView extends Component {
                                 </CardBody>
                                 <CardFooter>
                                     <Link to="/about/">
-                                        <Button type="buttom" size="lg">Back</Button>
+                                        <Button type="buttom" size="lg">ย้อนกลับ</Button>
                                     </Link>
-                                    <Button type="reset" size="lg" color="danger">Reset</Button>
-                                    <Button type="submit " size="lg" color="success">Save</Button>
+                                    <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
+                                    <Button type="submit " size="lg" color="success">บันทึก</Button>
                                 </CardFooter>
                             </Form>
                         </Card>

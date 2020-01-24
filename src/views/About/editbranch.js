@@ -104,8 +104,8 @@ class editView extends Component {
                                 </CardBody>
                                 <CardFooter>
                                     <Button variant="secondary" size="lg" onClick={this.goBack}>ย้อนกลับ</Button>
-                                    <Button type="reset" size="lg" color="danger">Reset</Button>
-                                    <Button type="submit " size="lg" color="success">Save</Button>
+                                    <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
+                                    <Button type="submit " size="lg" color="success">บันทึก</Button>
                                 </CardFooter>
                             </Form>
                         </Card>

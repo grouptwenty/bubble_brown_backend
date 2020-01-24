@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, InputGroup, Form, Input, Table, Card, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup, CardFooter } from 'reactstrap';
+import { Button, CustomInput, Form, Input, Table, Card, CardHeader, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup, CardFooter } from 'reactstrap';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { NavLink } from 'react-router-dom';
@@ -505,7 +505,7 @@ class HomeView extends Component {
                                                     <Col style={{ marginBottom: "15px" }}>
                                                         {imagePreview}
                                                     </Col>
-                                                    <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="promotion_image" />
+                                                    <CustomInput type="file" label="เลือกรูปภาพ" class="form-control" multiple onChange={this.onChangeHandler} id="promotion_image" />
                                                 </div>
                                             </FormGroup>
                                         </Col>

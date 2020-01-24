@@ -614,7 +614,7 @@ class BillView extends Component {
                             <Col lg="6" >
                             </Col>
                             <Col lg="4" style={{ textAlign: 'center' }} >
-                                <Label className="text_head">{this.state.total}</Label>
+                                <Label className="text_head">- {this.state.total}</Label>
 
                             </Col>
 

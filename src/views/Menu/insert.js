@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, InputGroup, Form, Input, Table, Card, CardHeader, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
+import { Button, CustomInput, Form, Input, Table, Card, CardHeader, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link, } from 'react-router-dom';
 import { fonts } from 'pdfmake/build/pdfmake';
@@ -271,7 +271,7 @@ class insertView extends Component {
                                                 <div class="form-group files">
                                                     <Col ol lg="12" style={{ marginBottom: "15px" }}>
                                                         {imagePreview}
-                                                        <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="menu_image" />
+                                                        <CustomInput type="file" label="เลือกรูปภาพ" class="form-control" multiple onChange={this.onChangeHandler} id="menu_image" />
 
                                                     </Col>
                                                 </div>

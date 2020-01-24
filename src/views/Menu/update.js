@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, InputGroup, Form, Input, Table, Card, CardHeader, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Label, FormGroup } from 'reactstrap';
+import { Button, InputGroup, Form, Input, Table, Card, CardHeader, CardFooter, Col, Row, CardImg, CardBody, CustomInput, Label, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link, } from 'react-router-dom';
 import { fonts } from 'pdfmake/build/pdfmake';
@@ -278,7 +278,10 @@ class editView extends Component {
                                                             <Col style={{ marginBottom: "15px" }}>
                                                                 {imagePreview}
                                                             </Col>
-                                                            <input type="file" class="form-control" multiple onChange={this.onChangeHandler} id="menu_image" />
+                                                            <Col style={{ marginBottom: "15px" }}>
+                                                            <CustomInput type="file" label="เลือกรูปภาพ" class="form-control" multiple onChange={this.onChangeHandler} id="menu_image" />
+
+                                                            </Col>
                                                         </div>
                                                     </FormGroup>
                                                 </Col>

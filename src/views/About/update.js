@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Card, Pagination, PaginationLink, PaginationItem, FormGroup, CardHeader, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Input, Label, Form } from 'reactstrap';
+import { Button, Table, Card, CustomInput, PaginationLink, PaginationItem, FormGroup, CardHeader, CardFooter, Col, Row, CardImg, CardBody, CardTitle, Input, Label, Form } from 'reactstrap';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { NavLink, Link, } from 'react-router-dom';
@@ -362,7 +362,7 @@ class editView extends Component {
                                                     <Col style={{ marginBottom: "15px" }}>
                                                         {imagePreview}
                                                     </Col>
-                                                    <input type="file" class="form-control" multiple onChange={this.onChangeHandler} />
+                                                    <CustomInput type="file" label="เลือกรูปภาพ" class="form-control" multiple onChange={this.onChangeHandler} />
                                                 </div>
                                             </FormGroup>
                                         </Col>
@@ -474,8 +474,8 @@ class editView extends Component {
                                 </CardBody>
                                 <CardFooter>
                                     <Button variant="secondary" size="lg" onClick={this.goBack}>ย้อนกลับ</Button>
-                                    <Button type="reset" size="lg" color="danger">Reset</Button>
-                                    <Button type="submit " size="lg" color="success">Save</Button>
+                                    <Button type="reset" size="lg" color="danger">ยกเลิก</Button>
+                                    <Button type="submit " size="lg" color="success">บันทึก</Button>
                                 </CardFooter>
                             </Form>
                         </Card>
