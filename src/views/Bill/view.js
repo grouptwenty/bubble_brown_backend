@@ -291,6 +291,7 @@ class BillView extends Component {
                 promotion_code: check_bill.promotion_code,
                 customer_code: '',
                 payment_discount: '',
+                about_code: this.props.user.about_code
             }
         } else {
             var payment = {
@@ -303,6 +304,7 @@ class BillView extends Component {
                 promotion_code: '',
                 customer_code: '',
                 payment_discount: '',
+                about_code: this.props.user.about_code
             }
         }
 
