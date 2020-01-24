@@ -87,7 +87,7 @@ class EditMenuTypeModal extends Component {
       } else {
         this.setState({
           menu_type_validate: "INVALID",
-          menu_type_validate_text: "This name already exists.",
+          menu_type_validate_text: "ชื่อนี้มีการใช้งานแล้ว.",
         })
         console.log("INVALID : ", menu_type_name);
       }

@@ -74,7 +74,7 @@ class InsertZoneModal extends Component {
       } else {
         this.setState({
           zone_validate: "INVALID",
-          zone_validate_text: "This name already exists.",
+          zone_validate_text: "ชื่อนี้มีการใช้งานแล้ว.",
         })
         console.log("INVALID : ", zone_name);
       }

@@ -75,7 +75,7 @@ class InsertProductTypeModal extends Component {
       } else {
         this.setState({
           product_type_validate: "INVALID",
-          product_type_validate_text: "This name already exists.",
+          product_type_validate_text: "ชื่อนี้มีการใช้งานแล้ว.",
         })
         console.log("INVALID : ", product_type_name);
       }
