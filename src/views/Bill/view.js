@@ -396,6 +396,7 @@ class BillView extends Component {
                     product_cost: stock_out.data[i].product_cost,
                     unit: stock_out.data[i].recipe_unit,
                     stock_out_date: date,
+                    about_code: this.props.user.about_code
 
                 }
                 console.log("recipe ==>", recipe);
