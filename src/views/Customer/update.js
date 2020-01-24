@@ -144,7 +144,7 @@ class editView extends Component {
                     title: "สำเร็จ!",
                     text: "แก้ไขข้อมูลลูกค้าสำเร็จ",
                     icon: "success",
-                    button: "Close",
+                    button: "ปิด",
                 });
                 this.props.history.push('/customer/')
             }
@@ -158,28 +158,28 @@ class editView extends Component {
             swal({
                 text: "กรุณากรอก ชื่อ-นามสกุล",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.customer_id == '') {
             swal({
                 text: "กรุณากรอก ไอดีลูกค้า",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.customer_email == '') {
             swal({
                 text: "กรุณากรอก อีเมล",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.customer_tel == '') {
             swal({
                 text: "กรุณากรอก เบอร์โทร",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
             // } else if (form.customer_id == '') {

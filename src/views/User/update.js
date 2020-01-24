@@ -183,7 +183,7 @@ class editView extends Component {
                     title: "สำเร็จ!",
                     text: "แก้ไขข้อมูลพนักงานสำเร็จ",
                     icon: "success",
-                    button: "Close",
+                    button: "ปิด",
                 });
                 this.props.history.push('/user')
             }
@@ -195,56 +195,56 @@ class editView extends Component {
             swal({
                 text: "กรุณากรอก ตำแหน่ง",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_firstname == '') {
             swal({
                 text: "กรุณากรอก ชื่อจริง",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_lastname == '') {
             swal({
                 text: "กรุณากรอก นามสกุล",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_email == '') {
             swal({
                 text: "กรุณากรอก อีเมล",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_tel == '') {
             swal({
                 text: "กรุณากรอก เบอร์โทร",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_address == '') {
             swal({
                 text: "กรุณากรอก ที่อยู่",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_username == '') {
             swal({
                 text: "กรุณากรอก รหัสผู้ใช้",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_password == '') {
             swal({
                 text: "กรุณากรอก รหัสผ่าน",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else {

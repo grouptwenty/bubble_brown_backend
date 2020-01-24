@@ -95,7 +95,7 @@ class HomeView extends Component {
                 swal({
                     title: "กรุณาใส่วันที่ให้ถูกต้อง",
                     icon: "warning",
-                    button: "Close",
+                    button: "ปิด",
                 });
             }
 
@@ -112,10 +112,10 @@ class HomeView extends Component {
                 //   console.log(res)
                 if (res.data) {
                     swal({
-                        title: "Booking Complete!",
-                        text: "Good job",
+                        title: "เรียบร้อย !",
+                        text: "เรียบร้อย",
                         icon: "success",
-                        button: "Close",
+                        button: "ปิด",
                     });
                     this.props.history.push('/booking/')
                 }
@@ -124,7 +124,7 @@ class HomeView extends Component {
             swal({
                 title: "วันที่ท่านจองไม่มีโต๊ะว่าง !!",
                 icon: "warning",
-                button: "Close",
+                button: "ปิด",
             });
         }
     }
@@ -135,35 +135,35 @@ class HomeView extends Component {
             swal({
                 text: "กรุณาเลือก วันที่จอง",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.booking_amount == '') {
             swal({
                 text: "กรุณากรอก จำนวน",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.booking_firstname == '') {
             swal({
                 text: "กรุณากรอก ชื่อ",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.booking_lastname == '') {
             swal({
                 text: "กรุณากรอก นามสกุล",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.booking_tel == '') {
             swal({
                 text: "กรุณากรอก เบอร์โทรศัพท์",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
 
@@ -171,7 +171,7 @@ class HomeView extends Component {
             swal({
                 text: "กรุณากรอก อีเมล",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else {

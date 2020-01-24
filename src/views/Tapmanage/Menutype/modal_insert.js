@@ -31,7 +31,7 @@ class InsertMenuTypeModal extends Component {
   }
   async SaveMenuType(event) {
     if (this.state.menu_type_validate == 'INVALID') {
-      swal("This name already exists.", {
+      swal("ชื่อนี้มีการใช้งานแล้ว.", {
         icon: "error",
       });
       event.preventDefault();
@@ -50,7 +50,7 @@ class InsertMenuTypeModal extends Component {
          
           text: "เพิ่มประเภทเมนูสำเร็จ !",
           icon: "success",
-          button: "Close",
+          button: "ปิด",
         });
         this.handleClose()
       } else {
@@ -58,7 +58,7 @@ class InsertMenuTypeModal extends Component {
           title: "มีบางอย่างผิดพลาด",
           text: "เพิ่มประเภทเมนูสำเร็จ !",
           icon: "error",
-          button: "Close",
+          button: "ปิด",
         });
       }
     }

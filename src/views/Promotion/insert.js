@@ -180,18 +180,18 @@ class HomeView extends Component {
         if (res.query_result) {
             // await this.fileUpload(this.state.selectedFile, 'CoverPage', res.data.insertId);
             swal({
-                title: "Good job!",
-                text: "Insert Promotion  Ok",
+                title: "เรียบร้อย !",
+                text: "เพิ่มข้อมูลสำเร็จ",
                 icon: "success",
-                button: "Close",
+                button: "ปิด",
             });
             this.props.history.push('/promotion');
         } else {
             swal({
-                title: "Error !",
-                text: "Insert Promotion Error ",
+                title: "ไม่สำเร็จ !",
+                text: "ไม่สามารถเพิ่มข้อมูลได้ ",
                 icon: "error",
-                button: "Close",
+                button: "ปิด",
             });
         }
     }

@@ -81,10 +81,10 @@ class updateView extends Component {
         console.log(res)
         // if (res.data) {
         swal({
-            title: "Good job!",
-            text: "Update Brand Ok",
+            title: "เรียบร้อย !",
+            text: "แก้ไขเรียบร้อย",
             icon: "success",
-            button: "Close",
+            button: "ปิด",
         });
         this.props.history.push('/product-manage/product/')
         // }

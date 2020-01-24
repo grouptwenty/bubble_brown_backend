@@ -28,8 +28,8 @@ class BookingView extends Component {
     onClickDelete(cell, row, rowIndex) {
         console.log('cell', cell);
         swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this imaginary file!",
+            title: "คุณแน่ใจหรือไม่ ?",
+            text: "เมื่อลบแล้วคุณจะไม่สามารถกู้คืนข้อมูลได้ !",
             icon: "warning",
             buttons: true,
             dangerMode: true,
@@ -41,11 +41,11 @@ class BookingView extends Component {
                 console.log('------------', set_data)
                 var res = await booking_model.deleteBooking(set_data);
                 if (res.query_result) {
-                    swal("Poof! Your imaginary file has been deleted!", {
+                    swal("ลบรูปภาพเรียบร้อยแล้ว !", {
                         icon: "success",
                     });
                 } else {
-                    swal("deleted Fail", {
+                    swal("ลบรูปภาพไม่สำเร็จ !", {
                         icon: "error",
                     });
                 }

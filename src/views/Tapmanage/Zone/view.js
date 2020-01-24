@@ -57,11 +57,11 @@ class ZoneView extends Component {
                 }
                 var res = await zone_model.deleteZoneByCode(set_data);
                 if (res.query_result) {
-                    swal("Poof! Your imaginary file has been deleted!", {
+                    swal("ลบรูปภาพสำเร็จ!", {
                         icon: "success",
                     });
                 } else {
-                    swal("deleted Fail", {
+                    swal("ลบรูปภาพไม่สำเร็จ", {
                         icon: "error",
                     });
                 }

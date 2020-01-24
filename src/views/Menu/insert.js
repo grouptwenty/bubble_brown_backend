@@ -148,7 +148,7 @@ class insertView extends Component {
                     title: "สำเร็จ!",
                     text: "เพิ่มเมนูสำเร็จ",
                     icon: "success",
-                    button: "Close",
+                    button: "ปิด",
                 });
                 this.props.history.push('/menu')
             }
@@ -162,21 +162,21 @@ class insertView extends Component {
             swal({
                 text: "กรุณาเลือก ประเภท",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.menu_name == '') {
             swal({
                 text: "กรุณากรอก ชื่อเมนู",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.menu_price == '') {
             swal({
                 text: "กรุณากรอก ราคา",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
             // } else if (form.menu_id == '') {

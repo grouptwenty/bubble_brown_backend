@@ -21,7 +21,7 @@ class CustomerView extends Component {
         console.log('cell', cell);
         swal({
             title: "คุณต้องการลบข้อมูลลูกค้า?",
-            text: "เมื่อลบแล้วคุณจะไม่สามารถกู้คืนข้อมูลได้!",
+            text: "เมื่อลบแล้วคุณจะไม่สามารถกู้คืนข้อมูลได้ !",
             icon: "warning",
             buttons: true,
             dangerMode: true,

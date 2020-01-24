@@ -131,7 +131,7 @@ class insertView extends Component {
                     title: "สำเร็จ!",
                     text: "เพิ่มข้อมูลพนักงานสำเร็จ",
                     icon: "success",
-                    button: "Close",
+                    button: "ปิด",
                 });
                 this.props.history.push('/user')
             }
@@ -145,28 +145,28 @@ class insertView extends Component {
             swal({
                 text: "กรุณากรอก ตำแหน่ง",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.about_code == '') {
             swal({
                 text: "กรุณาเลือก สาขา",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_firstname == '') {
             swal({
                 text: "กรุณากรอก ชื่อจริง",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_lastname == '') {
             swal({
                 text: "กรุณากรอก นามสกุล",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
             // } else if (form.user_email == '') {
@@ -180,7 +180,7 @@ class insertView extends Component {
             swal({
                 text: "กรุณากรอก เบอร์โทร",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
             // } else if (form.user_address == '') {
@@ -194,14 +194,14 @@ class insertView extends Component {
             swal({
                 text: "กรุณากรอก รหัสผู้ใช้",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_password == '') {
             swal({
                 text: "กรุณากรอก รหัสผ่าน",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else {

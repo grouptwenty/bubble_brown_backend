@@ -68,10 +68,10 @@ class editView extends Component {
         //   console.log(res)
         if (res.data) {
             swal({
-                title: "Good job!",
-                text: "update about Ok",
+                title: "สำเร็จ !",
+                text: "แก้ไขเรียบร้อย",
                 icon: "success",
-                button: "Close",
+                button: "ปิด",
             });
         // this.props.history.push('/about/')
         }

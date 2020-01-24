@@ -38,7 +38,7 @@ class EditProductTypeModal extends Component {
   }
   async SaveProductType(event) {
     if (this.state.product_type_validate == 'INVALID') {
-      swal("This name already exists.", {
+      swal("ชื่อนี้มีการใช้งานแล้ว.", {
         icon: "error",
       });
       event.preventDefault();
@@ -62,7 +62,7 @@ class EditProductTypeModal extends Component {
        
           text: "แก้ไขประเภทสินค้าสำเร็จ !",
           icon: "success",
-          button: "Close",
+          button: "ปิด",
         });
         this.handleClose()
       } else {
@@ -70,7 +70,7 @@ class EditProductTypeModal extends Component {
           title: "มีบางอย่างผิดพลาด",
           text: "แก้ไขประเภทสินค้าไม่สำเร็จ !",
           icon: "error",
-          button: "Close",
+          button: "ปิด",
         });
       }
     }

@@ -31,7 +31,7 @@ class InsertZoneModal extends Component {
   }
   async SaveZone(event) {
     if (this.state.zone_validate == 'INVALID') {
-      swal("This name already exists.", {
+      swal("ชื่อนี้มีการใช้งานแล้ว.", {
         icon: "error",
       });
       event.preventDefault();
@@ -49,7 +49,7 @@ class InsertZoneModal extends Component {
         
           text: "เพิ่มโซนสำเร็จ !",
           icon: "success",
-          button: "Close",
+          button: "ปิด",
         });
         this.handleClose()
       } else {
@@ -57,7 +57,7 @@ class InsertZoneModal extends Component {
           title: "มีบางอย่างผิดพลาด !",
           text: "เพิ่มโซนไม่สำเร็จ ",
           icon: "error",
-          button: "Close",
+          button: "ปิด",
         });
       }
     }

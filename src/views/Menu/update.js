@@ -152,7 +152,7 @@ class editView extends Component {
                     title: "สำเร็จ!",
                     text: "แก้ไขเมนูสำเร็จ",
                     icon: "success",
-                    button: "Close",
+                    button: "ปิด",
                 });
                 this.props.history.push('/menu/')
             }
@@ -166,14 +166,14 @@ class editView extends Component {
             swal({
                 text: "กรุณาเลือก ประเภท",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.menu_name == '') {
             swal({
                 text: "กรุณากรอก ชื่อเมนู",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
             // } else if (form.menu_image == '') {
@@ -187,7 +187,7 @@ class editView extends Component {
             swal({
                 text: "กรุณากรอก ราคา",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else {

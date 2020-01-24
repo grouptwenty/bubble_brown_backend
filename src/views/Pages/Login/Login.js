@@ -53,10 +53,10 @@ class Login extends Component {
       this.props.history.push('/dashboard')
     } else {
       swal({
-        title: "Can not login!",
-        text: "Please check your username and password!",
+        title: "ไม่สามารถเข้าสู่ระบบได้ !",
+        text: "ตรวจสอบ ชื่อผู้ใช้ และ รหัสผ่าน !",
         icon: "warning",
-        button: "Close",
+        button: "ปิด",
       });
 
     }

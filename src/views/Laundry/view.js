@@ -30,7 +30,7 @@ class LaundryView extends Component {
     async onDelete(code) {
         // console.log("code", code);
         swal({
-            text: "คุณต้องการลบข้อมูลร้านซักผ้า ? ",
+            text: "คุณต้องการลบข้อมูล ? ",
             icon: "warning",
             buttons: true,
             dengerMode: true,
@@ -41,12 +41,12 @@ class LaundryView extends Component {
                         .then((req) => {
                             if (req.data == true) {
                                 this.componentDidMount();
-                                swal("success Deleted! ", {
+                                swal("ลบข้อมูลสำเร็จ !", {
                                     icon: "success",
 
                                 });
                             } else {
-                                swal("success Deleted! ", {
+                                swal("ลบข้อมูลสำเร็จ ! ", {
                                     icon: "error",
 
                                 });

@@ -580,7 +580,7 @@ class OrderView extends Component {
             swal({
                 text: "กรุณาเลือกโต๊ะ",
                 icon: "warning",
-                button: "Close",
+                button: "ปิด",
             });
             insert = false
 
@@ -653,7 +653,7 @@ class OrderView extends Component {
                         title: "สั่งอาหารเรียบร้อย",
                         text: "โปรดรออาหารสักครู่...",
                         icon: "success",
-                        button: "Close",
+                        button: "ปิด",
                     });
                     this.props.history.push('/bill/')
                 }
@@ -772,7 +772,7 @@ class OrderView extends Component {
                     title: "สั่งอาหารเรียบร้อย",
                     text: "โปรดรออาหารสักครู่...",
                     icon: "success",
-                    button: "Close",
+                    button: "ปิด",
                 });
                 this.props.history.push('/bill/')
             }

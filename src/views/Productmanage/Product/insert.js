@@ -98,7 +98,7 @@ class insertView extends Component {
                 title: "สำเร็จ!",
                 text: "เพิ่มสินค้าสำเร็จ",
                 icon: "success",
-                button: "Close",
+                button: "ปิด",
             });
             this.props.history.push('/product-manage/product/')
         }

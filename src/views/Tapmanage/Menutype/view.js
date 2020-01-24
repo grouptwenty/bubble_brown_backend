@@ -42,11 +42,11 @@ class MenutypeView extends Component {
                 }
                 var res = await menu_type_model.deleteMenuTypeByCode(set_data);
                 if (res.query_result) {
-                    swal("Poof! Your imaginary file has been deleted!", {
+                    swal("ลบรูปภาพสำเร็จ !", {
                         icon: "success",
                     });
                 } else {
-                    swal("deleted Fail", {
+                    swal("ลบรูปภาพไม่สำเร็จ !", {
                         icon: "error",
                     });
                 }

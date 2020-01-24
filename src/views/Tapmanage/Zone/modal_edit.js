@@ -38,7 +38,7 @@ class EditZoneModal extends Component {
   }
   async SaveZone(event) {
     if (this.state.zone_validate == 'INVALID') {
-      swal("This name already exists.", {
+      swal("ชื่อนี้มีการใช้งานแล้ว.", {
         icon: "error",
       });
       event.preventDefault();
@@ -62,7 +62,7 @@ class EditZoneModal extends Component {
         
           text: "แก้ไขโซนสำเร็จ !",
           icon: "success",
-          button: "Close",
+          button: "ปิด",
         });
         this.handleClose()
       } else {
@@ -70,7 +70,7 @@ class EditZoneModal extends Component {
           title: "มีบางอย่างผิดพลาด !",
           text: "แก้ไขโซนไม่สำเร็จ ",
           icon: "error",
-          button: "Close",
+          button: "ปิด",
         });
       }
     }

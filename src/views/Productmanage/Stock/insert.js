@@ -169,7 +169,7 @@ class ProductTable extends React.Component {
                     swal({
                         text: "กรุณากรอกข้อมูลให้ครบ",
                         icon: "warning",
-                        button: "Close",
+                        button: "ปิด",
                     });
                     insert = false
                     break;
@@ -180,7 +180,7 @@ class ProductTable extends React.Component {
             swal({
                 text: "กรุณากรอกข้อมูลให้ครบ",
                 icon: "warning",
-                button: "Close",
+                button: "ปิด",
             });
         }
         if (insert) {
@@ -213,7 +213,7 @@ class ProductTable extends React.Component {
                 swal({
                     title: "จัดการสูตรเรียบร้อย",
                     icon: "success",
-                    button: "Close",
+                    button: "ปิด",
                 });
                 this.props.history.push('/product-manage/stock-in/')
 

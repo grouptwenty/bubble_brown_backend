@@ -206,10 +206,10 @@ class editView extends Component {
             //   console.log(res)
             if (res.data) {
                 swal({
-                    title: "Good job!",
-                    text: "update about Ok",
+                    title: "เรียบร้อย !",
+                    text: "แก้ไขข้อมูลสำเร็จ",
                     icon: "success",
-                    button: "Close",
+                    button: "ปิด",
                 });
                 this.props.history.push('/about/')
             }
@@ -223,35 +223,35 @@ class editView extends Component {
             swal({
                 text: "กรุณากรอก รหัสลูกค้า / User Code",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.about_name_th == '') {
             swal({
                 text: "กรุณากรอก ชื่อ / TH",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.about_email == '') {
             swal({
                 text: "กรุณากรอก อีเมล / E-mail",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.about_username == '') {
             swal({
                 text: "กรุณากรอก บัญชีผู้ใช้ / Username",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.about_password == '') {
             swal({
                 text: "กรุณากรอก รหัสผ่าน / Password",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
 
@@ -259,56 +259,56 @@ class editView extends Component {
             swal({
                 text: "กรุณากรอก ที่อยู่ / Address",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.province_id == '') {
             swal({
                 text: "กรุณากรอก จังหวัด / Province",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.amphur_id == '') {
             swal({
                 text: "กรุณากรอก อำเภอ / Amphur",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.district_id == '') {
             swal({
                 text: "กรุณากรอก ตำบล / District",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.user_zipcode == '') {
             swal({
                 text: "กรุณากรอก รหัสไปรษณีย์ / Zipcode",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.latitude == '') {
             swal({
                 text: "กรุณากรอก ละติจูด",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.longitude == '') {
             swal({
                 text: "กรุณากรอก ลองติจูด",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else if (form.about_menu_data == '') {
             swal({
                 text: "กรุณาเลือกการโคลนข้อมูล",
                 icon: "warning",
-                button: "close",
+                button: "ปิด",
             });
             return false
         } else {
