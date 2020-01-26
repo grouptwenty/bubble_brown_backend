@@ -107,12 +107,11 @@ class editView extends Component {
         document.getElementById('about_code').value = data.about_code
         document.getElementById('about_name_th').value = data.about_name_th
         document.getElementById('about_email').value = data.about_email
-        document.getElementById('about_username').value = data.about_username
-        document.getElementById('about_password').value = data.about_password
         document.getElementById('about_address').value = data.about_address
         document.getElementById('about_tel').value = data.about_tel
         document.getElementById('latitude').value = data.latitude
         document.getElementById('longitude').value = data.longitude
+        document.getElementById('distance').value = data.distance
 
         if (data.province_id != null) {
             document.getElementById('province_id').value = data.province_id
@@ -199,9 +198,7 @@ class editView extends Component {
 
             }
 
-            if (arr['about_password'] != this.state.about_password_old) {
-                arr['about_password'] = await md5(arr['about_password']);
-            }
+        
             var res = await about_model.updateAboutBy(arr);
             //   console.log(res)
             if (res.data) {
@@ -236,20 +233,6 @@ class editView extends Component {
         } else if (form.about_email == '') {
             swal({
                 text: "กรุณากรอก อีเมล / E-mail",
-                icon: "warning",
-                button: "ปิด",
-            });
-            return false
-        } else if (form.about_username == '') {
-            swal({
-                text: "กรุณากรอก บัญชีผู้ใช้ / Username",
-                icon: "warning",
-                button: "ปิด",
-            });
-            return false
-        } else if (form.about_password == '') {
-            swal({
-                text: "กรุณากรอก รหัสผ่าน / Password",
                 icon: "warning",
                 button: "ปิด",
             });
@@ -300,6 +283,13 @@ class editView extends Component {
         } else if (form.longitude == '') {
             swal({
                 text: "กรุณากรอก ลองติจูด",
+                icon: "warning",
+                button: "ปิด",
+            });
+            return false
+        } else if (form.distance == '') {
+            swal({
+                text: "กรุณากรอก ระยะทางสั่งซื้อ",
                 icon: "warning",
                 button: "ปิด",
             });
@@ -398,16 +388,7 @@ class editView extends Component {
                                             <Input type="email" id="about_email" name="about_email" class="form-control"  ></Input>
                                             <p id="about_email" className="text_head_sub">Example : revelsoft.co.th</p>
                                         </Col>
-                                        <Col lg="3">
-                                            <Label className="text_head"> บัญชีผู้ใช้ / Username<font color='red'><b> * </b></font></Label>
-                                            <Input type="text" id="about_username" name="about_username" class="form-control" autocomplete="off" ></Input>
-                                            <p id="about_username" className="text_head_sub">Example : root</p>
-                                        </Col>
-                                        <Col lg="3">
-                                            <Label className="text_head"> รหัสผ่าน / Password<font color='red'><b> * </b></font></Label>
-                                            <Input type="password" id="about_password" name="about_password" class="form-control" autoComplete="off" ></Input>
-                                            <p id="about_password" className="text_head_sub">Example : 123456</p>
-                                        </Col>
+                                       
                                     </Row>
                                     <br />
                                     <hr />
@@ -452,15 +433,20 @@ class editView extends Component {
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col lg="3">
+                                        <Col lg="4">
                                             <Label className="text_head"> ละติจูด<font color='red'><b> * </b></font></Label>
                                             <Input type="text" id="latitude" name="latitude" class="form-control" ></Input>
                                             <p id="latitude" className="text_head_sub">Example : 14.999548299999999</p>
                                         </Col>
-                                        <Col lg="3">
+                                        <Col lg="4">
                                             <Label className="text_head"> ละติจูด<font color='red'><b> * </b></font></Label>
                                             <Input type="text" id="longitude" name="longitude" class="form-control" ></Input>
                                             <p id="longitude" className="text_head_sub">Example : 102.10612169999999</p>
+                                        </Col>
+                                        <Col lg="4">
+                                            <Label className="text_head"> ระยะที่อนุญาติให้สั่งซื้อ (เมตร)<font color='red'><b> * </b></font></Label>
+                                            <Input type="text" id="distance" name="distance" class="form-control" ></Input>
+                                            <p id="distance" className="text_head_sub">Example : 50</p>
                                         </Col>
                                     </Row>
                                     <Row>

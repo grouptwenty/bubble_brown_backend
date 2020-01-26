@@ -398,22 +398,23 @@ class ReportSaleView extends Component {
 
         var sub_table_sale_month = await report_model.getTableReportSalesByMonth(arr)
         console.log("sub_table_sale_month", sub_table_sale_month);
+        if (sub_table_sale_month.data != undefined) {
+            for (var key in sub_table_sale_month.data) {
 
-        for (var key in sub_table_sale_month.data) {
+                var arr = {}
+                arr['payment_date'] = month.date
+                arr['menu_code'] = sub_table_sale_month.data[key].menu_code
+                arr['about_code'] = this.props.user.about_code
 
-            var arr = {}
-            arr['payment_date'] = month.date
-            arr['menu_code'] = sub_table_sale_month.data[key].menu_code
-            arr['about_code'] = this.props.user.about_code
+                var cost_table_sale_month = await report_model.getTableCostSalesByMonth(arr)
 
-            var cost_table_sale_month = await report_model.getTableCostSalesByMonth(arr)
-
-            sub_table_sale_month.data[key]['cost_table_sale_month'] = cost_table_sale_month.data.cost
+                sub_table_sale_month.data[key]['cost_table_sale_month'] = cost_table_sale_month.data.cost
+            }
+            this.setState({
+                sub_table_sale_month: sub_table_sale_month.data
+            })
+            this.toggle()
         }
-        this.setState({
-            sub_table_sale_month: sub_table_sale_month.data
-        })
-        this.toggle()
     }
 
     saleMonthDetail() {
@@ -780,7 +781,7 @@ class ReportSaleView extends Component {
                                 <Row>
                                     <Col lg="12">
 
-                                    <ButtonGroup size="lg">
+                                        <ButtonGroup size="lg">
                                             <Button
                                                 style={{
                                                     backgroundColor: this.state.seg === 1 ? '#b38d4d' : '#fff',
@@ -1101,7 +1102,7 @@ class ReportSaleView extends Component {
                                                     </Col>
                                                 </Row>
                                                 <br></br>
-                                                <BarChart data={graph_sales_year_number} colors={["#8D38C9"]}  />
+                                                <BarChart data={graph_sales_year_number} colors={["#8D38C9"]} />
                                                 <br></br>
                                                 <br></br>
                                                 <Row>

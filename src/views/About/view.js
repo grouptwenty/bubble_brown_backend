@@ -50,7 +50,7 @@ class AboutView extends Component {
     cellButton(cell, row, enumObject, rowIndex) {
         return (
             <>
-        
+
                 <NavLink exact to={'../about/detail/' + row.about_code}>
                     <button class="btn btn-primary">รายละเอียด</button>
                 </NavLink>
@@ -74,6 +74,8 @@ class AboutView extends Component {
     }
     async componentDidMount() {
         const about_list = await about_model.getAboutBy(this.props.user);
+        console.log('hhhhhhhhhhh',this.props.user);
+        
         const data_about_list = {
             rows: []
         }
@@ -100,51 +102,55 @@ class AboutView extends Component {
 
         const { data } = this.state;
         return (
-            <div className="animated fadeIn" style={{padding:'15px'}}>
+            <div className="animated fadeIn" style={{ padding: '15px' }}>
                 <Row>
                     <Col lg='12'>
                         <Card >
                             <CardHeader>
                                 สาขา
-                                <NavLink exact to={'../About/editbranch'} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> ตั้งต่าสาขาหลัก</button>
-                                </NavLink>
-                                <NavLink exact to={'../About/insert'} style={{ width: '100%' }}>
-                                    <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> เพิ่ม</button>
-                                </NavLink>
-                            </CardHeader>
-                            <CardBody>
-                                <Row>
-                                    <Col lg='12'>
-                                        <div>
-                                            <BootstrapTable
-                                                ref='table'
-                                                data={data.rows}
-                                                striped hover pagination
-                                                search={true}
-                                            // className="table-overflow"
-
-                                            >
-                                                <TableHeaderColumn dataField='about_code' headerAlign="center" dataAlign="center" dataSort isKey={true}>รหัสสาขา</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='about_name' headerAlign="center" dataAlign="center" dataSort>ชื่อร้าน</TableHeaderColumn>
-                                                <TableHeaderColumn dataField='about_tel' headerAlign="center" dataAlign="center" dataSort>เบอร์โทร</TableHeaderColumn>
-                                                <TableHeaderColumn width={"20%"} dataField='Action' headerAlign="center" dataAlign="left" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
-                                            </BootstrapTable>
+                                {this.props.user.user_position == 'แอดมิน' ?
+                                    <div>
+                                        <NavLink exact to={'../About/editbranch'} style={{ width: '100%' }}>
+                                            <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> ตั้งต่าสาขาหลัก</button>
+                                        </NavLink>
+                                        <NavLink exact to={'../About/insert'} style={{ width: '100%' }}>
+                                            <button class="btn btn-primary btn-lg float-right boottom-header"><i class="fa fa-plus"></i> เพิ่ม</button>
+                                        </NavLink>
                                         </div>
-                                    </Col>
-                                </Row>
-                            </CardBody>
+                                    :''}
+                            </CardHeader>
+                                    <CardBody>
+                                        <Row>
+                                            <Col lg='12'>
+                                                <div>
+                                                    <BootstrapTable
+                                                        ref='table'
+                                                        data={data.rows}
+                                                        striped hover pagination
+                                                        search={true}
+                                                    // className="table-overflow"
+
+                                                    >
+                                                        <TableHeaderColumn dataField='about_code' headerAlign="center" dataAlign="center" dataSort isKey={true}>รหัสสาขา</TableHeaderColumn>
+                                                        <TableHeaderColumn dataField='Picture' headerAlign="center" dataAlign="center" dataSort dataFormat={this.showPicture.bind(this)}>รูป</TableHeaderColumn>
+                                                        <TableHeaderColumn dataField='about_name' headerAlign="center" dataAlign="center" dataSort>ชื่อร้าน</TableHeaderColumn>
+                                                        <TableHeaderColumn dataField='about_tel' headerAlign="center" dataAlign="center" dataSort>เบอร์โทร</TableHeaderColumn>
+                                                        <TableHeaderColumn width={"20%"} dataField='Action' headerAlign="center" dataAlign="left" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
+                                                    </BootstrapTable>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </CardBody>
                         </Card>
                     </Col>
                 </Row>
             </div>
-        )
-    }
-}
+                )
+            }
+        }
 const mapStatetoProps = (state) => {
     return {
-        user: state.user,
-    }
-}
+                    user: state.user,
+            }
+        }
 export default connect(mapStatetoProps)(AboutView);

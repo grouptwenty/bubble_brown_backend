@@ -152,8 +152,6 @@ class insertView extends Component {
 
         if (this.check(arr)) {
 
-            arr['about_password'] = await md5(arr['about_password']);
-
             if (this.state.selectedFile != null) {
                 arr['about_img'] = await this.fileUpload(this.state.selectedFile, 'about', form.elements['about_code'].value + "_" + toDay);
             }
@@ -195,21 +193,6 @@ class insertView extends Component {
                 button: "ปิด",
             });
             return false
-        } else if (form.about_username == '') {
-            swal({
-                text: "กรุณากรอก บัญชีผู้ใช้ / Username",
-                icon: "warning",
-                button: "ปิด",
-            });
-            return false
-        } else if (form.about_password == '') {
-            swal({
-                text: "กรุณากรอก รหัสผ่าน / Password",
-                icon: "warning",
-                button: "ปิด",
-            });
-            return false
-
         } else if (form.about_address == '') {
             swal({
                 text: "กรุณากรอก ที่อยู่ / Address",
@@ -352,16 +335,7 @@ class insertView extends Component {
                                             <Input type="email" id="about_email" name="about_email" class="form-control"  ></Input>
                                             <p id="about_email" className="text_head_sub">Example : revelsoft.co.th</p>
                                         </Col>
-                                        <Col lg="3">
-                                            <Label className="text_head"> บัญชีผู้ใช้ / Username<font color='red'><b> * </b></font></Label>
-                                            <Input type="text" id="about_username" name="about_username" class="form-control" autocomplete="off" ></Input>
-                                            <p id="about_username" className="text_head_sub">Example : root</p>
-                                        </Col>
-                                        <Col lg="3">
-                                            <Label className="text_head"> รหัสผ่าน / Password<font color='red'><b> * </b></font></Label>
-                                            <Input type="password" id="about_password" name="about_password" class="form-control" autoComplete="oof" ></Input>
-                                            <p id="about_password" className="text_head_sub">Example : 123456</p>
-                                        </Col>
+                                        
                                     </Row>
                                     <br />
                                     <hr />

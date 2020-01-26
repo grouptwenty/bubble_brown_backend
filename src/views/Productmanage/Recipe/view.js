@@ -8,9 +8,11 @@ import swal from 'sweetalert';
 
 import MenuModel from '../../../models/MenuModel'
 import MenuTypeModel from '../../../models/MenuTypeModel'
+import RecipeModel from '../../../models/RecipeModel'
 
 const menutype_model = new MenuTypeModel
 const menu_model = new MenuModel
+const recipe_model = new RecipeModel
 class RecipeView extends Component {
     constructor(props) {
         super(props);
@@ -32,21 +34,50 @@ class RecipeView extends Component {
         })
 
         const menu_list = await menu_model.getMenuBy(this.props.user);
-        console.log("menu_list55555",menu_list);
-        
+
+        console.log("menu_list55555", menu_list);
+
         const data_menu_list = {
             rows: []
         }
         var i = 1;
         // for(var x=0;x<10;x++)
+
         for (var key in menu_list.data) {
+            const recipe = await recipe_model.getRecipeByCode({ 'menu_code': menu_list.data[key].menu_code });
+            console.log("recipe", recipe);
+            // for (var i in menu_list.data) {
+            var sud = [];
+            for (var s in recipe.data) {
+                var ss = (
+                    <>
+                        <Row>
+                            <Col lg="6" style={{ textAlign: 'start' }}>
+                                <label > {recipe.data[s].product_name}</label>
+                            </Col>
+                            <Col lg="3" style={{ textAlign: 'end' }}>
+                                <label  > {recipe.data[s].product_qty}</label>
+                            </Col>
+                            <Col lg="3" style={{ textAlign: 'start' }}>
+                                <label> {recipe.data[s].unit_name}</label>
+                            </Col>
+                        </Row>
+
+                        {/* recipe.data[s].product_name */}
+                    </>
+                )
+                sud.push(ss)
+            }
             var set_row = {
                 no: i,
                 menu_code: menu_list.data[key].menu_code,
                 menu_name: menu_list.data[key].menu_name,
+                // product_name: menu_list.data[i].product_name,
+                product_name: sud
             }
             data_menu_list.rows.push(set_row);
             i++;
+            // }
         }
         this.setState({
             data: data_menu_list
@@ -60,7 +91,7 @@ class RecipeView extends Component {
             for (var key in this.state.menutype_list) {
                 menu_type_list.push(
                     // <option value={this.state.product_type[key].product_type_id} >{this.state.product_type[key].product_type_name}</option>
-                    <Button outline color="primary"  onClick={this.getMenutByType.bind(this,this.state.menutype_list[key].menu_type_id)}>{this.state.menutype_list[key].menu_type_name}</Button>                        
+                    <Button outline color="primary" onClick={this.getMenutByType.bind(this, this.state.menutype_list[key].menu_type_id)}>{this.state.menutype_list[key].menu_type_name}</Button>
                 )
             }
             return menu_type_list;
@@ -71,28 +102,55 @@ class RecipeView extends Component {
 
         //   console.log("this.state.product_type[key].product_type_name",code);
 
-          const menu_list = await menu_model.getMenuByType(code);
-          const data_menu_list = {
-              rows: []
-          }
-          var i = 1;
-          // for(var x=0;x<10;x++)
-          for (var key in menu_list.data) {
-              var set_row = {
-                  no: i,
-                  menu_code: menu_list.data[key].menu_code,
-                  menu_name: menu_list.data[key].menu_name,
-              }
-              data_menu_list.rows.push(set_row);
-              i++;
-          }
-          this.setState({
-              data: data_menu_list
-          });
-    
-    
-    
+        const menu_list = await menu_model.getMenuByType(code);
+        const data_menu_list = {
+            rows: []
         }
+        var i = 1;
+        // for(var x=0;x<10;x++)
+        for (var key in menu_list.data) {
+            const recipe = await recipe_model.getRecipeByCode({ 'menu_code': menu_list.data[key].menu_code });
+            console.log("recipe", recipe);
+            // for (var i in menu_list.data) {
+            var sud = [];
+            for (var s in recipe.data) {
+                var ss = (
+                    <>
+                        <Row>
+                            <Col lg="6" style={{ textAlign: 'start' }}>
+                                <label > {recipe.data[s].product_name}</label>
+                            </Col>
+                            <Col lg="3" style={{ textAlign: 'end' }}>
+                                <label  > {recipe.data[s].product_qty}</label>
+                            </Col>
+                            <Col lg="3" style={{ textAlign: 'start' }}>
+                                <label> {recipe.data[s].unit_name}</label>
+                            </Col>
+                        </Row>
+
+                        {/* recipe.data[s].product_name */}
+                    </>
+                )
+                sud.push(ss)
+            }
+            var set_row = {
+                no: i,
+                menu_code: menu_list.data[key].menu_code,
+                menu_name: menu_list.data[key].menu_name,
+                // product_name: menu_list.data[i].product_name,
+                product_name: sud
+            }
+            data_menu_list.rows.push(set_row);
+            i++;
+            // }
+        }
+        this.setState({
+            data: data_menu_list
+        });
+
+
+
+    }
 
 
 
@@ -105,7 +163,13 @@ class RecipeView extends Component {
             </>
         )
     }
-
+    callSud(cell) {
+        return (
+            <>
+                {cell}
+            </>
+        )
+    }
     render() {
         const { data } = this.state;
 
@@ -118,12 +182,12 @@ class RecipeView extends Component {
                                 จัดการสูตร
                             </CardHeader>
                             <CardBody>
-                            <Row style={{textAlign:'end',paddingBottom:'20px'}}>
-                                    
+                                <Row style={{ textAlign: 'end', paddingBottom: '20px' }}>
+
                                     <Col lg="12">
                                         <ButtonGroup >
-                                        {this.renderMenuType()}
-                                        <Button outline color="primary" onClick={this.componentDidMount.bind(this)}>ทั้งหมด</Button>
+                                            {this.renderMenuType()}
+                                            <Button outline color="primary" onClick={this.componentDidMount.bind(this)}>ทั้งหมด</Button>
                                         </ButtonGroup>
                                     </Col>
                                 </Row>
@@ -140,6 +204,7 @@ class RecipeView extends Component {
                                             >
                                                 <TableHeaderColumn width={"10%"} dataField='no' headerAlign="center" dataAlign="center" dataSort isKey={true}>No</TableHeaderColumn>
                                                 <TableHeaderColumn dataField='menu_name' headerAlign="center" dataAlign="center" dataSort>เมนู</TableHeaderColumn>
+                                                <TableHeaderColumn dataField='product_name' dataFormat={this.callSud.bind(this)} headerAlign="center" dataAlign="center" dataSort>สูตร</TableHeaderColumn>
                                                 <TableHeaderColumn width={"15%"} dataField='Action' headerAlign="center" dataAlign="center" dataFormat={this.cellButton.bind(this)}> </TableHeaderColumn>
                                             </BootstrapTable>
                                         </div>
