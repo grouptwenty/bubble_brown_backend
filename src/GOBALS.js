@@ -33,13 +33,12 @@ export default {
 	// URL_IMG: 'http://it2.sut.ac.th:3006/',
 	// URL_PUSHER: 'http://it2.sut.ac.th:5002/',
 
-
-	URL: 'http://192.168.1.113:3004',
+	URL: 'http://54.169.155.89/:3004',
 	// IO: 'http://localhost:3002',
-	URL_UPLOAD_IMG: 'http://192.168.1.113:3005/upload-image/',
-	URL_DELETE_IMG: 'http://192.168.1.113:3005/delete-image/',
-	URL_IMG: 'http://192.168.1.113:3006/',
-	URL_PUSHER: 'http://192.168.1.113:5002/',
+	URL_UPLOAD_IMG: 'http://54.169.155.89:3005/upload-image/',
+	URL_DELETE_IMG: 'http://54.169.155.89:3005/delete-image/',
+	URL_IMG: 'http://54.169.155.89:3006/',
+	URL_PUSHER: 'http://54.169.155.89:5002/',
 
 }
 // 	URL: 'http://192.168.0.194:3004',
